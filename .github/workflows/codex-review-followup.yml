@@ -269,14 +269,6 @@ jobs:
                         nodes {
                           id
                           isResolved
-                          comments(first: 50) {
-                            nodes {
-                              author {
-                                login
-                              }
-                              url
-                            }
-                          }
                         }
                       }
                     }
@@ -302,6 +294,45 @@ jobs:
               return threads;
             }
 
+            async function listReviewThreadComments(threadId) {
+              const query = `
+                query($threadId: ID!, $cursor: String) {
+                  node(id: $threadId) {
+                    ... on PullRequestReviewThread {
+                      comments(first: 100, after: $cursor) {
+                        pageInfo {
+                          hasNextPage
+                          endCursor
+                        }
+                        nodes {
+                          author {
+                            login
+                          }
+                          url
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              const comments = [];
+              let cursor = null;
+
+              do {
+                const result = await github.graphql(query, {
+                  threadId,
+                  cursor,
+                });
+                const page = result.node?.comments;
+                if (!page) return comments;
+                comments.push(...page.nodes);
+                cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
+              } while (cursor);
+
+              return comments;
+            }
+
             async function resolveReviewThread(threadId) {
               const mutation = `
                 mutation($threadId: ID!) {
@@ -316,17 +347,18 @@ jobs:
               await github.graphql(mutation, { threadId });
             }
 
-            function isPureCodexThread(thread) {
-              return thread.comments.nodes.length > 0 && thread.comments.nodes.every((comment) => {
+            async function isPureCodexThread(thread) {
+              const comments = await listReviewThreadComments(thread.id);
+              return comments.length > 0 && comments.every((comment) => {
                 return CODEX_LOGINS.has(comment.author?.login);
               });
             }
 
             async function resolveCodexReviewThreads(prNumber) {
               const unresolved = await listUnresolvedReviewThreads(prNumber);
-              const codexThreads = unresolved.filter(isPureCodexThread);
 
-              for (const thread of codexThreads) {
+              for (const thread of unresolved) {
+                if (!(await isPureCodexThread(thread))) continue;
                 try {
                   await resolveReviewThread(thread.id);
                 } catch (error) {

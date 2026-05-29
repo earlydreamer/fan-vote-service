@@ -86,6 +86,7 @@
 - follow-up issue는 현재 PR의 merge gate가 아니다.
 - 자동화는 issue 생성 후 관련 Codex review thread resolve를 시도하고, PR이 draft가 아니며 CI/status/check가 실패 또는 대기 상태가 아니고 남은 unresolved thread가 없으면 자동 merge를 시도한다.
 - 사람이 답변한 review thread는 자동 resolve하지 않는다. Codex만 남긴 thread만 자동 resolve 대상이다.
+- Codex review thread 자동 resolve 전에는 thread의 모든 댓글 페이지를 확인해 51번째 이후 사람 댓글도 놓치지 않는다.
 - Actions check 완료 이벤트가 누락되는 경우를 보완하기 위해 schedule retry가 open PR의 자동 merge 조건을 주기적으로 다시 확인한다.
 - follow-up issue의 수정은 issue 기반 feature workflow로 별도 진행한다.
 - 자동화가 실패하더라도 PR 리뷰 원문과 issue/label 상태를 기준으로 복구한다.

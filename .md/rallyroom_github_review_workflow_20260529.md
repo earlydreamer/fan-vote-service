@@ -111,8 +111,9 @@ fallback 기록:
 9. follow-up issue는 현재 PR의 merge gate가 아니다.
 10. Codex 리뷰 자동화는 follow-up issue 생성 후 Codex만 남긴 review thread resolve와 자동 merge를 시도한다.
 11. 사람이 답변한 review thread는 자동 resolve하지 않는다. 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
-12. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
-13. 현재 PR에 실질 수정 커밋을 push한 경우에는 같은 공급자에게 재리뷰를 요청한다.
+12. Codex review thread 자동 resolve 전에는 thread의 모든 댓글 페이지를 확인해 51번째 이후 사람 댓글도 놓치지 않는다.
+13. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
+14. 현재 PR에 실질 수정 커밋을 push한 경우에는 같은 공급자에게 재리뷰를 요청한다.
 
 ## ready for review와 merge
 

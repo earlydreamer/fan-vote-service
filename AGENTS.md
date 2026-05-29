@@ -66,6 +66,7 @@
 - follow-up issue는 현재 PR의 merge gate가 아니다. follow-up issue의 수정은 별도 feature branch와 PR에서 처리한다.
 - Codex 리뷰 자동화는 Codex 피드백을 follow-up issue로 이관한 뒤 관련 Codex review thread resolve와 자동 merge를 시도한다.
 - 자동 merge 조건은 PR이 draft가 아니고, Codex 리뷰 응답이 확인되었고, CI/status/check가 실패 또는 대기 상태가 아니며, 남은 unresolved review thread가 없는 상태다.
+- 자동 resolve는 review thread의 모든 댓글 페이지를 확인한 뒤, Codex 봇만 남긴 thread에만 적용한다.
 - 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다. GitHub MCP로 resolution 상태 확인이나 처리가 불가능하면 GitHub UI에서 수동 확인한다.
 - 의존성 없는 기능은 subagent 병렬 개발을 허용한다.
 - merge 전에는 충돌, 테스트, 빌드 상태를 확인한다.
