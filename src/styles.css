@@ -1018,6 +1018,47 @@ select:focus-visible {
   color: var(--ink-soft);
 }
 
+.mission-card__text-field textarea {
+  inline-size: 100%;
+  min-block-size: 84px;
+  resize: vertical;
+  padding: 10px 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+
+.mission-card__button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-block-size: 40px;
+  padding: 0 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--ink);
+  color: white;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.mission-card__button:disabled {
+  cursor: not-allowed;
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+}
+
+.mission-card__receipt {
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgb(0 208 132 / 10%);
+  color: var(--ink-strong);
+  font-weight: 850;
+}
+
 .progress-meter {
   display: grid;
   gap: 8px;
