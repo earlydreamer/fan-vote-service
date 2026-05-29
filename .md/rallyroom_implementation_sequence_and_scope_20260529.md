@@ -10,6 +10,7 @@
 ## 전제
 
 - 최신 기획 기준: `.md/rallyroom_v2_backend_architecture_20260529.md`
+- 디자인 시스템 기준: `DESIGN.md`
 - 기술 스택 기준: `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`
 - TDD 기준: `.md/rallyroom_tdd_feature_slicing_20260529.md`
 - GitHub 운영 기준: `.md/rallyroom_github_review_workflow_20260529.md`
@@ -19,6 +20,7 @@
 - 프론트엔드는 신뢰 데이터를 직접 계산하거나 DB에 쓰지 않는다.
 - 핵심 mutation은 command API 경계로만 표현한다.
 - MVP라도 클라이언트 직접 Supabase insert/update 구조를 만들지 않는다.
+- UI 구현 전 `DESIGN.md`를 읽고, 첫 화면을 랜딩 페이지가 아니라 앱 대시보드로 만든다.
 - UI 구현은 React Best Practice 점검을 거친다.
 - 모든 기능은 feature 단위로 쪼개고, GitHub issue와 PR에서 상태와 완료 기준을 관리한다.
 - 브랜치 내부 임시 메모가 필요하면 `.md/local/`에 untracked 파일로 둔다.
@@ -58,12 +60,42 @@
 - `npm run build` 통과
 - `origin/main` bootstrap push 완료
 
+## Phase 0.5. Design System
+
+상태: 완료
+
+목표:
+
+- `awesome-design-md`와 Google Stitch DESIGN.md 개념을 참고해 RallyRoom 전용 디자인 계약을 만든다.
+- Phase 1 이후 UI가 랜딩 페이지, 일반 SaaS 히어로, 공식 아이돌 앱 톤으로 흐르지 않도록 시각 기준을 고정한다.
+
+포함 범위:
+
+- `DESIGN.md`
+- 시각 방향, 색상, 타입, spacing, 컴포넌트 규칙
+- 페이지와 라우팅 구조의 무드와 정보 밀도 원칙
+- AGENTS/README/기술 문서의 `DESIGN.md` 우선 참조 지침
+
+제외 범위:
+
+- React 페이지 구현
+- 라우팅 코드 구현
+- mock data JSON 구현
+
+완료 기준:
+
+- `DESIGN.md`가 루트에 존재한다.
+- `Fan Ops Board` 방향과 앱 대시보드 우선 원칙이 명시된다.
+- `npm test` 통과
+- `npm run build` 통과
+
 ## Phase 1. App Shell과 라우팅 골격
 
 목표:
 
 - RallyRoom MVP의 화면 이동 골격을 만든다.
 - 아직 서버 데이터 없이도 홈, 방 만들기, 방 상세, 마이페이지, Crew 대시보드, 요금제 화면으로 이동할 수 있게 한다.
+- `DESIGN.md` 기준으로 첫 화면을 홈/탐색 대시보드로 구성한다.
 
 포함 범위:
 
@@ -73,6 +105,7 @@
 - 빈 상태/로딩 상태의 기본 표현
 - 페이지 컴포넌트 파일 구조
 - React Best Practice 기준에 맞는 컴포넌트 분리
+- `DESIGN.md`의 페이지/라우트 구조 반영
 
 제외 범위:
 
@@ -97,6 +130,7 @@
 - 홈에서 주요 CTA가 보인다.
 - CTA 클릭 또는 라우팅 동작으로 방 만들기 화면에 접근할 수 있다.
 - 존재하지 않는 경로는 안전한 fallback을 보여준다.
+- 첫 화면이 full-viewport 랜딩 히어로가 아니라, 응원방 피드/미션/RP 요약을 포함한 앱 대시보드 구조임을 확인한다.
 
 완료 기준:
 
@@ -588,19 +622,20 @@
 
 ## 추천 실행 순서
 
-1. Phase 1, App Shell과 라우팅 골격
-2. Phase 2, Demo Data와 Read Model
-3. Phase 3, Room Creation Intent
-4. Phase 4, Command Client Boundary
-5. Phase 5, Voting UX
-6. Phase 6, Mission UX
-7. Phase 7, Fan Message UX
-8. Phase 8, Result Card
-9. Phase 9, Profile과 Reward History
-10. Phase 10, Crew Dashboard
-11. Phase 11, Supabase Schema/RLS/RPC 설계 산출물
-12. Phase 12, Supabase Edge Function Skeleton
-13. Phase 13, MVP Polish와 제출 준비
+1. Phase 0.5, Design System
+2. Phase 1, App Shell과 라우팅 골격
+3. Phase 2, Demo Data와 Read Model
+4. Phase 3, Room Creation Intent
+5. Phase 4, Command Client Boundary
+6. Phase 5, Voting UX
+7. Phase 6, Mission UX
+8. Phase 7, Fan Message UX
+9. Phase 8, Result Card
+10. Phase 9, Profile과 Reward History
+11. Phase 10, Crew Dashboard
+12. Phase 11, Supabase Schema/RLS/RPC 설계 산출물
+13. Phase 12, Supabase Edge Function Skeleton
+14. Phase 13, MVP Polish와 제출 준비
 
 ## MVP 컷라인
 
@@ -627,7 +662,7 @@
 
 ## 첫 번째 다음 작업
 
-다음 feature는 Phase 1로 시작한다.
+다음 feature는 Phase 1로 시작한다. 단, Phase 1은 반드시 `DESIGN.md` 기준으로 구현한다.
 
 권장 issue 제목:
 

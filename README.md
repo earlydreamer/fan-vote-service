@@ -12,6 +12,7 @@ RallyRoom은 팬이 직접 작은 응원방을 만들고, 투표와 미션으로
 - Vitest + Testing Library
 - Supabase 기반 아키텍처 예정
 - TDD 기반 feature 개발 예정
+- `DESIGN.md` 기반 RallyRoom 디자인 시스템 적용 예정
 
 ## 로컬 실행
 
@@ -42,6 +43,8 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 ## 개발 규칙
 
 프로젝트별 지침은 `AGENTS.md`를 따릅니다.
+
+UI 구현과 CSS 변경은 먼저 `DESIGN.md`를 읽고 진행합니다. RallyRoom의 첫 화면은 랜딩 페이지가 아니라, 응원방 피드와 미션, RP 요약, 방 만들기 CTA가 보이는 앱 대시보드여야 합니다.
 
 기술 스택과 디렉터리 구조는 `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`에서 관리합니다. 의존성이나 구조가 바뀌면 같은 feature PR에서 함께 갱신합니다.
 
