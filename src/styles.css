@@ -1534,6 +1534,135 @@ select:focus-visible {
   grid-column: 2;
 }
 
+.message-form {
+  display: grid;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: var(--surface-raised);
+}
+
+.message-type-toggle {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.message-type-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.message-type-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.message-type-option span {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.message-type-option input:checked + span {
+  border-color: rgb(98 91 246 / 34%);
+  background: var(--primary-soft);
+  color: var(--primary-pressed);
+}
+
+.message-type-option input:focus-visible + span {
+  outline: 3px solid rgb(98 91 246 / 28%);
+  outline-offset: 2px;
+}
+
+.message-field {
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.message-form textarea {
+  inline-size: 100%;
+  min-block-size: 104px;
+  resize: vertical;
+  padding: 11px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.55;
+}
+
+.message-form textarea:focus {
+  outline: 3px solid rgb(98 91 246 / 18%);
+  border-color: rgb(98 91 246 / 42%);
+}
+
+.message-form__actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.message-form__actions span {
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.message-form__actions .over-limit {
+  color: var(--live);
+}
+
+.message-form__actions button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-block-size: 40px;
+  padding: 9px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--primary);
+  color: #07110d;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.message-form__actions button:disabled {
+  cursor: not-allowed;
+  background: var(--surface-muted);
+  color: var(--ink-soft);
+}
+
+.message-reward-receipt {
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: rgb(0 208 132 / 10%);
+  color: var(--ink-strong);
+  font-weight: 850;
+}
+
+.message-list {
+  display: grid;
+}
+
 .message-row {
   display: grid;
   gap: 8px;

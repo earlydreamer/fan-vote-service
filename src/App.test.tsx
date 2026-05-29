@@ -206,6 +206,24 @@ describe('RallyRoom app shell', () => {
     expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
   });
 
+  it('posts a fan wall message from room detail and shows command rewards', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
+    await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
+
+    const fanWall = screen.getByRole('region', { name: '팬월' });
+
+    await user.click(within(fanWall).getByRole('radio', { name: '질문' }));
+    await user.type(within(fanWall).getByRole('textbox', { name: '메시지 내용' }), '다음 투표는 엔딩곡도 하면 좋겠어요');
+    await user.click(within(fanWall).getByRole('button', { name: '메시지 남기기' }));
+
+    expect(await within(fanWall).findByText('다음 투표는 엔딩곡도 하면 좋겠어요')).toBeInTheDocument();
+    expect(within(fanWall).getByRole('status')).toHaveTextContent('+10 RP');
+    expect(within(fanWall).getByRole('status')).toHaveTextContent('Energy +3');
+  });
+
   it('keeps voting disabled when a published result room is opened as a detail page', () => {
     window.history.pushState({}, '', '/rooms/room-pixel-season');
 

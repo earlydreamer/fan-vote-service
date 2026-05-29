@@ -110,7 +110,10 @@ D:\Projects\vibex
 │  │  ├─ home/
 │  │  │  └─ HomePage.tsx
 │  │  ├─ messages/
-│  │  │  └─ postRoomMessageApi.ts
+│  │  │  ├─ postRoomMessageApi.ts
+│  │  │  ├─ RoomMessagePanel.test.tsx
+│  │  │  ├─ RoomMessagePanel.tsx
+│  │  │  └─ usePostRoomMessage.ts
 │  │  ├─ missions/
 │  │  │  ├─ completeMissionApi.ts
 │  │  │  ├─ MissionList.test.tsx
@@ -245,3 +248,13 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/missions/MissionList.tsx`: 미션 카드, 텍스트 미션 입력, 완료 버튼, 보상 receipt UI
 - `src/features/missions/useCompleteMission.ts`: `completeMission` command 호출 상태와 보상 응답 표시 상태 관리
 - `src/features/missions/MissionList.test.tsx`: 미션 완료 command input 계약, 텍스트 검증, 완료 상태 테스트
+
+## 2026-05-30 Phase 7 Fan Message UX 추가 파일
+
+`features/messages` 아래에 방 상세 팬월 메시지 작성 UX를 위한 UI와 hook을 추가했다.
+
+- `src/features/messages/postRoomMessageApi.ts`: `post-room-message` command request/response DTO와 command wrapper
+- `src/features/messages/RoomMessagePanel.tsx`: 응원/질문 메시지 작성 폼, 팬월 메시지 목록, 보상 receipt UI
+- `src/features/messages/usePostRoomMessage.ts`: 메시지 본문 검증, command 호출 상태, 성공/에러 응답 반영 상태 관리
+- `src/features/messages/RoomMessagePanel.test.tsx`: 팬월 메시지 command input 계약, 본문 검증, 보상 응답 표시 테스트
+- `src/App.test.tsx`: 방 상세에서 팬월 메시지 작성 플로우가 내비게이션과 함께 동작하는지 검증

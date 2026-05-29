@@ -8,7 +8,12 @@ export interface PostRoomMessageInput {
 }
 
 export interface PostRoomMessageResponse {
-  messageId: string;
+  message: {
+    id: string;
+    type?: MessageType;
+    body: string;
+    createdAt: string;
+  };
   awardedRp?: number;
   awardedEnergy?: number;
 }
