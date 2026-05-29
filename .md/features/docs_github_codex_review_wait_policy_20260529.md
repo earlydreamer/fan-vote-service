@@ -4,10 +4,10 @@
 
 ## 상태
 
-- 상태: in_progress
-- 현재 진행 중: 첫 의미 단위 커밋 완료, draft PR 생성 준비
+- 상태: draft_pr_created
+- 현재 진행 중: draft PR 생성 완료, ready for review 전환 전 최종 검증 대기
 - GitHub issue: https://github.com/earlydreamer/fan-vote-service/issues/4
-- GitHub PR: 생성 예정
+- GitHub PR: https://github.com/earlydreamer/fan-vote-service/pull/5
 - Branch: `feature/4-github-codex-review-wait-policy`
 
 ## 문제
@@ -43,8 +43,8 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] 문서 보정
 - [x] 검증
 - [x] 의미 단위 커밋
-- [ ] 원격 push
-- [ ] draft PR 생성
+- [x] 원격 push
+- [x] draft PR 생성
 - [ ] ready for review 전환
 - [ ] GitHub Codex 리뷰 요청
 - [ ] GitHub Codex 리뷰 응답 대기
@@ -64,6 +64,7 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 
 - [x] issue #4 생성
 - [x] `feature/4-github-codex-review-wait-policy` 브랜치 생성
+- [x] PR #5 draft 생성
 
 ## 보류 작업
 
@@ -74,6 +75,7 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 | Commit | 의미 단위 | 검증 | 비고 |
 |---|---|---|---|
 | `f472f94` | GitHub Codex 리뷰 대기 정책 문서화 | `git diff --check`, `npm test`, `npm run build` | AGENTS/workflow/delivery/feature log |
+| `27df2ab` | feature 작업 로그 갱신 | `git diff --check`, `npm test`, `npm run build` | 첫 커밋 해시 반영 |
 
 ## 리뷰 장부
 
@@ -108,7 +110,7 @@ npm run build
 ## PR/Issue
 
 - Issue: https://github.com/earlydreamer/fan-vote-service/issues/4
-- PR: 생성 예정
+- PR: https://github.com/earlydreamer/fan-vote-service/pull/5
 
 ## 결정 로그
 
