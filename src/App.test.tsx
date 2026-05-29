@@ -189,6 +189,18 @@ describe('RallyRoom app shell', () => {
     expect(within(optionComposer).getByText(/레이저 엔딩 하트/)).toBeInTheDocument();
   });
 
+  it('keeps voting disabled when a published result room is opened as a detail page', () => {
+    window.history.pushState({}, '', '/rooms/room-pixel-season');
+
+    render(<App />);
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    expect(within(votePanel).getByText('결과가 공개된 방은 투표가 종료됐어요.')).toBeInTheDocument();
+    expect(within(votePanel).getByRole('button', { name: '투표 종료' })).toBeDisabled();
+    expect(within(votePanel).getAllByRole('radio').every((radio) => radio.hasAttribute('disabled'))).toBe(true);
+  });
+
   it('renders a published result card only for published rooms', () => {
     window.history.pushState({}, '', '/rooms/room-pixel-season/result');
 
