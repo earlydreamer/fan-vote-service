@@ -16,6 +16,8 @@ describe('RallyRoom app shell', () => {
 
     expect(banner).toHaveTextContent('RallyRoom');
     expect(banner).toHaveTextContent('Fan Vote Discovery');
+    expect(screen.getByText('팬이 만드는 투표의 공간')).toBeInTheDocument();
+    expect(screen.getByAltText('RallyRoom 팬 투표 커뮤니티')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
     expect(within(banner).getByRole('link', { name: '투표방 만들기' })).toBeInTheDocument();
