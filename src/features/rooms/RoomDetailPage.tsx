@@ -1,8 +1,10 @@
 import { type FormEvent, useState } from 'react';
-import { MessageSquareText, PlusCircle, Ticket } from 'lucide-react';
+import { PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { getVoteTitle } from '../../shared/domain/roomDisplay';
 import type { RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
+import { RoomMessagePanel } from '../messages/RoomMessagePanel';
+import type { PostRoomMessageCommand } from '../messages/usePostRoomMessage';
 import { MissionList } from '../missions/MissionList';
 import type { CompleteMissionCommand } from '../missions/useCompleteMission';
 import { NotFoundPage } from '../not-found/NotFoundPage';
@@ -30,7 +32,9 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const voteTitle = getVoteTitle(room);
   const castVoteCommand = createDemoCastVoteCommand(room);
   const completeMissionCommand = createDemoCompleteMissionCommand(room);
+  const postRoomMessageCommand = createDemoPostRoomMessageCommand(room);
   const isVotingOpen = room.status === 'active';
+  const isMessageOpen = room.status !== 'closed';
   const voteClosedReason = isVotingOpen ? undefined : getVoteClosedReason(room.status);
   const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
   const canSpendRp = profile.totalRp >= room.addOptionCost.rp;
@@ -133,21 +137,14 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           completeMissionCommand={completeMissionCommand}
         />
 
-        <section className="content-panel fan-wall" aria-labelledby="fan-wall-title">
-          <div className="collection-heading compact">
-            <div>
-              <p className="eyebrow">Messages</p>
-              <h2 id="fan-wall-title">팬월</h2>
-            </div>
-            <MessageSquareText size={18} aria-hidden="true" />
-          </div>
-          {room.messages.map((message) => (
-            <article key={message.id} className="message-row">
-              <span className="chip">{message.type === 'cheer' ? '메시지' : '질문'}</span>
-              <p>{message.body}</p>
-            </article>
-          ))}
-        </section>
+        <RoomMessagePanel
+          key={`${room.id}-messages`}
+          roomId={room.id}
+          messages={room.messages}
+          postRoomMessageCommand={postRoomMessageCommand}
+          isMessageOpen={isMessageOpen}
+          closedReason="마감된 방은 팬월 메시지 작성이 종료됐어요."
+        />
       </div>
     </div>
   );
@@ -191,6 +188,28 @@ function createDemoCompleteMissionCommand(room: RallyRoom): CompleteMissionComma
               }
             ]
           : []
+      }
+    };
+  };
+}
+
+let demoMessageSequence = 0;
+
+function createDemoPostRoomMessageCommand(room: RallyRoom): PostRoomMessageCommand {
+  return async ({ type, body }) => {
+    demoMessageSequence += 1;
+
+    return {
+      ok: true,
+      data: {
+        message: {
+          id: `${room.id}-message-demo-${demoMessageSequence}`,
+          type,
+          body,
+          createdAt: '2026-05-30T09:05:00.000Z'
+        },
+        awardedRp: 10,
+        awardedEnergy: 3
       }
     };
   };
