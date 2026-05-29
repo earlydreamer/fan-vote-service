@@ -47,8 +47,12 @@ const forbiddenRules = [
     pattern: /전달\s*보장/
   },
   {
-    label: '소속사 전달',
-    pattern: /소속사\s*전달/
+    label: '소속사',
+    pattern: /소속사/
+  },
+  {
+    label: '실제 반영',
+    pattern: /실제\s*반영/
   }
 ] as const;
 
