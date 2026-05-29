@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { MessageSquareText, PlusCircle, Ticket, Vote } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
+import { getVoteTitle } from '../../shared/domain/roomDisplay';
 import type { Candidate } from '../../shared/types/rallyroom';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { NotFoundPage } from '../not-found/NotFoundPage';
@@ -21,6 +22,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   if (!room) return <NotFoundPage />;
 
   const category = demoReadRepository.getCategory(room.categoryId);
+  const voteTitle = getVoteTitle(room);
   const canSpendTicket = voteTickets >= room.addOptionCost.voteTickets;
   const canSpendRp = rp >= room.addOptionCost.rp;
   const optionCostLabel = canSpendTicket ? `투표권 ${room.addOptionCost.voteTickets}장` : `${room.addOptionCost.rp} RP`;
@@ -58,6 +60,10 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
         <div className="detail-stage__copy">
           <p className="eyebrow">Vote detail</p>
           <h1 id="room-title">{room.title}</h1>
+          <div className="detail-vote-title">
+            <span>투표 제목</span>
+            <strong>{voteTitle}</strong>
+          </div>
           <p>{room.topic}</p>
           <div className="room-card__meta">
             <span className="chip">{category?.name ?? '투표방'}</span>

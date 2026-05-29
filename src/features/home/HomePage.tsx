@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Flame, PlusCircle, Sparkles, Ticket, Trophy } from 'lucide-react';
+import { PlusCircle, Sparkles, Ticket, Trophy, Zap } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
+import { getVoteTitle } from '../../shared/domain/roomDisplay';
 import type { DiscoverySort, RallyRoom } from '../../shared/types/rallyroom';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { RoomCard } from '../../shared/ui/RoomCard';
@@ -21,7 +22,7 @@ export function HomePage() {
     (room) => selectedCategoryId === 'all' || room.categoryId === selectedCategoryId
   );
   const featuredRoom = dashboard.featuredRooms[0] ?? dashboard.allRooms[0];
-  const secondaryFeaturedRooms = dashboard.featuredRooms.slice(1, 4);
+  const secondaryFeaturedRooms = dashboard.featuredRooms.slice(1, 3);
   const totalVotes = dashboard.allRooms.reduce(
     (sum, room) => sum + room.candidates.reduce((roomSum, candidate) => roomSum + candidate.voteCount, 0),
     0
@@ -29,23 +30,18 @@ export function HomePage() {
 
   return (
     <div className="home-discovery">
-      <section className="top-signal-strip" aria-label="오늘의 활동 요약">
-        <span>
-          <Flame size={16} aria-hidden="true" />
-          Live {dashboard.activeRooms.length}
-        </span>
-        <span>{totalVotes.toLocaleString()}표 누적</span>
-        <span>보유 투표권 {dashboard.profile.voteTickets}장</span>
-        <span>{dashboard.profile.weeklyRp.toLocaleString()} RP 이번 주 획득</span>
-      </section>
-
       <section className="featured-stage" aria-label="Featured 투표">
         <div className="featured-copy">
-          <p className="eyebrow">Fan Vote Discovery</p>
-          <h1 id="home-title">지금 뜨는 팬 투표</h1>
+          <div className="hero-pill">
+            <Zap size={17} aria-hidden="true" />
+            팬이 만드는 투표의 공간
+          </div>
+          <h1 id="home-title">
+            지금 뜨는 <span>팬 투표</span>를 직접 만들어보세요
+          </h1>
           <p>
-            팬이 직접 주제를 열고 후보를 더하며, 투표권과 RP를 다시 참여 행동으로 쓰는 인기투표
-            보드예요.
+            좋아하는 작품, 캐릭터, 장면을 팬이 직접 투표방으로 만들고 후보를 더해요. 투표권과 RP는
+            다시 항목 추가와 결과 카드로 이어집니다.
           </p>
           <div className="featured-actions">
             <a className="button button-primary" href={`/rooms/${featuredRoom.id}`}>
@@ -56,19 +52,40 @@ export function HomePage() {
               투표방 만들기
             </a>
           </div>
+          <div className="hero-stats" aria-label="오늘의 활동 요약">
+            <span>
+              <strong>{dashboard.activeRooms.length}</strong>
+              Live
+            </span>
+            <span>
+              <strong>{totalVotes.toLocaleString()}</strong>
+              누적 표
+            </span>
+            <span>
+              <strong>{dashboard.profile.voteTickets}장</strong>
+              보유 투표권
+            </span>
+          </div>
         </div>
 
+        <div className="hero-art-card">
+          <img
+            src="https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/hero-1-55890d0c-0afe-481f-9557-eb2b3b35af2f.png"
+            alt="RallyRoom 팬 투표 커뮤니티"
+          />
+        </div>
+      </section>
+
+      <section className="featured-strip" aria-label="함께 뜨는 투표">
         <FeaturedVote room={featuredRoom} />
-
-        <div className="featured-stack" aria-label="함께 뜨는 투표">
-          {secondaryFeaturedRooms.map((room) => (
-            <a key={room.id} href={`/rooms/${room.id}`} className="featured-mini">
-              <span>{room.featuredLabel ?? 'Featured'}</span>
-              <strong>{room.title}</strong>
-              <em>{room.participantCount.toLocaleString()}명 참여</em>
-            </a>
-          ))}
-        </div>
+        {secondaryFeaturedRooms.map((room) => (
+          <a key={room.id} href={`/rooms/${room.id}`} className="featured-mini">
+            <span>{room.featuredLabel ?? 'Featured'}</span>
+            <strong>{getVoteTitle(room)}</strong>
+            <em>응원방 · {room.title}</em>
+            <small>{room.participantCount.toLocaleString()}명 참여</small>
+          </a>
+        ))}
       </section>
 
       <nav className="category-filter" aria-label="카테고리 탐색">
@@ -111,7 +128,7 @@ export function HomePage() {
           </div>
         </div>
 
-        <div className="vote-card-grid">
+        <div className="vote-card-grid vote-card-grid--wide">
           {visibleRooms.map((room) => (
             <RoomCard key={room.id} room={room} category={demoReadRepository.getCategory(room.categoryId)} />
           ))}
@@ -187,9 +204,10 @@ function FeaturedVote({ room }: { room: RallyRoom }) {
   const category = demoReadRepository.getCategory(room.categoryId);
   const leader = [...room.candidates].sort((left, right) => right.voteCount - left.voteCount)[0];
   const voteCount = room.candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0);
+  const voteTitle = getVoteTitle(room);
 
   return (
-    <article className="featured-vote-card" aria-label={`${room.title} Featured 카드`}>
+    <article className="featured-vote-card" aria-label={`${voteTitle} Featured 카드`}>
       <div className="featured-vote-card__media">
         <span>{room.featuredLabel ?? 'Featured'}</span>
         <strong>{room.thumbnail.label}</strong>
@@ -199,7 +217,8 @@ function FeaturedVote({ room }: { room: RallyRoom }) {
           <span className="chip">{category?.name ?? '투표방'}</span>
           <span className="chip chip-energy">{room.candidates.length}개 항목</span>
         </div>
-        <h2>{room.title}</h2>
+        <span className="room-card__room-name">응원방 · {room.title}</span>
+        <h2>{voteTitle}</h2>
         <p>{room.topic}</p>
         <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
         <div className="featured-vote-card__stats">

@@ -1,3 +1,4 @@
+import { deriveVoteTitle } from '../../domain/roomDisplay';
 import type { CategoryTone, PollFormat, RallyRoom, RoomStatus } from '../../types/rallyroom';
 
 type CandidateSeed = readonly [id: string, title: string, voteCount: number];
@@ -6,6 +7,7 @@ interface RoomSeed {
   id: string;
   slug: string;
   title: string;
+  voteTitle?: string;
   topic: string;
   categoryId: string;
   targetId: string;
@@ -663,6 +665,7 @@ function createRoom(seed: RoomSeed): RallyRoom {
     id: seed.id,
     slug: seed.slug,
     title: seed.title,
+    voteTitle: seed.voteTitle ?? deriveVoteTitle(seed.title),
     topic: seed.topic,
     categoryId: seed.categoryId,
     primaryTargetId: seed.targetId,

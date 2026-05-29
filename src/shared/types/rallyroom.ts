@@ -86,6 +86,7 @@ export interface RallyRoom {
   id: string;
   slug: string;
   title: string;
+  voteTitle?: string;
   topic: string;
   categoryId: string;
   primaryTargetId: string;

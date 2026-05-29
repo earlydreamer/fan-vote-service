@@ -1,5 +1,5 @@
 import { type MouseEvent, useEffect, useState } from 'react';
-import { Home, PlusCircle, Search, UserRound } from 'lucide-react';
+import { Home, PlusCircle, UserRound } from 'lucide-react';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
 import { NotFoundPage } from '../features/not-found/NotFoundPage';
@@ -56,12 +56,6 @@ export function AppShell() {
             <small>Fan Vote Discovery</small>
           </span>
         </a>
-
-        <label className="shell-search">
-          <Search size={17} aria-hidden="true" />
-          <span className="sr-only">투표방 검색</span>
-          <input value="카테고리, 투표방, 결과 카드 검색" readOnly />
-        </label>
 
         <nav className="primary-nav" aria-label="주요 화면">
           {primaryNavItems.map((item) => (

@@ -46,6 +46,22 @@ describe('RoomCard', () => {
     expect(within(ranking).getByText('테스트 후보')).toBeInTheDocument();
     expect(within(ranking).getByText('10표')).toBeInTheDocument();
   });
+
+  it('separates the vote title from the room name in the card hierarchy', () => {
+    render(
+      <RoomCard
+        room={buildRoom({
+          title: '테스트 응원방',
+          voteTitle: '테스트 대표 투표',
+          topic: '테스트 투표 설명'
+        })}
+      />
+    );
+
+    expect(screen.getByRole('heading', { name: '테스트 대표 투표' })).toBeInTheDocument();
+    expect(screen.getByText('응원방 · 테스트 응원방')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '테스트 응원방' })).not.toBeInTheDocument();
+  });
 });
 
 function buildRoom(overrides: Partial<RallyRoom> = {}): RallyRoom {

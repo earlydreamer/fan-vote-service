@@ -18,7 +18,7 @@ describe('RallyRoom app shell', () => {
     expect(banner).toHaveTextContent('Fan Vote Discovery');
     expect(screen.getByText('팬이 만드는 투표의 공간')).toBeInTheDocument();
     expect(screen.getByAltText('RallyRoom 팬 투표 커뮤니티')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표를 직접 만들어보세요' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
     expect(within(banner).getByRole('link', { name: '투표방 만들기' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Featured 투표' })).toBeInTheDocument();
@@ -42,7 +42,7 @@ describe('RallyRoom app shell', () => {
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
 
     expect(screen.getByRole('button', { name: '게임' })).toHaveAttribute('aria-pressed', 'true');
-    expect(within(gallery).getByText('픽셀 리그 시즌 투표 결과')).toBeInTheDocument();
+    expect(within(gallery).getByText('응원방 · 픽셀 리그 시즌 투표 결과')).toBeInTheDocument();
     expect(within(gallery).queryByText('은하 무대 오프닝 투표방')).not.toBeInTheDocument();
   });
 
@@ -75,7 +75,7 @@ describe('RallyRoom app shell', () => {
 
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
 
-    await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝 투표방/ }));
+    await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
 
     expect(screen.getByRole('heading', { name: '은하 무대 오프닝 투표방' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '투표 현황' })).toBeInTheDocument();
@@ -94,7 +94,7 @@ describe('RallyRoom app shell', () => {
     render(<App />);
 
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
-    await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝 투표방/ }));
+    await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
 
     const optionComposer = screen.getByRole('region', { name: '투표 항목 추가' });
 

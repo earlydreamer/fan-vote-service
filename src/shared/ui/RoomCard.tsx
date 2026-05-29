@@ -1,5 +1,6 @@
 import { type CSSProperties } from 'react';
-import { Clock3, Plus, UsersRound, Vote } from 'lucide-react';
+import { Clock3, UsersRound } from 'lucide-react';
+import { getVoteTitle } from '../domain/roomDisplay';
 import type { Category, PollFormat, RallyRoom } from '../types/rallyroom';
 import { ProgressMeter } from './ProgressMeter';
 
@@ -11,6 +12,12 @@ const serviceCalendarFormatter = new Intl.DateTimeFormat('en-CA', {
   month: '2-digit',
   day: '2-digit'
 });
+const ROOM_VISUAL_ASSETS = [
+  'https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/feature-1-dc59fb6f-4c07-490c-b308-9efb11daa17a.png',
+  'https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/feature-2-a4b50744-1afb-491f-a97c-67a105f47849.png',
+  'https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/feature-3-307284d5-8ca5-49f1-8542-f0e7d1de6bd1.png',
+  'https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/feature-4-63a8efb9-3ff9-4a78-89e9-5b3964781cdd.png'
+] as const;
 
 interface RoomCardProps {
   room: RallyRoom;
@@ -21,20 +28,23 @@ interface RoomCardProps {
 export function RoomCard({ room, category, compact = false }: RoomCardProps) {
   const candidateRanking = [...room.candidates]
     .sort((left, right) => right.voteCount - left.voteCount)
-    .slice(0, compact ? 1 : 3);
+    .slice(0, compact ? 1 : 2);
   const voteCount = room.candidates.reduce((sum, candidate) => sum + candidate.voteCount, 0);
+  const voteTitle = getVoteTitle(room);
   const thumbnailStyle = {
     '--thumb-accent': room.thumbnail.accent
   } as CSSProperties;
+  const visualAsset = getRoomVisualAsset(room.id);
 
   return (
     <article
       className={compact ? 'room-card room-card--compact' : 'room-card'}
-      aria-label={`${room.title} 카드`}
+      aria-label={`${voteTitle} 투표 카드`}
       data-category={category?.colorToken ?? 'primary'}
       data-tone={room.thumbnail.tone}
     >
       <a className="room-card__visual" href={`/rooms/${room.id}`} style={thumbnailStyle} aria-hidden="true" tabIndex={-1}>
+        <img src={visualAsset} alt="" loading="lazy" decoding="async" />
         <span className="room-card__status">{formatStatus(room)}</span>
         <span className="room-card__thumbnail-label">{room.thumbnail.label}</span>
       </a>
@@ -46,10 +56,11 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
           {!compact && <span className="chip chip-energy">{room.candidates.length}개 항목</span>}
         </div>
 
+        <span className="room-card__room-name">응원방 · {room.title}</span>
         <h3>
-          <a href={`/rooms/${room.id}`}>{room.title}</a>
+          <a href={`/rooms/${room.id}`}>{voteTitle}</a>
         </h3>
-        {!compact && <p>{room.topic}</p>}
+        {!compact && <p className="room-card__topic-copy">{room.topic}</p>}
 
         {candidateRanking.length > 0 && (
           <ol className="room-card__leaders" aria-label="후보 랭킹 미리보기">
@@ -71,10 +82,6 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
             {room.participantCount.toLocaleString()}명
           </span>
           <span>
-            <Vote size={16} aria-hidden="true" />
-            {voteCount.toLocaleString()}표
-          </span>
-          <span>
             <Clock3 size={16} aria-hidden="true" />
             {room.status === 'result_published' ? '결과' : formatDday(room.endAt)}
           </span>
@@ -82,16 +89,18 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
 
         {!compact && (
           <div className="room-card__footer">
-            <span>
-              <Plus size={15} aria-hidden="true" />
-              후보 추가 {room.addOptionCost.voteTickets}장
-            </span>
+            <span>{voteCount.toLocaleString()}표</span>
             <a href={`/rooms/${room.id}`}>{room.status === 'result_published' ? '결과 보기' : '투표하기'}</a>
           </div>
         )}
       </div>
     </article>
   );
+}
+
+function getRoomVisualAsset(roomId: string): string {
+  const hash = Array.from(roomId).reduce((sum, character) => sum + character.charCodeAt(0), 0);
+  return ROOM_VISUAL_ASSETS[hash % ROOM_VISUAL_ASSETS.length] ?? ROOM_VISUAL_ASSETS[0];
 }
 
 function formatStatus(room: RallyRoom): string {
