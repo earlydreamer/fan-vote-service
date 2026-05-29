@@ -76,10 +76,10 @@ Postgres RPC / transaction functions
 
 루트 `DESIGN.md`는 RallyRoom UI의 시각 source of truth다. UI 구현 전 반드시 읽는다.
 
-- 방향: `Fan Ops Board`, 팬이 직접 여는 응원방 운영 대시보드
+- 방향: `Fan Vote Board`, 팬이 직접 여는 인기투표/랭킹 보드
 - 첫 화면: 랜딩 히어로가 아니라 홈/탐색 대시보드
-- 주요 시각 객체: 응원방 카드, Room Energy 게이지, 미션 카드, RP/아이콘 칩, 결과 카드
-- 금지: 실존 스타/작품 이미지, 공식성 오인 문구, 베이지 SaaS 히어로, 보라/파랑 그라디언트 중심 디자인, `Inter` primary font
+- 주요 시각 객체: 투표방 카드, Vote Energy 게이지, 랭킹/후보 카드, 미션 카드, RP/아이콘 칩, 결과 카드
+- 금지: 실존 스타/작품 이미지, 공식성 오인 문구, 베이지 SaaS 히어로, 보라/파랑 그라디언트 중심 디자인, 하드 보더/블록 포스터풍 UI, `Inter` primary font
 - 목데이터: 이후 Supabase read model로 교체 가능한 JSON/typed fixture 구조 우선
 
 ## 현재 디렉터리 구조
