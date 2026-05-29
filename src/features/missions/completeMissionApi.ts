@@ -3,7 +3,7 @@ import { postCommand, type CommandClient, type CommandResult } from '../../share
 export interface CompleteMissionInput {
   roomId: string;
   missionId: string;
-  proofText?: string;
+  textValue?: string;
 }
 
 export interface CompleteMissionResponse {
@@ -13,13 +13,10 @@ export interface CompleteMissionResponse {
   earnedRewards: string[];
 }
 
-interface CompleteMissionCommandPayload {
-  command: 'complete-mission';
-  mission: {
-    roomId: string;
-    missionId: string;
-    proofText?: string;
-  };
+interface CompleteMissionRequest {
+  roomId: string;
+  missionId: string;
+  textValue?: string;
 }
 
 export function completeMission(
@@ -29,13 +26,10 @@ export function completeMission(
   return postCommand(client, 'complete-mission', buildCompleteMissionPayload(input));
 }
 
-function buildCompleteMissionPayload(input: CompleteMissionInput): CompleteMissionCommandPayload {
+function buildCompleteMissionPayload(input: CompleteMissionInput): CompleteMissionRequest {
   return {
-    command: 'complete-mission',
-    mission: {
-      roomId: input.roomId,
-      missionId: input.missionId,
-      ...(input.proofText?.trim() ? { proofText: input.proofText.trim() } : {})
-    }
+    roomId: input.roomId,
+    missionId: input.missionId,
+    ...(input.textValue?.trim() ? { textValue: input.textValue.trim() } : {})
   };
 }

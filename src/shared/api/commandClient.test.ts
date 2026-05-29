@@ -102,6 +102,39 @@ describe('command client boundary', () => {
     });
   });
 
+  it('maps platform status-only errors to standard command error codes', async () => {
+    const cases = [
+      { status: 401, code: 'UNAUTHENTICATED', message: '로그인이 필요해요.' },
+      { status: 403, code: 'FORBIDDEN', message: '이 작업을 수행할 권한이 없어요.' },
+      { status: 429, code: 'RATE_LIMITED', message: '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.' },
+      { status: 404, code: 'NOT_FOUND', message: '요청한 대상을 찾을 수 없어요.' }
+    ] as const;
+
+    for (const testCase of cases) {
+      const fetcher = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+        jsonResponse({ message: 'Missing authorization header' }, { status: testCase.status })
+      );
+      const client = createCommandClient({
+        functionsUrl: 'https://project-ref.functions.supabase.co',
+        fetcher: fetcher as unknown as typeof fetch
+      });
+
+      const result = await postCommand(client, 'cast-vote', {
+        roomId: 'room-1',
+        candidateIds: ['candidate-1']
+      });
+
+      expect(result).toEqual({
+        ok: false,
+        error: {
+          code: testCase.code,
+          message: testCase.message,
+          status: testCase.status
+        }
+      });
+    }
+  });
+
   it('returns a config error when required command env values are missing', () => {
     const result = readCommandConfig({
       VITE_SUPABASE_FUNCTIONS_URL: ''

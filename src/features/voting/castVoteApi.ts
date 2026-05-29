@@ -15,24 +15,18 @@ export interface CastVoteResponse {
   participantCount: number;
 }
 
-interface CastVoteCommandPayload {
-  command: 'cast-vote';
-  vote: {
-    roomId: string;
-    candidateIds: string[];
-  };
+interface CastVoteRequest {
+  roomId: string;
+  candidateIds: string[];
 }
 
 export function castVote(client: CommandClient, input: CastVoteInput): Promise<CommandResult<CastVoteResponse>> {
   return postCommand(client, 'cast-vote', buildCastVotePayload(input));
 }
 
-function buildCastVotePayload(input: CastVoteInput): CastVoteCommandPayload {
+function buildCastVotePayload(input: CastVoteInput): CastVoteRequest {
   return {
-    command: 'cast-vote',
-    vote: {
-      roomId: input.roomId,
-      candidateIds: [...input.candidateIds]
-    }
+    roomId: input.roomId,
+    candidateIds: [...input.candidateIds]
   };
 }

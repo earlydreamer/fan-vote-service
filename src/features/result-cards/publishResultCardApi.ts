@@ -14,9 +14,6 @@ export function publishResultCard(
   input: PublishResultCardInput
 ): Promise<CommandResult<PublishResultCardResponse>> {
   return postCommand(client, 'publish-result-card', {
-    command: 'publish-result-card',
-    resultCard: {
-      roomId: input.roomId
-    }
+    roomId: input.roomId
   });
 }
