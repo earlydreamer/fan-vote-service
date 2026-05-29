@@ -26,6 +26,7 @@
 - 최신 운영 절차는 [.md/rallyroom_delivery_workflow_20260529.md](.md/rallyroom_delivery_workflow_20260529.md) 를 따른다.
 - GitHub issue, draft PR, review, merge 절차는 [.md/rallyroom_github_review_workflow_20260529.md](.md/rallyroom_github_review_workflow_20260529.md) 를 따른다.
 - 기술 스택과 디렉터리 구조는 [.md/rallyroom_tech_stack_and_directory_structure_20260529.md](.md/rallyroom_tech_stack_and_directory_structure_20260529.md) 에 명시하고, 구조나 의존성이 바뀔 때마다 갱신한다.
+- 구현 순서와 범위는 [.md/rallyroom_implementation_sequence_and_scope_20260529.md](.md/rallyroom_implementation_sequence_and_scope_20260529.md) 를 따른다.
 - TDD 스펙 분해 기준은 [.md/rallyroom_tdd_feature_slicing_20260529.md](.md/rallyroom_tdd_feature_slicing_20260529.md) 를 따른다.
 - 초기 세팅 작업 로그는 [.md/features/foundation_project_setup_20260529.md](.md/features/foundation_project_setup_20260529.md) 를 확인한다.
 

@@ -45,6 +45,8 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 
 기술 스택과 디렉터리 구조는 `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`에서 관리합니다. 의존성이나 구조가 바뀌면 같은 feature PR에서 함께 갱신합니다.
 
+구현 순서와 범위는 `.md/rallyroom_implementation_sequence_and_scope_20260529.md`를 기준으로 합니다.
+
 초기 세팅 이후 모든 구현은 다음 순서로 진행합니다.
 
 1. `.md/features/`에 feature 문서를 작성합니다.
