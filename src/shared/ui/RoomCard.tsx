@@ -18,6 +18,10 @@ interface RoomCardProps {
 }
 
 export function RoomCard({ room, category, compact = false }: RoomCardProps) {
+  const candidateRanking = [...room.candidates]
+    .sort((left, right) => right.voteCount - left.voteCount)
+    .slice(0, compact ? 1 : 2);
+
   return (
     <article className="room-card" data-category={category?.colorToken ?? 'primary'}>
       <div className="room-card__strip" aria-hidden="true" />
@@ -30,6 +34,17 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
           <a href={`/rooms/${room.id}`}>{room.title}</a>
         </h3>
         {!compact && <p>{room.topic}</p>}
+        {candidateRanking.length > 0 && (
+          <ol className="room-card__leaders" aria-label="후보 랭킹 미리보기">
+            {candidateRanking.map((candidate, index) => (
+              <li key={candidate.id}>
+                <span>{index + 1}</span>
+                <strong>{candidate.title}</strong>
+                <em>{candidate.voteCount.toLocaleString()}표</em>
+              </li>
+            ))}
+          </ol>
+        )}
         <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
         <div className="room-card__stats">
           <span>

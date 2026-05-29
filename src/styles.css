@@ -252,7 +252,7 @@ select {
 
 .dashboard-intro {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, auto);
   gap: 24px;
   align-items: end;
   margin-block-end: 24px;
@@ -262,6 +262,38 @@ select {
   border-radius: 8px;
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(18px);
+}
+
+.intro-actions {
+  display: grid;
+  gap: 12px;
+  justify-items: end;
+}
+
+.intro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(72px, 1fr));
+  gap: 8px;
+  width: min(360px, 100%);
+}
+
+.intro-stats span {
+  display: grid;
+  gap: 4px;
+  min-height: 72px;
+  padding: 12px;
+  color: var(--ink-muted);
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+}
+
+.intro-stats strong {
+  color: var(--ink);
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-size: 18px;
 }
 
 .dashboard-intro > *,
@@ -438,6 +470,56 @@ select {
   color: var(--ink-muted);
   font-size: 14px;
   line-height: 1.55;
+}
+
+.room-card__leaders {
+  display: grid;
+  gap: 8px;
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+}
+
+.room-card__leaders li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  min-height: 38px;
+  padding: 8px 10px;
+  background: color-mix(in srgb, var(--vote-soft) 55%, white);
+  border: 1px solid rgba(37, 99, 235, 0.12);
+  border-radius: 8px;
+}
+
+.room-card__leaders span {
+  display: grid;
+  place-items: center;
+  inline-size: 24px;
+  block-size: 24px;
+  color: white;
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-size: 12px;
+  font-weight: 900;
+  background: var(--vote);
+  border-radius: 999px;
+}
+
+.room-card__leaders strong {
+  overflow: hidden;
+  color: var(--ink);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.room-card__leaders em {
+  color: var(--vote);
+  font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 900;
+  white-space: nowrap;
 }
 
 .room-card__stats {
@@ -880,6 +962,15 @@ select {
     padding: 18px;
   }
 
+  .intro-actions {
+    justify-items: stretch;
+  }
+
+  .intro-stats {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
   .board-section,
   .content-panel {
     padding: 16px;
@@ -914,6 +1005,14 @@ select {
     display: grid;
     grid-template-columns: 1fr;
     gap: 4px;
+  }
+
+  .room-card__leaders li {
+    grid-template-columns: 28px minmax(0, 1fr);
+  }
+
+  .room-card__leaders em {
+    grid-column: 2;
   }
 
   .stat-grid,

@@ -1,10 +1,14 @@
-import { Sparkles } from 'lucide-react';
+import { PlusCircle, Sparkles } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { RoomCard } from '../../shared/ui/RoomCard';
 
 export function HomePage() {
   const dashboard = demoReadRepository.getDashboard();
+  const activeVoteCount = dashboard.activeRooms.reduce(
+    (sum, room) => sum + room.candidates.reduce((roomSum, candidate) => roomSum + candidate.voteCount, 0),
+    0
+  );
 
   return (
     <div className="dashboard-page">
@@ -17,9 +21,26 @@ export function HomePage() {
             남겨요.
           </p>
         </div>
-        <a className="button button-primary" href="/rooms/new">
-          투표방 만들기
-        </a>
+        <div className="intro-actions">
+          <a className="button button-primary" href="/rooms/new">
+            <PlusCircle size={18} aria-hidden="true" />
+            투표방 만들기
+          </a>
+          <div className="intro-stats" aria-label="오늘의 투표 요약">
+            <span>
+              Live
+              <strong>{dashboard.activeRooms.length}</strong>
+            </span>
+            <span>
+              Votes
+              <strong>{activeVoteCount.toLocaleString()}</strong>
+            </span>
+            <span>
+              Rewards
+              <strong>{dashboard.profile.weeklyRp.toLocaleString()} RP</strong>
+            </span>
+          </div>
+        </div>
       </section>
 
       <div className="dashboard-grid">
