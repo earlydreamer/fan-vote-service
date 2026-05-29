@@ -15,9 +15,9 @@ colors:
   surface: "#FFFFFF"
   surface-raised: "#F9FAFB"
   surface-tint: "#EEF6FF"
-  stage: "#111418"
-  stage-soft: "#1A1F27"
-  stage-line: "#2A313C"
+  hero-tint: "#F7FBFF"
+  hero-mint: "#EFFAF5"
+  hero-lavender: "#F5F3FF"
   line: "#DDE3EA"
   line-soft: "#E8EEF4"
   primary: "#00D084"
@@ -335,7 +335,7 @@ Use a spacious content-platform mood:
 - clear category chips
 - energetic but controlled accent colors
 
-Light mode is the default browsing surface. Dark, cinematic, or high-contrast surfaces are allowed for Featured or result-card moments.
+Light mode is the default browsing surface. Featured and result-card moments should stay bright and editorial; avoid large near-black blocks or dark-mode-like pages unless a later direction explicitly asks for it.
 
 ### Cards
 
@@ -401,9 +401,9 @@ Tag rules:
 - `energy` amber: D-day and ending-soon urgency
 - `mission` mint: participation missions
 - `reward` violet: RP, badges, paid perks
-- `stage` near-black: high-impact Featured or result surfaces
+- `hero-tint`, `hero-mint`, `hero-lavender`: bright editorial Featured/result surfaces
 
-Keep accent colors functional and contained. Do not let one hue dominate the whole app.
+Keep accent colors functional and contained. Do not let one hue dominate the whole app, and do not make the product feel like a dark streaming clone.
 
 ## Page Ingredients
 
