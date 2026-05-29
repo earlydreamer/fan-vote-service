@@ -30,6 +30,7 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
           const receipt = missionState.receipts[mission.id];
           const error = missionState.errors[mission.id];
           const isSubmitting = missionState.submittingMissionId === mission.id;
+          const isAnyMissionSubmitting = missionState.submittingMissionId !== null;
           const isCompleted = mission.isCompleted || Boolean(receipt);
           const titleId = `${mission.id}-title`;
 
@@ -41,7 +42,6 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
 
               {mission.type === 'message' && !isCompleted && (
                 <label className="mission-card__text-field">
-                  <span className="sr-only">{mission.title} 입력</span>
                   <textarea
                     aria-label={`${mission.title} 입력`}
                     value={missionState.textValues[mission.id] ?? ''}
@@ -54,7 +54,7 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
               <button
                 type="button"
                 className="mission-card__button"
-                disabled={isCompleted || isSubmitting}
+                disabled={isCompleted || isAnyMissionSubmitting}
                 onClick={() => {
                   void missionState.completeMission(mission.id);
                 }}
