@@ -109,8 +109,8 @@ fallback 기록:
 7. PR 코멘트 또는 review reply로 판단 근거를 한국어로 남긴다.
 8. 리뷰가 별도 작업으로 분리되어야 하면 한국어 follow-up issue로 추적한다.
 9. follow-up issue는 현재 PR의 merge gate가 아니다.
-10. Codex 리뷰 자동화는 follow-up issue 생성 후 Codex review thread resolve와 자동 merge를 시도한다.
-11. 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
+10. Codex 리뷰 자동화는 follow-up issue 생성 후 Codex만 남긴 review thread resolve와 자동 merge를 시도한다.
+11. 사람이 답변한 review thread는 자동 resolve하지 않는다. 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
 12. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
 13. 현재 PR에 실질 수정 커밋을 push한 경우에는 같은 공급자에게 재리뷰를 요청한다.
 
@@ -133,7 +133,8 @@ draft 해제 후:
 6. follow-up issue는 현재 PR의 merge gate가 아니다.
 7. workflow는 Codex review thread resolve를 시도한다.
 8. workflow는 PR이 draft가 아니고, CI/status/check가 실패 또는 대기 상태가 아니며, 남은 unresolved review thread가 없으면 `merge_method: merge`로 자동 merge를 시도한다.
-9. 자동 merge가 실패하면 GitHub MCP로 PR 상태, head SHA, check 상태, unresolved thread를 확인하고 수동 merge 여부를 판단한다.
+9. Actions check 완료 이벤트가 누락되는 경우를 보완하기 위해 schedule retry가 open PR의 자동 merge 조건을 주기적으로 다시 확인한다.
+10. 자동 merge가 실패하면 GitHub MCP로 PR 상태, head SHA, check 상태, unresolved thread를 확인하고 수동 merge 여부를 판단한다.
 
 ## 금지
 

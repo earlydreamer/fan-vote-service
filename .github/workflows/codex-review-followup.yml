@@ -12,6 +12,8 @@ on:
   check_suite:
     types: [completed]
   status:
+  schedule:
+    - cron: '*/5 * * * *'
 
 permissions:
   contents: write
@@ -31,7 +33,8 @@ jobs:
       (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@codex review')) ||
       github.event_name == 'pull_request' ||
       github.event_name == 'check_suite' ||
-      github.event_name == 'status'
+      github.event_name == 'status' ||
+      github.event_name == 'schedule'
     runs-on: ubuntu-latest
     steps:
       - name: Codex 피드백 이관 및 자동 머지 시도
@@ -101,6 +104,21 @@ jobs:
               }
 
               return null;
+            }
+
+            async function getPullRequestRefs() {
+              if (eventName === 'schedule') {
+                const pulls = await github.paginate(github.rest.pulls.list, {
+                  owner,
+                  repo,
+                  state: 'open',
+                  per_page: 100,
+                });
+                return pulls.map((pullRequest) => ({ number: pullRequest.number }));
+              }
+
+              const pullRequestRef = await getPullRequestRef();
+              return pullRequestRef ? [pullRequestRef] : [];
             }
 
             function getFeedback() {
@@ -298,15 +316,15 @@ jobs:
               await github.graphql(mutation, { threadId });
             }
 
-            function isCodexThread(thread) {
-              return thread.comments.nodes.some((comment) => {
+            function isPureCodexThread(thread) {
+              return thread.comments.nodes.length > 0 && thread.comments.nodes.every((comment) => {
                 return CODEX_LOGINS.has(comment.author?.login);
               });
             }
 
             async function resolveCodexReviewThreads(prNumber) {
               const unresolved = await listUnresolvedReviewThreads(prNumber);
-              const codexThreads = unresolved.filter(isCodexThread);
+              const codexThreads = unresolved.filter(isPureCodexThread);
 
               for (const thread of codexThreads) {
                 try {
@@ -458,10 +476,19 @@ jobs:
               return createdIssue;
             }
 
-            const prRef = await getPullRequestRef();
-            if (!prRef) return;
+            const prRefs = await getPullRequestRefs();
+            if (prRefs.length === 0) return;
 
             await ensureWorkflowLabels();
+
+            if (eventName === 'schedule') {
+              for (const prRef of prRefs) {
+                await tryAutoMerge(prRef.number);
+              }
+              return;
+            }
+
+            const prRef = prRefs[0];
 
             if (isCodexReviewRequestComment()) {
               await recordCodexReviewRequest(prRef.number);
