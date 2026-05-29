@@ -35,7 +35,7 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByText(/공식 제휴나 전달 보장을 암시하지 않도록/)).toBeInTheDocument();
   });
 
-  it('opens a room detail page and its result card route', async () => {
+  it('opens a room detail page and gates an unpublished result card route', async () => {
     const user = userEvent.setup();
     render(<App />);
 
@@ -49,8 +49,20 @@ describe('RallyRoom app shell', () => {
 
     await user.click(screen.getByRole('link', { name: '결과 카드 보기' }));
 
+    expect(screen.getByRole('heading', { name: '결과 카드 준비 중' })).toBeInTheDocument();
+    expect(screen.getByText(/은하 무대 오프닝 응원방/)).toBeInTheDocument();
+    expect(screen.queryByText('첫 장면 스포트라이트')).not.toBeInTheDocument();
+    expect(screen.queryByText('오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.')).not.toBeInTheDocument();
+  });
+
+  it('renders a published result card only for published rooms', () => {
+    window.history.pushState({}, '', '/rooms/room-pixel-season/result');
+
+    render(<App />);
+
     expect(screen.getByRole('heading', { name: '결과 카드' })).toBeInTheDocument();
-    expect(screen.getByText('은하 무대 오프닝 응원방')).toBeInTheDocument();
+    expect(screen.getByText('픽셀 리그 시즌 응원 결과')).toBeInTheDocument();
+    expect(screen.getByText('역전승 하이라이트')).toBeInTheDocument();
   });
 
   it('routes to profile, crew dashboard, and pricing pages from navigation', async () => {
