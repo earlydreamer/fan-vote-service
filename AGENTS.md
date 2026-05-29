@@ -49,7 +49,7 @@
 - GitHub remote: `https://github.com/earlydreamer/fan-vote-service.git`
 - 계정: `earlydreamer`
 - 빈 remote에 올리는 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 기능/수정/문서 변경은 feature branch에서 진행한다.
-- 작업 단위: issue 생성, feature branch, draft pull request, 테스트, review, ready for review, merge
+- 작업 단위: issue 생성, feature branch, draft pull request, 테스트, ready for review, review, 피드백 반영, merge
 - GitHub 작업은 가능한 한 GitHub MCP를 우선 사용한다. 로컬 커밋과 push는 local `git`을 사용하고, issue/PR/comment/review/merge는 GitHub MCP를 우선한다.
 - 각 feature는 `.md/features/` 안에 독립 작업 상태 파일을 가진다. 예정, 진행 중, 완료, 보류, 커밋 장부, PR/리뷰 상태를 그 파일에서 추적한다.
 - feature 브랜치 안에서는 의미 단위 커밋을 잘게 쌓는다. 최종 merge 전까지 rebase나 squash로 커밋을 합치지 않는다.
