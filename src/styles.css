@@ -967,8 +967,18 @@ select {
   }
 
   .intro-stats {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: 100%;
+  }
+
+  .intro-stats span {
+    min-height: 64px;
+    padding: 10px;
+    font-size: 11px;
+  }
+
+  .intro-stats strong {
+    font-size: 15px;
   }
 
   .board-section,
@@ -1013,6 +1023,10 @@ select {
 
   .room-card__leaders em {
     grid-column: 2;
+  }
+
+  .bottom-nav a {
+    min-width: 0;
   }
 
   .stat-grid,
