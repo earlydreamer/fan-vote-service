@@ -1,5 +1,5 @@
 import { type MouseEvent, useEffect, useState } from 'react';
-import { Home, PlusCircle, UserRound } from 'lucide-react';
+import { Home, PlusCircle, Ticket, UserRound } from 'lucide-react';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
 import { NotFoundPage } from '../features/not-found/NotFoundPage';
@@ -8,10 +8,13 @@ import { ProfilePage } from '../features/profile/ProfilePage';
 import { ResultCardPage } from '../features/result-cards/ResultCardPage';
 import { RoomCreatePage } from '../features/rooms/RoomCreatePage';
 import { RoomDetailPage } from '../features/rooms/RoomDetailPage';
+import { demoReadRepository } from '../shared/api/demoReadRepository';
 import { type AppRoute, matchRoute, primaryNavItems } from './routes';
 
 export function AppShell() {
   const [route, setRoute] = useState<AppRoute>(() => matchRoute(window.location.pathname));
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const profile = demoReadRepository.getProfile();
 
   useEffect(() => {
     const handlePopState = () => {
@@ -43,6 +46,9 @@ export function AppShell() {
 
   return (
     <div className="app-frame" onClick={handleShellClick}>
+      <a className="skip-link" href="#main-content">
+        본문으로 건너뛰기
+      </a>
       <header className="app-header">
         <a className="brand-mark" href="/" aria-label="RallyRoom 홈">
           <span className="brand-sigil" aria-hidden="true">
@@ -50,7 +56,7 @@ export function AppShell() {
           </span>
           <span>
             <strong>RallyRoom</strong>
-            <small>Fan Ops Board</small>
+            <small>Fan Vote Discovery</small>
           </span>
         </a>
 
@@ -62,12 +68,34 @@ export function AppShell() {
           ))}
         </nav>
 
-        <a className="button button-primary header-cta" href="/rooms/new">
-          응원방 만들기
-        </a>
+        <div className="account-area">
+          {isAuthenticated ? (
+            <>
+              <a className="account-chip" href="/profile" aria-label="내 프로필">
+                <span className="account-chip__wallet">
+                  <Ticket size={16} aria-hidden="true" />
+                  <span>투표권 {profile.voteTickets}장</span>
+                </span>
+                <span className="account-chip__rp">{profile.totalRp.toLocaleString()} RP</span>
+                <span className="account-avatar" aria-hidden="true">
+                  나
+                </span>
+              </a>
+              <button className="auth-button" type="button" onClick={() => setIsAuthenticated(false)}>
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <button className="auth-button auth-button--primary" type="button" onClick={() => setIsAuthenticated(true)}>
+              로그인
+            </button>
+          )}
+        </div>
       </header>
 
-      <main className="app-main">{renderRoute(route)}</main>
+      <main id="main-content" className="app-main">
+        {renderRoute(route)}
+      </main>
 
       <nav className="bottom-nav" aria-label="모바일 주요 화면">
         <a href="/">

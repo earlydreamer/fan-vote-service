@@ -2,8 +2,8 @@
   {
     "id": "room-stage-opening",
     "slug": "eunha-stage-opening",
-    "title": "은하 무대 오프닝 응원방",
-    "topic": "이번 주말 공개되는 가상 쇼케이스 오프닝 장면을 팬들이 함께 응원해요.",
+    "title": "은하 무대 오프닝 투표방",
+    "topic": "이번 주말 공개되는 가상 쇼케이스에서 가장 기대되는 오프닝 장면을 팬들이 직접 골라요.",
     "categoryId": "cat-stage",
     "primaryTargetId": "target-eunha-stage",
     "status": "active",
@@ -32,7 +32,7 @@
       {
         "id": "mission-stage-checkin",
         "type": "check_in",
-        "title": "오늘 응원 출석 찍기",
+        "title": "오늘 투표 출석 찍기",
         "rewardRp": 30,
         "rewardEnergy": 20,
         "isCompleted": false
@@ -40,7 +40,7 @@
       {
         "id": "mission-stage-message",
         "type": "message",
-        "title": "팬월에 한 줄 응원 남기기",
+        "title": "팬월에 한 줄 선택 이유 남기기",
         "rewardRp": 45,
         "rewardEnergy": 35,
         "isCompleted": false
@@ -50,14 +50,14 @@
       {
         "id": "msg-stage-1",
         "type": "cheer",
-        "body": "오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.",
+        "body": "오프닝 장면이 오래 기억될 수 있게 같이 골라보자.",
         "status": "visible",
         "createdAt": "2026-05-29T06:10:00.000Z"
       },
       {
         "id": "msg-stage-2",
         "type": "question",
-        "body": "결과 카드에 오늘의 응원 문구도 같이 들어가면 좋겠어요.",
+        "body": "결과 카드에 오늘의 선택 이유도 같이 들어가면 좋겠어요.",
         "status": "visible",
         "createdAt": "2026-05-29T06:32:00.000Z"
       }
@@ -65,15 +65,15 @@
     "resultCard": {
       "winnerCandidateId": "cand-opening-spotlight",
       "totalParticipants": 328,
-      "topMessage": "오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.",
+      "topMessage": "오프닝 장면이 오래 기억될 수 있게 같이 골라보자.",
       "earnedIcon": "Spotlight Crew"
     }
   },
   {
     "id": "room-aurora-ending",
     "slug": "aurora-ending-line",
-    "title": "오로라 결말 한 줄 응원방",
-    "topic": "가상 웹소설 에피소드의 마지막 문장을 팬들이 고르고 응원하는 방.",
+    "title": "오로라 결말 한 줄 투표방",
+    "topic": "가상 웹소설 에피소드의 마지막 문장을 팬들이 고르고 랭킹으로 기록하는 방.",
     "categoryId": "cat-story",
     "primaryTargetId": "target-aurora-cast",
     "status": "active",
@@ -134,8 +134,8 @@
   {
     "id": "room-pixel-season",
     "slug": "pixel-league-season",
-    "title": "픽셀 리그 시즌 응원 결과",
-    "topic": "가상 게임 리그 시즌 종료 후 팬들이 만든 응원 결과 카드.",
+    "title": "픽셀 리그 시즌 투표 결과",
+    "topic": "가상 게임 리그 시즌 종료 후 팬들이 만든 투표 결과 카드.",
     "categoryId": "cat-game",
     "primaryTargetId": "target-pixel-league",
     "status": "result_published",
@@ -174,7 +174,7 @@
       {
         "id": "msg-pixel-1",
         "type": "cheer",
-        "body": "결과 카드가 다음 시즌 응원방으로 이어지는 느낌이라 좋다.",
+        "body": "결과 카드가 다음 시즌 투표방으로 이어지는 느낌이라 좋다.",
         "status": "visible",
         "createdAt": "2026-05-27T13:20:00.000Z"
       }
@@ -182,7 +182,7 @@
     "resultCard": {
       "winnerCandidateId": "cand-pixel-comeback",
       "totalParticipants": 421,
-      "topMessage": "결과 카드가 다음 시즌 응원방으로 이어지는 느낌이라 좋다.",
+      "topMessage": "결과 카드가 다음 시즌 투표방으로 이어지는 느낌이라 좋다.",
       "earnedIcon": "Comeback Badge",
       "publishedAt": "2026-05-27T14:00:00.000Z"
     }
