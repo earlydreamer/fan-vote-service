@@ -38,7 +38,7 @@ export function ProfilePage() {
       </section>
 
       <section className="content-panel" aria-labelledby="joined-title">
-        <h2 id="joined-title">참여 중인 응원방</h2>
+        <h2 id="joined-title">참여 중인 투표방</h2>
         <div className="mini-list">
           {joinedRooms.map((room) => (
             <a key={room.id} href={`/rooms/${room.id}`} className="mini-row">

@@ -8,15 +8,15 @@ export function RoomCreatePage() {
     <div className="page-grid create-page">
       <section className="content-panel form-panel" aria-labelledby="room-create-title">
         <p className="eyebrow">Open a room</p>
-        <h1 id="room-create-title">새 응원방 열기</h1>
+        <h1 id="room-create-title">새 투표방 열기</h1>
         <p className="guard-copy">
-          공식 제휴나 전달 보장을 암시하지 않도록, 응원 주제와 대상은 팬 주도 기록으로만 표현해요.
+          공식 제휴나 전달 보장을 암시하지 않도록, 투표 주제와 대상은 팬 주도 기록으로만 표현해요.
         </p>
 
         <form className="stacked-form">
           <label>
-            응원 주제
-            <input value="가상 쇼케이스 오프닝 장면 응원" readOnly />
+            투표 주제
+            <input value="가상 쇼케이스 최고의 오프닝 장면" readOnly />
           </label>
           <label>
             카테고리
@@ -50,8 +50,8 @@ export function RoomCreatePage() {
         <h2 id="preview-title">방 카드 미리보기</h2>
         <div className="preview-card">
           <span className="chip chip-energy">D-2</span>
-          <h3>은하 무대 오프닝 응원방</h3>
-          <p>투표 후보, 미션, 팬월을 함께 운영하는 응원방으로 생성돼요.</p>
+          <h3>은하 무대 오프닝 투표방</h3>
+          <p>후보 랭킹, 참여 미션, 팬월을 함께 운영하는 투표방으로 생성돼요.</p>
           <ul className="check-list">
             <li>
               <CheckCircle2 size={18} aria-hidden="true" />

@@ -7,7 +7,7 @@
   "roomStats": [
     {
       "roomId": "room-stage-opening",
-      "title": "은하 무대 오프닝 응원방",
+      "title": "은하 무대 오프닝 투표방",
       "participantCount": 328,
       "voteCount": 746,
       "missionCompletionRate": 71,
@@ -15,7 +15,7 @@
     },
     {
       "roomId": "room-aurora-ending",
-      "title": "오로라 결말 한 줄 응원방",
+      "title": "오로라 결말 한 줄 투표방",
       "participantCount": 186,
       "voteCount": 393,
       "missionCompletionRate": 58,

@@ -23,14 +23,14 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
       <div className="room-card__strip" aria-hidden="true" />
       <div className="room-card__body">
         <div className="room-card__meta">
-          <span className="chip">{category?.name ?? '응원방'}</span>
+          <span className="chip">{category?.name ?? '투표방'}</span>
           <span className="chip chip-energy">{formatDday(room.endAt)}</span>
         </div>
         <h3>
           <a href={`/rooms/${room.id}`}>{room.title}</a>
         </h3>
         {!compact && <p>{room.topic}</p>}
-        <ProgressMeter label="Room Energy" value={room.currentGoalValue} max={room.goalValue} />
+        <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
         <div className="room-card__stats">
           <span>
             <UsersRound size={16} aria-hidden="true" />

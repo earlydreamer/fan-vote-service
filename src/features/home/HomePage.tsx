@@ -10,15 +10,15 @@ export function HomePage() {
     <div className="dashboard-page">
       <section className="dashboard-intro" aria-labelledby="home-title">
         <div>
-          <p className="eyebrow">Fan Ops Board</p>
-          <h1 id="home-title">오늘의 응원방 보드</h1>
+          <p className="eyebrow">Fan Vote Board</p>
+          <h1 id="home-title">오늘의 인기투표 보드</h1>
           <p>
-            팬이 직접 응원 주제를 열고, 투표와 미션으로 Room Energy를 채운 뒤 결과 카드로 기록을
+            팬이 직접 투표 주제를 열고, 후보를 고르고, 랭킹 변화를 지켜본 뒤 결과 카드로 기록을
             남겨요.
           </p>
         </div>
         <a className="button button-primary" href="/rooms/new">
-          응원방 만들기
+          투표방 만들기
         </a>
       </section>
 
@@ -27,7 +27,7 @@ export function HomePage() {
           <div className="section-heading">
             <div>
               <p className="eyebrow">Live rooms</p>
-              <h2 id="active-rooms-title">진행 중인 응원방</h2>
+              <h2 id="active-rooms-title">진행 중인 투표방</h2>
             </div>
             <span className="metric-chip">{dashboard.activeRooms.length}개 진행 중</span>
           </div>
@@ -45,7 +45,7 @@ export function HomePage() {
 
         <aside className="side-rail">
           <section className="content-panel profile-panel" aria-labelledby="profile-summary-title">
-            <p className="eyebrow">My rally power</p>
+            <p className="eyebrow">My vote loop</p>
             <h2 id="profile-summary-title">내 RP</h2>
             <div className="rp-number">{dashboard.profile.totalRp.toLocaleString()} RP</div>
             <p>
@@ -63,7 +63,7 @@ export function HomePage() {
 
           <section className="content-panel" aria-labelledby="expiring-title">
             <div className="section-heading compact">
-              <h2 id="expiring-title">마감 임박</h2>
+              <h2 id="expiring-title">마감 임박 투표</h2>
               <span className="chip chip-energy">D-day</span>
             </div>
             <div className="mini-list">
@@ -78,7 +78,7 @@ export function HomePage() {
 
           <section className="content-panel" aria-labelledby="missions-title">
             <div className="section-heading compact">
-              <h2 id="missions-title">오늘의 미션</h2>
+              <h2 id="missions-title">오늘의 참여 미션</h2>
               <Sparkles size={18} aria-hidden="true" />
             </div>
             <div className="mission-list">

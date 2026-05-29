@@ -42,8 +42,8 @@ function buildRoom(overrides: Partial<RallyRoom> = {}): RallyRoom {
   return {
     id: 'room-test',
     slug: 'room-test',
-    title: '테스트 응원방',
-    topic: '테스트 응원 주제',
+    title: '테스트 투표방',
+    topic: '테스트 투표 주제',
     categoryId: 'cat-stage',
     primaryTargetId: 'target-test',
     status: 'active',

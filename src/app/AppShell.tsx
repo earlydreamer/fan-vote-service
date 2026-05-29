@@ -43,6 +43,9 @@ export function AppShell() {
 
   return (
     <div className="app-frame" onClick={handleShellClick}>
+      <a className="skip-link" href="#main-content">
+        본문으로 건너뛰기
+      </a>
       <header className="app-header">
         <a className="brand-mark" href="/" aria-label="RallyRoom 홈">
           <span className="brand-sigil" aria-hidden="true">
@@ -50,7 +53,7 @@ export function AppShell() {
           </span>
           <span>
             <strong>RallyRoom</strong>
-            <small>Fan Ops Board</small>
+            <small>Fan Vote Board</small>
           </span>
         </a>
 
@@ -63,11 +66,14 @@ export function AppShell() {
         </nav>
 
         <a className="button button-primary header-cta" href="/rooms/new">
-          응원방 만들기
+          <PlusCircle size={18} aria-hidden="true" />
+          투표방 만들기
         </a>
       </header>
 
-      <main className="app-main">{renderRoute(route)}</main>
+      <main id="main-content" className="app-main">
+        {renderRoute(route)}
+      </main>
 
       <nav className="bottom-nav" aria-label="모바일 주요 화면">
         <a href="/">

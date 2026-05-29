@@ -36,8 +36,8 @@ export const demoReadRepository = {
       templates: [
         {
           id: 'template-dday',
-          title: 'D-day 응원방',
-          description: '마감일을 정하고 Room Energy를 함께 채우는 기본 템플릿',
+          title: 'D-day 투표방',
+          description: '마감일을 정하고 Vote Energy를 함께 채우는 기본 템플릿',
           categoryId: 'cat-stage'
         },
         {

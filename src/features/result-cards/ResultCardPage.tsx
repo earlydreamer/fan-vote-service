@@ -24,10 +24,10 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
         </section>
 
         <aside className="content-panel">
-          <h2>응원은 아직 진행 중</h2>
+          <h2>투표는 아직 진행 중</h2>
           <p>현재는 투표와 미션 참여가 가능한 상태예요. 결과 카드는 발행 후 다시 확인해 주세요.</p>
           <a className="button button-secondary" href={`/rooms/${room.id}`}>
-            응원방으로 돌아가기
+            투표방으로 돌아가기
           </a>
         </aside>
       </div>
@@ -39,7 +39,7 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
   return (
     <div className="page-grid result-page">
       <section className="result-card" aria-labelledby="result-title">
-        <p className="eyebrow">Published rally memory</p>
+        <p className="eyebrow">Published vote memory</p>
         <h1 id="result-title">결과 카드</h1>
         <div className="result-card__inner">
           <Trophy size={28} aria-hidden="true" />
@@ -51,13 +51,13 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
       </section>
 
       <aside className="content-panel">
-        <h2>다음 응원 루프</h2>
+        <h2>다음 투표 루프</h2>
         <p>
-          참여자 {room.resultCard.totalParticipants.toLocaleString()}명이 만든 결과를 다음 응원방의
+          참여자 {room.resultCard.totalParticipants.toLocaleString()}명이 만든 결과를 다음 투표방의
           시작점으로 연결해요.
         </p>
         <a className="button button-primary" href="/rooms/new">
-          후속 응원방 만들기
+          후속 투표방 만들기
         </a>
       </aside>
     </div>

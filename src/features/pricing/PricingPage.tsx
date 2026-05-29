@@ -2,8 +2,8 @@ const plans = [
   {
     name: 'Free',
     price: '0원',
-    description: '팬이 직접 응원방을 열고 기본 결과 카드를 남기는 데모 플랜',
-    features: ['응원방 생성', '투표와 미션', '기본 결과 카드']
+    description: '팬이 직접 투표방을 열고 기본 결과 카드를 남기는 데모 플랜',
+    features: ['투표방 생성', '투표와 미션', '기본 결과 카드']
   },
   {
     name: 'Plus',
@@ -15,7 +15,7 @@ const plans = [
     name: 'Crew',
     price: '상담 필요',
     description: '향후 공식 계정이나 크리에이터가 aggregate 지표를 보는 확장 플랜',
-    features: ['Crew 대시보드', '공식성 검증 플로우', '방 운영 리포트']
+    features: ['Crew 대시보드', '공식성 검증 플로우', '투표방 운영 리포트']
   }
 ] as const;
 

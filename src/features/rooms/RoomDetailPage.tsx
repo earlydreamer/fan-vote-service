@@ -16,7 +16,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
     <div className="room-detail-page">
       <section className="detail-hero" aria-labelledby="room-title">
         <div>
-          <p className="eyebrow">Rally room</p>
+          <p className="eyebrow">Vote room</p>
           <h1 id="room-title">{room.title}</h1>
           <p>{room.topic}</p>
         </div>
@@ -31,7 +31,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
             <h2 id="vote-status-title">투표 현황</h2>
             <Vote size={18} aria-hidden="true" />
           </div>
-          <ProgressMeter label="Room Energy" value={room.currentGoalValue} max={room.goalValue} />
+          <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
           <div className="candidate-list">
             {room.candidates.map((candidate) => (
               <article key={candidate.id} className="candidate-card">
@@ -63,7 +63,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           </div>
           {room.messages.map((message) => (
             <article key={message.id} className="message-row">
-              <span className="chip">{message.type === 'cheer' ? '응원' : '질문'}</span>
+              <span className="chip">{message.type === 'cheer' ? '메시지' : '질문'}</span>
               <p>{message.body}</p>
             </article>
           ))}

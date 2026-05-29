@@ -15,7 +15,7 @@ export function CrewDashboardPage() {
 
       <section className="stat-grid wide" aria-label="Crew 요약 지표">
         <div>
-          <span>누적 방</span>
+          <span>누적 투표방</span>
           <strong>{crewStats.totalRooms}</strong>
         </div>
         <div>
@@ -33,7 +33,7 @@ export function CrewDashboardPage() {
       </section>
 
       <section className="content-panel" aria-labelledby="crew-room-title">
-        <h2 id="crew-room-title">방별 성과</h2>
+        <h2 id="crew-room-title">투표방별 성과</h2>
         <div className="table-like">
           {crewStats.roomStats.map((room) => (
             <article key={room.roomId}>
