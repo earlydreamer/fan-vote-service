@@ -59,6 +59,7 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 8. Codex 리뷰 피드백이 남으면 자동화가 follow-up issue로 이관합니다.
 9. follow-up issue는 현재 PR의 merge gate가 아니다. CI/status/check가 깨끗하고 남은 unresolved review thread가 없으면 자동 merge를 시도합니다.
 10. Codex review thread 자동 resolve는 thread의 모든 댓글 페이지를 확인한 뒤, Codex 봇만 남긴 thread에만 적용합니다.
+11. workflow가 자동 merge를 수행하면 PR body의 same-repo closing keyword issue를 `completed`로 명시 종료합니다.
 
 ## 중요한 아키텍처 원칙
 

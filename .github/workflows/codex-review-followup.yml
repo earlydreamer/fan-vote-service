@@ -406,6 +406,36 @@ jobs:
               return false;
             }
 
+            function extractClosingIssueNumbers(body) {
+              const issueNumbers = new Set();
+              const closingKeyword = /\b(?:close[sd]?|fix(?:e[sd])?|resolve[sd]?)\s*:?\s+#(\d+)/gi;
+              let match;
+
+              while ((match = closingKeyword.exec(body || '')) !== null) {
+                issueNumbers.add(Number(match[1]));
+              }
+
+              return [...issueNumbers];
+            }
+
+            async function closeLinkedIssuesAfterMerge(pr) {
+              const issueNumbers = extractClosingIssueNumbers(pr.body || '');
+
+              for (const issue_number of issueNumbers) {
+                try {
+                  await github.rest.issues.update({
+                    owner,
+                    repo,
+                    issue_number,
+                    state: 'closed',
+                    state_reason: 'completed',
+                  });
+                } catch (error) {
+                  core.warning(`linked issue 자동 종료 실패: #${issue_number} (${error.message})`);
+                }
+              }
+            }
+
             async function tryAutoMerge(prNumber) {
               const { data: pr } = await github.rest.pulls.get({
                 owner,
@@ -437,6 +467,7 @@ jobs:
                   commit_title: `Merge pull request #${prNumber} from ${pr.head.label}`,
                   commit_message: '자동 merge: Codex 리뷰 이관 또는 승인과 CI 검증을 통과했습니다.',
                 });
+                await closeLinkedIssuesAfterMerge(pr);
               } catch (error) {
                 core.warning(`자동 merge 실패: ${error.message}`);
               }
