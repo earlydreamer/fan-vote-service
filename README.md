@@ -55,9 +55,9 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 4. 실패하는 테스트를 먼저 작성합니다.
 5. 최소 구현으로 테스트를 통과시킵니다.
 6. `npm test`, `npm run build`를 통과시킵니다.
-7. pull request를 열고 GitHub Codex 리뷰 후 merge합니다.
-8. Codex 리뷰 피드백이 남으면 follow-up issue로 추적합니다.
-9. merge 전 모든 PR conversation과 review thread가 resolved 상태인지 확인합니다.
+7. pull request를 열고 GitHub Codex 리뷰를 요청합니다.
+8. Codex 리뷰 피드백이 남으면 자동화가 follow-up issue로 이관합니다.
+9. follow-up issue는 현재 PR의 merge gate가 아니다. CI/status/check가 깨끗하고 남은 unresolved review thread가 없으면 자동 merge를 시도합니다.
 
 ## 중요한 아키텍처 원칙
 

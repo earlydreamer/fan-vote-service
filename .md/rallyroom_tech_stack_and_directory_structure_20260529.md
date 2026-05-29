@@ -15,6 +15,7 @@
 - 빌드 도구, 테스트 도구, 배포 타깃 변경
 - Supabase, Edge Functions, DB migration 구조 추가/변경
 - `src/` 하위 주요 디렉터리 추가/변경
+- repository workflow 또는 최상위 테스트 디렉터리 추가/변경
 - feature 소유권이나 책임 경계 변경
 - alias, routing, state management, server-state 전략 변경
 
@@ -72,6 +73,9 @@ Postgres RPC / transaction functions
 
 ```text
 D:\Projects\vibex
+├─ .github/
+│  └─ workflows/
+│     └─ codex-review-followup.yml
 ├─ .md/
 │  ├─ local/                 # gitignore 대상, 브랜치별 임시 작업 메모
 │  ├─ rallyroom_delivery_workflow_20260529.md
@@ -90,6 +94,8 @@ D:\Projects\vibex
 │  ├─ main.tsx
 │  ├─ styles.css
 │  └─ vite-env.d.ts
+├─ tests/
+│  └─ workflowPolicy.test.js
 ├─ .env.example
 ├─ .gitignore
 ├─ AGENTS.md

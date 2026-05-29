@@ -7,22 +7,33 @@ on:
     types: [submitted]
   pull_request_review_comment:
     types: [created]
+  pull_request:
+    types: [ready_for_review, reopened, synchronize]
+  check_suite:
+    types: [completed]
+  status:
 
 permissions:
   contents: read
+  checks: read
+  statuses: read
   issues: write
   pull-requests: write
 
 concurrency:
-  group: codex-review-followup-${{ github.event.pull_request.number || github.event.issue.number || github.run_id }}
+  group: codex-review-followup-${{ github.event.pull_request.number || github.event.issue.number || github.event.check_suite.head_sha || github.event.sha || github.run_id }}
   cancel-in-progress: false
 
 jobs:
   codex-review-followup:
-    if: github.event.sender.login == 'chatgpt-codex-connector[bot]'
+    if: >-
+      github.event.sender.login == 'chatgpt-codex-connector[bot]' ||
+      github.event_name == 'pull_request' ||
+      github.event_name == 'check_suite' ||
+      github.event_name == 'status'
     runs-on: ubuntu-latest
     steps:
-      - name: Codex 피드백 후속 이슈 생성
+      - name: Codex 피드백 이관 및 자동 머지 시도
         uses: actions/github-script@v7
         with:
           script: |
@@ -30,8 +41,17 @@ jobs:
             const repo = context.repo.repo;
             const eventName = context.eventName;
             const payload = context.payload;
+            const CODEX_LOGINS = new Set([
+              'chatgpt-codex-connector',
+              'chatgpt-codex-connector[bot]',
+            ]);
+            const TRACKING_LABELS = ['codex-reviewed', 'codex-feedback'];
 
-            function getPullRequestRef() {
+            function isCodexSender() {
+              return payload.sender?.login === 'chatgpt-codex-connector[bot]';
+            }
+
+            async function getPullRequestRef() {
               if (eventName === 'issue_comment') {
                 if (!payload.issue.pull_request) return null;
                 return { number: payload.issue.number };
@@ -43,6 +63,25 @@ jobs:
 
               if (eventName === 'pull_request_review_comment') {
                 return { number: payload.pull_request.number };
+              }
+
+              if (eventName === 'pull_request') {
+                return { number: payload.pull_request.number };
+              }
+
+              if (eventName === 'check_suite') {
+                const pullRequest = payload.check_suite.pull_requests?.[0];
+                return pullRequest ? { number: pullRequest.number } : null;
+              }
+
+              if (eventName === 'status') {
+                const { data: pulls } = await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner,
+                  repo,
+                  commit_sha: payload.sha,
+                });
+                const pullRequest = pulls.find((item) => item.state === 'open');
+                return pullRequest ? { number: pullRequest.number } : null;
               }
 
               return null;
@@ -95,6 +134,12 @@ jobs:
               }
             }
 
+            async function ensureWorkflowLabels() {
+              await ensureLabel('codex-feedback', 'D93F0B', 'GitHub Codex 리뷰 피드백을 후속 이슈로 이관했습니다.');
+              await ensureLabel('codex-reviewed', '0E8A16', 'GitHub Codex가 현재 head에서 주요 문제를 찾지 않았습니다.');
+              await ensureLabel('codex-follow-up', '5319E7', 'GitHub Codex 리뷰 피드백에서 생성된 후속 작업 이슈입니다.');
+            }
+
             async function addLabel(issue_number, name) {
               await github.rest.issues.addLabels({
                 owner,
@@ -104,94 +149,287 @@ jobs:
               });
             }
 
-            const prRef = getPullRequestRef();
-            if (!prRef) return;
-
-            const feedback = getFeedback();
-            const body = feedback.body.trim();
-            if (!body) return;
-
-            const { data: pr } = await github.rest.pulls.get({
-              owner,
-              repo,
-              pull_number: prRef.number,
-            });
-
-            await ensureLabel('codex-feedback', 'D93F0B', '처리할 GitHub Codex 리뷰 피드백이 있습니다.');
-            await ensureLabel('codex-reviewed', '0E8A16', 'GitHub Codex가 주요 문제를 찾지 않았습니다.');
-            await ensureLabel('codex-follow-up', '5319E7', 'GitHub Codex 리뷰 피드백에서 생성된 후속 이슈입니다.');
-
-            const noMajorIssue = /did(?:n't| not) find any major issues|no major issues|major issues \uC5C6\uC74C/i.test(body);
-            if (noMajorIssue) {
-              await addLabel(prRef.number, 'codex-reviewed');
-              return;
+            async function removeLabelIfExists(issue_number, name) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner,
+                  repo,
+                  issue_number,
+                  name,
+                });
+              } catch (error) {
+                if (error.status !== 404) throw error;
+              }
             }
 
-            const genericReviewEnvelope = /Here are some automated review suggestions/i.test(body)
-              && eventName === 'pull_request_review';
-            if (genericReviewEnvelope) return;
-
-            await addLabel(prRef.number, 'codex-feedback');
-
-            const marker = `codex-review-followup-pr-${prRef.number}`;
-            const followUpTitle = `Codex 리뷰 후속 처리: PR #${prRef.number}`;
-            const openFollowUps = await github.paginate(github.rest.issues.listForRepo, {
-              owner,
-              repo,
-              state: 'open',
-              labels: 'codex-follow-up',
-              per_page: 100,
-            });
-            const followUpIssue = openFollowUps.find((issue) => {
-              return issue.title === followUpTitle || (issue.body || '').includes(marker);
-            });
-
-            const excerpt = body.length > 3500 ? `${body.slice(0, 3500)}\n\n...` : body;
-            const issueBody = [
-              `<!-- ${marker} -->`,
-              `# Codex 리뷰 후속 처리: PR #${prRef.number}`,
-              '',
-              '## 원본 PR',
-              `- PR: #${prRef.number}`,
-              `- Head SHA: \`${pr.head.sha}\``,
-              `- 리뷰 출처: ${feedback.source}`,
-              `- 리뷰 링크: ${feedback.url}`,
-              '',
-              '## 리뷰 피드백',
-              '',
-              excerpt,
-              '',
-              '## 처리 체크리스트',
-              '',
-              '- [ ] 피드백이 현재 코드/문서에도 유효한지 확인',
-              '- [ ] 수정 또는 보류 여부 판단',
-              '- [ ] 필요한 테스트와 검증 실행',
-              '- [ ] PR thread 또는 코멘트에 판단 근거를 한국어로 기록',
-              '- [ ] merge 전 관련 PR conversation 또는 review thread resolved 처리',
-              '- [ ] 실질 변경이 있으면 `@codex review` 재요청',
-            ].join('\n');
-
-            if (followUpIssue) {
-              await github.rest.issues.createComment({
+            async function getIssueLabels(issue_number) {
+              const { data: issue } = await github.rest.issues.get({
                 owner,
                 repo,
-                issue_number: followUpIssue.number,
-                body: [
-                  `PR #${prRef.number}에 Codex 피드백이 추가되었습니다.`,
-                  '',
-                  `- Head SHA: \`${pr.head.sha}\``,
-                  `- 리뷰 링크: ${feedback.url}`,
-                  '',
-                  excerpt,
-                ].join('\n'),
+                issue_number,
               });
+              return new Set(issue.labels.map((label) => {
+                return typeof label === 'string' ? label : label.name;
+              }));
+            }
+
+            async function listUnresolvedReviewThreads(prNumber) {
+              const query = `
+                query($owner: String!, $repo: String!, $number: Int!, $cursor: String) {
+                  repository(owner: $owner, name: $repo) {
+                    pullRequest(number: $number) {
+                      reviewThreads(first: 100, after: $cursor) {
+                        pageInfo {
+                          hasNextPage
+                          endCursor
+                        }
+                        nodes {
+                          id
+                          isResolved
+                          comments(first: 50) {
+                            nodes {
+                              author {
+                                login
+                              }
+                              url
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              `;
+
+              const threads = [];
+              let cursor = null;
+
+              do {
+                const result = await github.graphql(query, {
+                  owner,
+                  repo,
+                  number: prNumber,
+                  cursor,
+                });
+                const page = result.repository.pullRequest.reviewThreads;
+                threads.push(...page.nodes.filter((thread) => !thread.isResolved));
+                cursor = page.pageInfo.hasNextPage ? page.pageInfo.endCursor : null;
+              } while (cursor);
+
+              return threads;
+            }
+
+            async function resolveReviewThread(threadId) {
+              const mutation = `
+                mutation($threadId: ID!) {
+                  resolveReviewThread(input: { threadId: $threadId }) {
+                    thread {
+                      id
+                      isResolved
+                    }
+                  }
+                }
+              `;
+              await github.graphql(mutation, { threadId });
+            }
+
+            function isCodexThread(thread) {
+              return thread.comments.nodes.some((comment) => {
+                return CODEX_LOGINS.has(comment.author?.login);
+              });
+            }
+
+            async function resolveCodexReviewThreads(prNumber) {
+              const unresolved = await listUnresolvedReviewThreads(prNumber);
+              const codexThreads = unresolved.filter(isCodexThread);
+
+              for (const thread of codexThreads) {
+                try {
+                  await resolveReviewThread(thread.id);
+                } catch (error) {
+                  core.warning(`Codex review thread 자동 resolve 실패: ${thread.id} (${error.message})`);
+                }
+              }
+            }
+
+            async function hasBlockingChecks(pr) {
+              const blocking = [];
+
+              const { data: combinedStatus } = await github.rest.repos.getCombinedStatusForRef({
+                owner,
+                repo,
+                ref: pr.head.sha,
+              });
+
+              if (['failure', 'error', 'pending'].includes(combinedStatus.state)) {
+                blocking.push(`status:${combinedStatus.state}`);
+              }
+
+              const { data: checkData } = await github.rest.checks.listForRef({
+                owner,
+                repo,
+                ref: pr.head.sha,
+                per_page: 100,
+              });
+
+              for (const checkRun of checkData.check_runs) {
+                if (checkRun.name === 'Codex Review Follow-up') continue;
+                if (checkRun.status !== 'completed') {
+                  blocking.push(`check:${checkRun.name}:${checkRun.status}`);
+                  continue;
+                }
+                if (!['success', 'neutral', 'skipped'].includes(checkRun.conclusion)) {
+                  blocking.push(`check:${checkRun.name}:${checkRun.conclusion}`);
+                }
+              }
+
+              if (blocking.length > 0) {
+                core.info(`자동 merge 대기: ${blocking.join(', ')}`);
+                return true;
+              }
+
+              return false;
+            }
+
+            async function tryAutoMerge(prNumber) {
+              const { data: pr } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: prNumber,
+              });
+
+              if (pr.state !== 'open' || pr.draft) return;
+
+              const labels = await getIssueLabels(prNumber);
+              const hasCodexDecision = TRACKING_LABELS.some((label) => labels.has(label));
+              if (!hasCodexDecision) return;
+
+              const unresolved = await listUnresolvedReviewThreads(prNumber);
+              if (unresolved.length > 0) {
+                core.info(`자동 merge 대기: unresolved review thread ${unresolved.length}개`);
+                return;
+              }
+
+              if (await hasBlockingChecks(pr)) return;
+
+              try {
+                await github.rest.pulls.merge({
+                  owner,
+                  repo,
+                  pull_number: prNumber,
+                  merge_method: 'merge',
+                  sha: pr.head.sha,
+                  commit_title: `Merge pull request #${prNumber} from ${pr.head.label}`,
+                  commit_message: '자동 merge: Codex 리뷰 이관 또는 승인과 CI 검증을 통과했습니다.',
+                });
+              } catch (error) {
+                core.warning(`자동 merge 실패: ${error.message}`);
+              }
+            }
+
+            async function createOrUpdateFollowUpIssue(pr, feedback, body) {
+              const marker = `codex-review-followup-pr-${pr.number}`;
+              const followUpTitle = `Codex 리뷰 후속 작업: PR #${pr.number}`;
+              const openFollowUps = await github.paginate(github.rest.issues.listForRepo, {
+                owner,
+                repo,
+                state: 'open',
+                labels: 'codex-follow-up',
+                per_page: 100,
+              });
+              const followUpIssue = openFollowUps.find((issue) => {
+                return issue.title === followUpTitle || (issue.body || '').includes(marker);
+              });
+
+              const excerpt = body.length > 3500 ? `${body.slice(0, 3500)}\n\n...` : body;
+              const issueBody = [
+                `<!-- ${marker} -->`,
+                `# Codex 리뷰 후속 작업: PR #${pr.number}`,
+                '',
+                '## 원본 PR',
+                `- PR: #${pr.number}`,
+                `- Head SHA: \`${pr.head.sha}\``,
+                `- 리뷰 출처: ${feedback.source}`,
+                `- 리뷰 링크: ${feedback.url}`,
+                '',
+                '## 현재 PR 처리 원칙',
+                '',
+                '- 이 이슈는 현재 PR의 merge gate가 아니다.',
+                '- 현재 PR은 Codex 피드백을 이 이슈로 이관하고, 관련 Codex review thread를 resolved 처리한 뒤, CI/status/check가 깨끗하면 자동 merge한다.',
+                '- 이 이슈의 수정은 별도 feature branch와 PR에서 처리한다.',
+                '',
+                '## 리뷰 피드백',
+                '',
+                excerpt,
+              ].join('\n');
+
+              if (followUpIssue) {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: followUpIssue.number,
+                  body: [
+                    `PR #${pr.number}에 Codex 피드백이 추가되었습니다.`,
+                    '',
+                    '- 이 코멘트는 현재 PR의 merge gate가 아닙니다.',
+                    '- 필요한 수정은 이 follow-up issue 기준으로 별도 작업에서 처리합니다.',
+                    `- Head SHA: \`${pr.head.sha}\``,
+                    `- 리뷰 링크: ${feedback.url}`,
+                    '',
+                    excerpt,
+                  ].join('\n'),
+                });
+                return followUpIssue;
+              }
+
+              const { data: createdIssue } = await github.rest.issues.create({
+                owner,
+                repo,
+                title: followUpTitle,
+                body: issueBody,
+                labels: ['codex-follow-up', 'codex-feedback'],
+              });
+
+              return createdIssue;
+            }
+
+            const prRef = await getPullRequestRef();
+            if (!prRef) return;
+
+            await ensureWorkflowLabels();
+
+            if (eventName === 'pull_request' && payload.action === 'synchronize') {
+              for (const label of TRACKING_LABELS) {
+                await removeLabelIfExists(prRef.number, label);
+              }
               return;
             }
 
-            await github.rest.issues.create({
-              owner,
-              repo,
-              title: followUpTitle,
-              body: issueBody,
-              labels: ['codex-follow-up', 'codex-feedback'],
-            });
+            if (isCodexSender()) {
+              const feedback = getFeedback();
+              const body = feedback.body.trim();
+              if (!body) return;
+
+              const { data: pr } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: prRef.number,
+              });
+
+              const noMajorIssue = /did(?:n't| not) find any major issues|no major issues|major issues \uC5C6\uC74C/i.test(body);
+              if (noMajorIssue) {
+                await addLabel(prRef.number, 'codex-reviewed');
+                await tryAutoMerge(prRef.number);
+                return;
+              }
+
+              const genericReviewEnvelope = /Here are some automated review suggestions/i.test(body)
+                && eventName === 'pull_request_review';
+              if (genericReviewEnvelope) return;
+
+              await addLabel(prRef.number, 'codex-feedback');
+              await createOrUpdateFollowUpIssue(pr, feedback, body);
+              await resolveCodexReviewThreads(prRef.number);
+            }
+
+            await tryAutoMerge(prRef.number);

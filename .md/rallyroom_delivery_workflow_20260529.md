@@ -36,8 +36,8 @@
 4. 의미 단위 커밋 누적
 5. draft 해제
 6. GitHub Codex 코드리뷰 요청
-7. 리뷰 응답 확인과 피드백 반영
-8. merge commit으로 main 반영
+7. 리뷰 응답 확인과 피드백 이관 또는 반영
+8. CI/status/check와 unresolved thread 상태가 깨끗하면 merge commit으로 main 반영
 
 ## 작업 흐름
 
@@ -58,9 +58,9 @@
 15. draft PR을 ready for review로 전환한다.
 16. GitHub PR에서 `@codex review`를 요청한다.
 17. GitHub Codex 리뷰는 GitHub 이벤트와 follow-up issue를 source of truth로 추적한다.
-18. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트 또는 follow-up issue에 남긴다.
-19. 관련 PR conversation과 review thread가 모두 resolved 상태인지 확인한다. unresolved thread가 있으면 merge하지 않는다.
-20. 결함이 없다고 판단되면 최종 검증 후 merge한다.
+18. 현재 PR에서 바로 고치지 않을 리뷰 피드백은 follow-up issue로 이관한다.
+19. follow-up issue는 현재 PR의 merge gate가 아니다.
+20. CI/status/check가 깨끗하고 남은 unresolved review thread가 없으면 자동 merge를 시도한다.
 
 ## 커밋 정책
 
@@ -82,10 +82,12 @@
 
 - GitHub Codex 리뷰가 actionable feedback을 남기면 GitHub Actions가 `codex-feedback` label을 붙이고 follow-up issue를 만든다.
 - "major issues 없음" 응답은 follow-up issue를 만들지 않고 `codex-reviewed` label만 붙인다.
-- follow-up issue는 한국어 본문으로 리뷰 요약, 원문 링크, PR 번호, head SHA, 처리 체크리스트를 포함한다.
-- 자동화는 issue 생성까지만 책임진다. 수정은 issue 기반 feature workflow로 진행한다.
+- follow-up issue는 한국어 본문으로 리뷰 요약, 원문 링크, PR 번호, head SHA, 현재 PR 처리 원칙을 포함한다.
+- follow-up issue는 현재 PR의 merge gate가 아니다.
+- 자동화는 issue 생성 후 관련 Codex review thread resolve를 시도하고, PR이 draft가 아니며 CI/status/check가 실패 또는 대기 상태가 아니고 남은 unresolved thread가 없으면 자동 merge를 시도한다.
+- follow-up issue의 수정은 issue 기반 feature workflow로 별도 진행한다.
 - 자동화가 실패하더라도 PR 리뷰 원문과 issue/label 상태를 기준으로 복구한다.
-- follow-up issue는 PR conversation resolution을 대체하지 않는다. repository rule이 unresolved conversation을 막으면 PR thread를 resolved 처리해야 merge할 수 있다.
+- 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
 - 이 워크플로우 파일이 아직 default branch에 없는 bootstrap PR에서는 review event가 자동 실행되지 않는다. 이 경우 Codex 피드백을 수동으로 follow-up issue에 이관한다.
 
 ## merge 전 체크
@@ -100,8 +102,8 @@
 - React/TSX 변경 시 `vercel:react-best-practices` 점검 기록 확인
 - GitHub MCP로 PR 코멘트/리뷰 확인
 - GitHub Codex 코드리뷰 요청 및 응답 처리 완료
-- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 스캔으로 확인
-- Codex follow-up issue가 있으면 처리 여부 확인
+- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 또는 `codex-reviewed`/`codex-feedback` label로 확인
+- Codex follow-up issue가 있더라도 현재 PR의 merge gate로 보지 않음
 - 모든 PR conversation/review thread가 resolved 상태인지 확인
 - GitHub MCP가 resolution 상태를 제공하지 못하면 GitHub UI에서 unresolved conversation이 없는지 수동 확인
 - GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰로 대체하지 않았는지 확인
