@@ -5,7 +5,7 @@
 ## 상태
 
 - 상태: in_progress
-- 현재 진행 중: 검증 통과, 첫 의미 단위 커밋 준비
+- 현재 진행 중: 첫 의미 단위 커밋 완료, draft PR 생성 준비
 - GitHub issue: https://github.com/earlydreamer/fan-vote-service/issues/4
 - GitHub PR: 생성 예정
 - Branch: `feature/4-github-codex-review-wait-policy`
@@ -42,7 +42,7 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] feature branch 생성
 - [x] 문서 보정
 - [x] 검증
-- [ ] 의미 단위 커밋
+- [x] 의미 단위 커밋
 - [ ] 원격 push
 - [ ] draft PR 생성
 - [ ] ready for review 전환
@@ -73,7 +73,7 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 
 | Commit | 의미 단위 | 검증 | 비고 |
 |---|---|---|---|
-| 예정 | GitHub Codex 리뷰 대기 정책 문서화 | `git diff --check`, `npm test`, `npm run build` | AGENTS/workflow/delivery/feature log |
+| `f472f94` | GitHub Codex 리뷰 대기 정책 문서화 | `git diff --check`, `npm test`, `npm run build` | AGENTS/workflow/delivery/feature log |
 
 ## 리뷰 장부
 
