@@ -11,6 +11,8 @@ export interface VotePanelProps {
   goalValue: number;
   participantCount: number;
   castVoteCommand: CastVoteCommand;
+  isVotingOpen?: boolean;
+  closedReason?: string;
 }
 
 export function VotePanel({
@@ -19,7 +21,9 @@ export function VotePanel({
   currentGoalValue,
   goalValue,
   participantCount,
-  castVoteCommand
+  castVoteCommand,
+  isVotingOpen = true,
+  closedReason
 }: VotePanelProps) {
   const voteState = useCastVote({
     roomId,
@@ -28,9 +32,13 @@ export function VotePanel({
     participantCount,
     castVoteCommand
   });
+  const isVoteClosed = !isVotingOpen;
+  const submitLabel = isVoteClosed ? '투표 종료' : voteState.hasVoted ? '투표 완료' : '투표하기';
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (isVoteClosed) return;
+
     void voteState.submitVote();
   };
 
@@ -48,6 +56,11 @@ export function VotePanel({
         <ProgressMeter label="Vote Energy" value={voteState.currentGoalValue} max={goalValue} />
         <span>{voteState.participantCount.toLocaleString()}명 참여</span>
       </div>
+      {isVoteClosed && closedReason && (
+        <p className="vote-panel__closed" role="status">
+          {closedReason}
+        </p>
+      )}
 
       <form className="vote-form" onSubmit={handleSubmit}>
         <div className="candidate-grid" role="radiogroup" aria-label="투표 후보">
@@ -56,13 +69,14 @@ export function VotePanel({
               key={candidate.id}
               className="candidate-card candidate-card--selectable"
               data-selected={voteState.selectedCandidateId === candidate.id}
+              data-disabled={isVoteClosed}
             >
               <input
                 type="radio"
                 name={`${roomId}-candidate`}
                 value={candidate.id}
                 checked={voteState.selectedCandidateId === candidate.id}
-                disabled={voteState.isSubmitting || voteState.hasVoted}
+                disabled={isVoteClosed || voteState.isSubmitting || voteState.hasVoted}
                 onChange={() => voteState.selectCandidate(candidate.id)}
               />
               <span>{index + 1}</span>
@@ -74,14 +88,17 @@ export function VotePanel({
         </div>
 
         <div className="vote-action-row">
-          <button type="submit" disabled={!voteState.selectedCandidateId || voteState.isSubmitting || voteState.hasVoted}>
-            {voteState.hasVoted ? (
+          <button
+            type="submit"
+            disabled={isVoteClosed || !voteState.selectedCandidateId || voteState.isSubmitting || voteState.hasVoted}
+          >
+            {voteState.hasVoted && !isVoteClosed ? (
               <>
                 <CheckCircle2 size={17} aria-hidden="true" />
-                투표 완료
+                {submitLabel}
               </>
             ) : (
-              '투표하기'
+              submitLabel
             )}
           </button>
           {voteState.statusMessage && (

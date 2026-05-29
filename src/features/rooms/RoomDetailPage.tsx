@@ -2,7 +2,7 @@ import { type FormEvent, useState } from 'react';
 import { MessageSquareText, PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { getVoteTitle } from '../../shared/domain/roomDisplay';
-import type { RallyRoom } from '../../shared/types/rallyroom';
+import type { RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
 import { NotFoundPage } from '../not-found/NotFoundPage';
 import { VotePanel } from '../voting/VotePanel';
 import type { CastVoteCommand } from '../voting/useCastVote';
@@ -27,6 +27,8 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const category = demoReadRepository.getCategory(room.categoryId);
   const voteTitle = getVoteTitle(room);
   const castVoteCommand = createDemoCastVoteCommand(room);
+  const isVotingOpen = room.status === 'active';
+  const voteClosedReason = isVotingOpen ? undefined : getVoteClosedReason(room.status);
   const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
   const canSpendRp = profile.totalRp >= room.addOptionCost.rp;
   const optionCostLabel = canSpendTicket ? `투표권 ${room.addOptionCost.voteTickets}장` : `${room.addOptionCost.rp} RP`;
@@ -78,6 +80,8 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           goalValue={room.goalValue}
           participantCount={room.participantCount}
           castVoteCommand={castVoteCommand}
+          isVotingOpen={isVotingOpen}
+          closedReason={voteClosedReason}
         />
 
         <section className="content-panel option-composer" aria-labelledby="option-composer-title">
@@ -169,4 +173,12 @@ function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
       }
     };
   };
+}
+
+function getVoteClosedReason(status: RoomStatus): string {
+  if (status === 'result_published') {
+    return '결과가 공개된 방은 투표가 종료됐어요.';
+  }
+
+  return '마감된 방은 투표가 종료됐어요.';
 }
