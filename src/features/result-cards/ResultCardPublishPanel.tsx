@@ -63,9 +63,20 @@ export function ResultCardPublishPanel({
       {publishState.receipt && (
         <div className="result-publish-panel__receipt" role="status">
           <p>결과 카드 발행 요청 완료</p>
-          <a href={publishState.receipt.redirectTo}>발행된 결과 카드로 이동</a>
+          <a
+            href={publishState.receipt.redirectTo}
+            target={getRedirectTarget(publishState.receipt.redirectTo)}
+          >
+            발행된 결과 카드로 이동
+          </a>
         </div>
       )}
     </section>
   );
+}
+
+function getRedirectTarget(redirectTo: string): '_self' | undefined {
+  const currentRoute = `${window.location.pathname}${window.location.search}`;
+
+  return redirectTo === currentRoute ? '_self' : undefined;
 }
