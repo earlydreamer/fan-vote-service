@@ -15,26 +15,28 @@ describe('RallyRoom app shell', () => {
     const primaryNav = screen.getByRole('navigation', { name: '주요 화면' });
 
     expect(banner).toHaveTextContent('RallyRoom');
-    expect(screen.getByRole('heading', { name: '오늘의 응원방 보드' })).toBeInTheDocument();
+    expect(banner).toHaveTextContent('Fan Vote Board');
+    expect(screen.getByRole('heading', { name: '오늘의 인기투표 보드' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
-    expect(within(banner).getByRole('link', { name: '응원방 만들기' })).toBeInTheDocument();
-    const roomFeed = screen.getByRole('region', { name: '진행 중인 응원방' });
+    expect(within(banner).getByRole('link', { name: '투표방 만들기' })).toBeInTheDocument();
+    const roomFeed = screen.getByRole('region', { name: '진행 중인 투표방' });
     expect(roomFeed).toBeInTheDocument();
     expect(roomFeed).toHaveClass('board-section');
     expect(roomFeed).not.toHaveClass('content-panel');
-    expect(screen.getByRole('region', { name: '마감 임박' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: '오늘의 미션' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: '마감 임박 투표' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: '오늘의 참여 미션' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '내 RP' })).toBeInTheDocument();
     expect(screen.queryByText('Fan-led micro rally rooms')).not.toBeInTheDocument();
+    expect(screen.queryByText('Fan Ops Board')).not.toBeInTheDocument();
   });
 
   it('navigates to room creation from the global CTA', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(within(screen.getByRole('banner')).getByRole('link', { name: '응원방 만들기' }));
+    await user.click(within(screen.getByRole('banner')).getByRole('link', { name: '투표방 만들기' }));
 
-    expect(screen.getByRole('heading', { name: '새 응원방 열기' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '새 투표방 열기' })).toBeInTheDocument();
     expect(screen.getByText(/공식 제휴나 전달 보장을 암시하지 않도록/)).toBeInTheDocument();
   });
 
@@ -42,18 +44,18 @@ describe('RallyRoom app shell', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    const roomFeed = screen.getByRole('region', { name: '진행 중인 응원방' });
+    const roomFeed = screen.getByRole('region', { name: '진행 중인 투표방' });
 
-    await user.click(within(roomFeed).getByRole('link', { name: /은하 무대 오프닝 응원방/ }));
+    await user.click(within(roomFeed).getByRole('link', { name: /은하 무대 오프닝 투표방/ }));
 
-    expect(screen.getByRole('heading', { name: '은하 무대 오프닝 응원방' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: '은하 무대 오프닝 투표방' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '투표 현황' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '팬월' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: '결과 카드 보기' }));
 
     expect(screen.getByRole('heading', { name: '결과 카드 준비 중' })).toBeInTheDocument();
-    expect(screen.getByText(/은하 무대 오프닝 응원방/)).toBeInTheDocument();
+    expect(screen.getByText(/은하 무대 오프닝 투표방/)).toBeInTheDocument();
     expect(screen.queryByText('첫 장면 스포트라이트')).not.toBeInTheDocument();
     expect(screen.queryByText('오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.')).not.toBeInTheDocument();
   });
@@ -64,7 +66,7 @@ describe('RallyRoom app shell', () => {
     render(<App />);
 
     expect(screen.getByRole('heading', { name: '결과 카드' })).toBeInTheDocument();
-    expect(screen.getByText('픽셀 리그 시즌 응원 결과')).toBeInTheDocument();
+    expect(screen.getByText('픽셀 리그 시즌 투표 결과')).toBeInTheDocument();
     expect(screen.getByText('역전승 하이라이트')).toBeInTheDocument();
   });
 
