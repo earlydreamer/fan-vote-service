@@ -58,7 +58,7 @@ export function mapCommandErrorMessage(error: { code?: string; message?: string 
 export function normalizeCommandError(rawError: unknown, status?: number): CommandError {
   const errorRecord = isRecord(rawError) ? rawError : {};
   const rawCode = typeof errorRecord.code === 'string' ? errorRecord.code : undefined;
-  const code = isKnownErrorCode(rawCode) ? rawCode : status && status >= 500 ? 'SERVER_ERROR' : 'UNKNOWN_ERROR';
+  const code = isKnownErrorCode(rawCode) ? rawCode : mapStatusToCommandErrorCode(status);
   const fieldErrors = isStringArrayRecord(errorRecord.fieldErrors) ? errorRecord.fieldErrors : undefined;
 
   return {
@@ -74,6 +74,21 @@ export function normalizeCommandError(rawError: unknown, status?: number): Comma
 
 function isKnownErrorCode(code: string | undefined): code is CommandErrorCode {
   return knownErrorCodes.includes(code as CommandErrorCode);
+}
+
+function mapStatusToCommandErrorCode(status: number | undefined): CommandErrorCode {
+  switch (status) {
+    case 401:
+      return 'UNAUTHENTICATED';
+    case 403:
+      return 'FORBIDDEN';
+    case 404:
+      return 'NOT_FOUND';
+    case 429:
+      return 'RATE_LIMITED';
+    default:
+      return status && status >= 500 ? 'SERVER_ERROR' : 'UNKNOWN_ERROR';
+  }
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

@@ -13,13 +13,10 @@ export interface PostRoomMessageResponse {
   awardedEnergy?: number;
 }
 
-interface PostRoomMessageCommandPayload {
-  command: 'post-room-message';
-  message: {
-    roomId: string;
-    type: MessageType;
-    body: string;
-  };
+interface PostRoomMessageRequest {
+  roomId: string;
+  type: MessageType;
+  body: string;
 }
 
 export function postRoomMessage(
@@ -29,13 +26,10 @@ export function postRoomMessage(
   return postCommand(client, 'post-room-message', buildPostRoomMessagePayload(input));
 }
 
-function buildPostRoomMessagePayload(input: PostRoomMessageInput): PostRoomMessageCommandPayload {
+function buildPostRoomMessagePayload(input: PostRoomMessageInput): PostRoomMessageRequest {
   return {
-    command: 'post-room-message',
-    message: {
-      roomId: input.roomId,
-      type: input.type,
-      body: input.body.trim()
-    }
+    roomId: input.roomId,
+    type: input.type,
+    body: input.body.trim()
   };
 }
