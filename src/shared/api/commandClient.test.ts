@@ -14,7 +14,9 @@ function jsonResponse(body: unknown, init?: ResponseInit) {
 
 describe('command client boundary', () => {
   it('posts a command payload to the configured function URL', async () => {
-    const fetcher = vi.fn(async () => jsonResponse({ data: { roomId: 'room-1' } }));
+    const fetcher = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({ data: { roomId: 'room-1' } })
+    );
     const client = createCommandClient({
       functionsUrl: 'https://project-ref.functions.supabase.co',
       fetcher: fetcher as unknown as typeof fetch
@@ -27,9 +29,9 @@ describe('command client boundary', () => {
 
     expect(result).toEqual({ ok: true, data: { roomId: 'room-1' } });
     expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(fetcher.mock.calls[0]?.[0]).toBe('https://project-ref.functions.supabase.co/create-room');
+    const [url, init] = fetcher.mock.calls[0] as [RequestInfo | URL, RequestInit];
 
-    const init = fetcher.mock.calls[0]?.[1] as RequestInit;
+    expect(url).toBe('https://project-ref.functions.supabase.co/create-room');
     expect(init.method).toBe('POST');
     expect(new Headers(init.headers).get('Content-Type')).toBe('application/json');
     expect(JSON.parse(init.body as string)).toEqual({
@@ -39,7 +41,9 @@ describe('command client boundary', () => {
   });
 
   it('sends anon key and access token headers when configured', async () => {
-    const fetcher = vi.fn(async () => jsonResponse({ data: { accepted: true } }));
+    const fetcher = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+      jsonResponse({ data: { accepted: true } })
+    );
     const client = createCommandClient({
       functionsUrl: 'https://project-ref.functions.supabase.co/',
       anonKey: 'anon-key',
@@ -52,10 +56,10 @@ describe('command client boundary', () => {
       vote: { roomId: 'room-1', candidateIds: ['candidate-1'] }
     });
 
-    const init = fetcher.mock.calls[0]?.[1] as RequestInit;
+    const [url, init] = fetcher.mock.calls[0] as [RequestInfo | URL, RequestInit];
     const headers = new Headers(init.headers);
 
-    expect(fetcher.mock.calls[0]?.[0]).toBe('https://project-ref.functions.supabase.co/cast-vote');
+    expect(url).toBe('https://project-ref.functions.supabase.co/cast-vote');
     expect(headers.get('apikey')).toBe('anon-key');
     expect(headers.get('Authorization')).toBe('Bearer user-token');
   });
@@ -67,7 +71,7 @@ describe('command client boundary', () => {
   });
 
   it('returns a command error when the edge function rejects the request', async () => {
-    const fetcher = vi.fn(async () =>
+    const fetcher = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
       jsonResponse(
         {
           error: {

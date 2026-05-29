@@ -1,7 +1,7 @@
 # RallyRoom 기술 스택과 디렉터리 구조
 
 작성일: 2026-05-29
-최종 갱신일: 2026-05-29
+최종 갱신일: 2026-05-30
 
 ## 목적
 
@@ -48,6 +48,7 @@
 - Supabase Postgres RPC, 도메인 트랜잭션
 - Supabase RLS, constraints, aggregate view
 - TanStack Query, server state read/cache 관리
+- command client boundary: `src/shared/api/commandClient.ts`, `src/shared/api/commandErrors.ts`, `src/shared/config/env.ts`
 
 ### Deployment 예정
 
@@ -108,6 +109,10 @@ D:\Projects\vibex
 │  │  │  └─ CrewDashboardPage.tsx
 │  │  ├─ home/
 │  │  │  └─ HomePage.tsx
+│  │  ├─ messages/
+│  │  │  └─ postRoomMessageApi.ts
+│  │  ├─ missions/
+│  │  │  └─ completeMissionApi.ts
 │  │  ├─ not-found/
 │  │  │  └─ NotFoundPage.tsx
 │  │  ├─ pricing/
@@ -115,14 +120,26 @@ D:\Projects\vibex
 │  │  ├─ profile/
 │  │  │  └─ ProfilePage.tsx
 │  │  ├─ result-cards/
+│  │  │  ├─ publishResultCardApi.ts
 │  │  │  └─ ResultCardPage.tsx
-│  │  └─ rooms/
-│  │     ├─ RoomCreatePage.tsx
-│  │     └─ RoomDetailPage.tsx
+│  │  ├─ rooms/
+│  │  │  ├─ createRoomApi.ts
+│  │  │  ├─ createRoomCommand.test.ts
+│  │  │  ├─ createRoomCommand.ts
+│  │  │  ├─ RoomCreatePage.tsx
+│  │  │  └─ RoomDetailPage.tsx
+│  │  └─ voting/
+│  │     └─ castVoteApi.ts
 │  ├─ shared/
 │  │  ├─ api/
+│  │  │  ├─ commandApiWrappers.test.ts
+│  │  │  ├─ commandClient.test.ts
+│  │  │  ├─ commandClient.ts
+│  │  │  ├─ commandErrors.ts
 │  │  │  ├─ demoReadRepository.test.ts
 │  │  │  └─ demoReadRepository.ts
+│  │  ├─ config/
+│  │  │  └─ env.ts
 │  │  ├─ data/demo/
 │  │  │  ├─ categories.json
 │  │  │  ├─ crewStats.json

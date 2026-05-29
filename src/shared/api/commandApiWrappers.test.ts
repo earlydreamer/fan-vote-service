@@ -1,12 +1,14 @@
 import { describe, expect, it, vi } from 'vitest';
 import { completeMission } from '../../features/missions/completeMissionApi';
 import { postRoomMessage } from '../../features/messages/postRoomMessageApi';
-import { publishResultCard } from '../../features/resultCards/publishResultCardApi';
+import { publishResultCard } from '../../features/result-cards/publishResultCardApi';
 import { castVote } from '../../features/voting/castVoteApi';
 import { createCommandClient } from './commandClient';
 
 function createRecordingClient() {
-  const fetcher = vi.fn(async () => new Response(JSON.stringify({ data: { accepted: true } })));
+  const fetcher = vi.fn(async (_input: RequestInfo | URL, _init?: RequestInit) =>
+    new Response(JSON.stringify({ data: { accepted: true } }))
+  );
   const client = createCommandClient({
     functionsUrl: 'https://project-ref.functions.supabase.co',
     fetcher: fetcher as unknown as typeof fetch
@@ -16,7 +18,9 @@ function createRecordingClient() {
     client,
     fetcher,
     sentBody() {
-      return JSON.parse((fetcher.mock.calls[0]?.[1] as RequestInit).body as string);
+      const [, init] = fetcher.mock.calls[0] as [RequestInfo | URL, RequestInit];
+
+      return JSON.parse(init.body as string);
     }
   };
 }
