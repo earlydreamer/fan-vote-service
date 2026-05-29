@@ -38,8 +38,15 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
 }
 
 function formatDday(endAt: string): string {
-  const now = new Date('2026-05-29T00:00:00.000+09:00');
+  const now = new Date();
   const end = new Date(endAt);
-  const days = Math.max(Math.ceil((end.getTime() - now.getTime()) / 86_400_000), 0);
+  const days = Math.max(calendarDayDiff(end, now), 0);
   return days === 0 ? '오늘 마감' : `D-${days}`;
+}
+
+function calendarDayDiff(end: Date, now: Date): number {
+  const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+  const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  return Math.round((endDay.getTime() - nowDay.getTime()) / 86_400_000);
 }

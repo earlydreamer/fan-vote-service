@@ -50,7 +50,7 @@ describe('RallyRoom app shell', () => {
     await user.click(screen.getByRole('link', { name: '결과 카드 보기' }));
 
     expect(screen.getByRole('heading', { name: '결과 카드 준비 중' })).toBeInTheDocument();
-    expect(screen.getByText('은하 무대 오프닝 응원방')).toBeInTheDocument();
+    expect(screen.getByText(/은하 무대 오프닝 응원방/)).toBeInTheDocument();
     expect(screen.queryByText('첫 장면 스포트라이트')).not.toBeInTheDocument();
     expect(screen.queryByText('오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.')).not.toBeInTheDocument();
   });
