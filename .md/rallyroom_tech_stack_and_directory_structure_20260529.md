@@ -73,8 +73,7 @@ Postgres RPC / transaction functions
 ```text
 D:\Projects\vibex
 ├─ .md/
-│  ├─ features/
-│  │  └─ foundation_project_setup_20260529.md
+│  ├─ local/                 # gitignore 대상, 브랜치별 임시 작업 메모
 │  ├─ rallyroom_delivery_workflow_20260529.md
 │  ├─ rallyroom_github_review_workflow_20260529.md
 │  ├─ rallyroom_tdd_feature_slicing_20260529.md
@@ -144,5 +143,4 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - 리스트 key와 불필요한 memoization 여부
 - TypeScript에서 `any` 회피
 
-점검 결과는 해당 feature 파일의 "React Best Practice 점검" 섹션과 PR 코멘트에 남긴다.
-
+점검 결과는 PR 코멘트 또는 GitHub issue에 남긴다.

@@ -49,13 +49,15 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 
 초기 세팅 이후 모든 구현은 다음 순서로 진행합니다.
 
-1. `.md/features/`에 feature 문서를 작성합니다.
-2. GitHub issue를 만듭니다.
-3. feature branch를 만듭니다.
+1. GitHub issue로 작업 범위와 완료 기준을 정의합니다.
+2. feature branch를 만듭니다.
+3. 필요한 경우 `.md/local/` 아래에 로컬 작업 메모를 둡니다. 이 디렉터리는 커밋하지 않습니다.
 4. 실패하는 테스트를 먼저 작성합니다.
 5. 최소 구현으로 테스트를 통과시킵니다.
 6. `npm test`, `npm run build`를 통과시킵니다.
-7. pull request를 열고 리뷰 후 merge합니다.
+7. pull request를 열고 GitHub Codex 리뷰 후 merge합니다.
+8. Codex 리뷰 피드백이 남으면 follow-up issue로 추적합니다.
+9. merge 전 모든 PR conversation과 review thread가 resolved 상태인지 확인합니다.
 
 ## 중요한 아키텍처 원칙
 
