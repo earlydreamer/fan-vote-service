@@ -6,11 +6,19 @@ export interface CompleteMissionInput {
   textValue?: string;
 }
 
+export interface EarnedReward {
+  code: string;
+  name: string;
+  icon: string;
+}
+
 export interface CompleteMissionResponse {
   missionId: string;
   awardedRp: number;
   awardedEnergy: number;
-  earnedRewards: string[];
+  newTotalRp?: number;
+  newRoomEnergy?: number;
+  earnedRewards: EarnedReward[];
 }
 
 interface CompleteMissionRequest {

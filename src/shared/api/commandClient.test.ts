@@ -66,6 +66,7 @@ describe('command client boundary', () => {
 
   it('maps standard command error codes to Korean user messages', () => {
     expect(mapCommandErrorMessage({ code: 'DUPLICATE_VOTE' })).toBe('이미 이 투표에 참여했어요.');
+    expect(mapCommandErrorMessage({ code: 'DUPLICATE_MISSION_COMPLETION' })).toBe('이미 완료한 미션이에요.');
     expect(mapCommandErrorMessage({ code: 'VALIDATION_ERROR' })).toBe('입력값을 다시 확인해 주세요.');
     expect(mapCommandErrorMessage({ code: 'CONFIG_MISSING' })).toBe('앱 설정이 아직 완료되지 않았어요.');
   });

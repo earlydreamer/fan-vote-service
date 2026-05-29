@@ -24,7 +24,7 @@ function renderMissionList(
       missionId: 'mission-message',
       awardedRp: 77,
       awardedEnergy: 33,
-      earnedRewards: ['응원 배지']
+      earnedRewards: [{ code: 'cheer_badge', name: '응원 배지', icon: '✨' }]
     }
   })
 ) {
@@ -65,7 +65,7 @@ describe('MissionList', () => {
         missionId: 'mission-message',
         awardedRp: 77,
         awardedEnergy: 33,
-        earnedRewards: ['응원 배지']
+        earnedRewards: [{ code: 'cheer_badge', name: '응원 배지', icon: '✨' }]
       }
     }));
 
@@ -94,8 +94,33 @@ describe('MissionList', () => {
     expect(JSON.stringify(submittedInput)).not.toContain('currentGoalValue');
     expect(await within(missionCard).findByRole('status')).toHaveTextContent('+77 RP');
     expect(within(missionCard).getByRole('status')).toHaveTextContent('Energy +33');
+    expect(within(missionCard).getByRole('status')).toHaveTextContent('✨');
     expect(within(missionCard).getByRole('status')).toHaveTextContent('응원 배지');
     expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
+  });
+
+  it('locks the mission when the command reports duplicate completion', async () => {
+    const user = userEvent.setup();
+    const completeMissionCommand = vi.fn(async (): Promise<CommandResult<CompleteMissionResponse>> => ({
+      ok: false,
+      error: {
+        code: 'DUPLICATE_MISSION_COMPLETION',
+        message: '이미 완료한 미션이에요.'
+      }
+    }));
+
+    renderMissionList(completeMissionCommand);
+
+    const missionCard = screen.getByRole('article', { name: '오늘의 투표권 사용하기' });
+
+    await user.click(within(missionCard).getByRole('button', { name: '미션 완료' }));
+
+    expect(await within(missionCard).findByRole('alert')).toHaveTextContent('이미 완료한 미션이에요.');
+    expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
+
+    await user.click(within(missionCard).getByRole('button', { name: '완료됨' }));
+
+    expect(completeMissionCommand).toHaveBeenCalledTimes(1);
   });
 
   it('does not submit missions that are already completed', async () => {

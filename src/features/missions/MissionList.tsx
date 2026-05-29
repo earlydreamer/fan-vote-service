@@ -32,6 +32,9 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
           const isSubmitting = missionState.submittingMissionId === mission.id;
           const isAnyMissionSubmitting = missionState.submittingMissionId !== null;
           const isCompleted = mission.isCompleted || Boolean(receipt);
+          const earnedRewardText = receipt?.earnedRewards
+            .map((reward) => `${reward.icon} ${reward.name}`)
+            .join(' · ');
           const titleId = `${mission.id}-title`;
 
           return (
@@ -80,7 +83,7 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
               {receipt && (
                 <p className="mission-card__receipt" role="status">
                   +{receipt.awardedRp} RP · Energy +{receipt.awardedEnergy}
-                  {receipt.earnedRewards.length > 0 ? ` · ${receipt.earnedRewards.join(', ')}` : ''}
+                  {earnedRewardText ? ` · ${earnedRewardText}` : ''}
                 </p>
               )}
             </article>
