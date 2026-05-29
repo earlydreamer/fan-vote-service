@@ -55,6 +55,19 @@ describe('buildCreateRoomCommand', () => {
     expect(result.errors.some((error) => error.includes('전달 보장'))).toBe(true);
   });
 
+  it('rejects standalone agency and real-world reflection phrases', () => {
+    const result = buildCreateRoomCommand({
+      ...validInput,
+      topic: '소속사가 확인하는 투표이고 결과가 실제 반영됩니다'
+    });
+
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+
+    expect(result.errors.some((error) => error.includes('소속사'))).toBe(true);
+    expect(result.errors.some((error) => error.includes('실제 반영'))).toBe(true);
+  });
+
   it('rejects fewer than two non-empty candidates', () => {
     const result = buildCreateRoomCommand({
       ...validInput,
