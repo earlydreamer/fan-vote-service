@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from './App';
@@ -11,10 +11,13 @@ describe('RallyRoom app shell', () => {
   it('renders an app dashboard instead of a landing hero', () => {
     render(<App />);
 
-    expect(screen.getByRole('banner')).toHaveTextContent('RallyRoom');
+    const banner = screen.getByRole('banner');
+    const primaryNav = screen.getByRole('navigation', { name: '주요 화면' });
+
+    expect(banner).toHaveTextContent('RallyRoom');
     expect(screen.getByRole('heading', { name: '오늘의 응원방 보드' })).toBeInTheDocument();
-    expect(screen.getByRole('navigation', { name: '주요 화면' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: '응원방 만들기' })).toBeInTheDocument();
+    expect(primaryNav).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: '응원방 만들기' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '진행 중인 응원방' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '마감 임박' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '오늘의 미션' })).toBeInTheDocument();
@@ -26,7 +29,7 @@ describe('RallyRoom app shell', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('link', { name: '응원방 만들기' }));
+    await user.click(within(screen.getByRole('banner')).getByRole('link', { name: '응원방 만들기' }));
 
     expect(screen.getByRole('heading', { name: '새 응원방 열기' })).toBeInTheDocument();
     expect(screen.getByText(/공식 제휴나 전달 보장을 암시하지 않도록/)).toBeInTheDocument();
@@ -36,7 +39,9 @@ describe('RallyRoom app shell', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('link', { name: /은하 무대 오프닝 응원방/ }));
+    const roomFeed = screen.getByRole('region', { name: '진행 중인 응원방' });
+
+    await user.click(within(roomFeed).getByRole('link', { name: /은하 무대 오프닝 응원방/ }));
 
     expect(screen.getByRole('heading', { name: '은하 무대 오프닝 응원방' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '투표 현황' })).toBeInTheDocument();
@@ -52,13 +57,15 @@ describe('RallyRoom app shell', () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(screen.getByRole('link', { name: '내 활동' }));
+    const primaryNav = screen.getByRole('navigation', { name: '주요 화면' });
+
+    await user.click(within(primaryNav).getByRole('link', { name: '내 활동' }));
     expect(screen.getByRole('heading', { name: '내 활동' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('link', { name: 'Crew' }));
+    await user.click(within(primaryNav).getByRole('link', { name: 'Crew' }));
     expect(screen.getByRole('heading', { name: 'Crew 대시보드' })).toBeInTheDocument();
 
-    await user.click(screen.getByRole('link', { name: '요금제' }));
+    await user.click(within(primaryNav).getByRole('link', { name: '요금제' }));
     expect(screen.getByRole('heading', { name: '요금제' })).toBeInTheDocument();
   });
 

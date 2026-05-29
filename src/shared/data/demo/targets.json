@@ -1,0 +1,34 @@
+[
+  {
+    "id": "target-eunha-stage",
+    "categoryId": "cat-stage",
+    "name": "은하 무대",
+    "targetType": "fictional-work",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-aurora-cast",
+    "categoryId": "cat-story",
+    "name": "오로라 캐스트",
+    "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-pixel-league",
+    "categoryId": "cat-game",
+    "name": "픽셀 리그",
+    "targetType": "fictional-work",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-sunday-club",
+    "categoryId": "cat-sports",
+    "name": "선데이 클럽",
+    "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  }
+]
