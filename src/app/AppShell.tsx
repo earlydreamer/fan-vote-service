@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { type MouseEvent, useEffect, useState } from 'react';
 import { Home, PlusCircle, UserRound } from 'lucide-react';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
@@ -28,7 +28,7 @@ export function AppShell() {
     setRoute(matchRoute(href));
   };
 
-  const handleShellClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleShellClick = (event: MouseEvent<HTMLDivElement>) => {
     const anchor = (event.target as Element).closest('a[href]');
 
     if (!(anchor instanceof HTMLAnchorElement)) return;
