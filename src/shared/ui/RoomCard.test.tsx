@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import { within } from '@testing-library/dom';
+import { render, screen, within } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RallyRoom } from '../types/rallyroom';
 import { RoomCard } from './RoomCard';
