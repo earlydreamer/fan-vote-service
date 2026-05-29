@@ -25,9 +25,10 @@
 2. feature branch 생성
 3. draft PR 생성
 4. 의미 단위 커밋 누적
-5. 코드리뷰 요청
-6. draft 해제
-7. merge commit으로 main 반영
+5. draft 해제
+6. GitHub Codex 코드리뷰 요청
+7. 리뷰 응답 확인과 피드백 반영
+8. merge commit으로 main 반영
 
 ## 작업 흐름
 
@@ -45,9 +46,13 @@
 12. 커밋이 추가될 때마다 feature 파일과 draft PR 본문 또는 코멘트를 갱신한다.
 13. React/TSX 변경이 있으면 `vercel:react-best-practices` 기준 점검을 수행하고 기록한다.
 14. 테스트와 빌드를 통과시킨다.
-15. feature 완성 판단 후 수동 코드리뷰를 요청한다.
-16. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
-17. 결함이 없다고 판단되면 draft를 풀고 merge한다.
+15. feature 완성 판단 후 검증을 통과시킨다.
+16. draft PR을 ready for review로 전환한다.
+17. GitHub PR에서 `@codex review`를 요청한다.
+18. GitHub MCP로 PR comment/review/review thread를 스캔해 GitHub Codex 리뷰 응답 도착 여부를 확인한다.
+19. 응답이 없으면 merge하지 않고 대기하거나 heartbeat/manual scan을 반복한다.
+20. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
+21. 결함이 없다고 판단되면 최종 검증 후 merge한다.
 
 ## 커밋 정책
 
@@ -65,7 +70,7 @@
 
 ## 상태
 
-- 상태: planned | in_progress | blocked | review_requested | ready_to_merge | merged
+- 상태: planned | in_progress | blocked | ready_for_review | github_review_requested | feedback_applied | ready_to_merge | merged
 - 현재 진행 중:
 - GitHub issue:
 - GitHub PR:
@@ -133,7 +138,9 @@
 - conflict 없음 확인
 - React/TSX 변경 시 `vercel:react-best-practices` 점검 기록 확인
 - GitHub MCP로 PR 코멘트/리뷰 확인
-- 코드리뷰 요청 및 응답 처리 완료
+- GitHub Codex 코드리뷰 요청 및 응답 처리 완료
+- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 스캔으로 확인
+- GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰로 대체하지 않았는지 확인
 - 적용하지 않은 리뷰가 있으면 보류 근거 코멘트 작성
-- draft 해제 전 최종 검증 완료
+- merge 전 최종 검증 완료
 - merge method는 `merge` 사용, squash/rebase 금지
