@@ -1,7 +1,7 @@
 import { postCommand, type CommandClient, type CommandResult } from '../../shared/api/commandClient';
 
 export type CreateRoomVoteMode = 'pick' | 'multi_pick' | 'matchup' | 'bracket' | 'scene' | 'line' | 'quick';
-export type CreateRoomResultVisibility = 'after_vote' | 'after_close' | 'public';
+export type CreateRoomResultVisibility = 'live' | 'after_vote' | 'after_close';
 
 export interface CreateRoomRequest {
   title: string;

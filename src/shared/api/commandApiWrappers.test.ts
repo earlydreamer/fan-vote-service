@@ -2,7 +2,7 @@ import { describe, expect, it, vi } from 'vitest';
 import { completeMission } from '../../features/missions/completeMissionApi';
 import { postRoomMessage } from '../../features/messages/postRoomMessageApi';
 import { publishResultCard } from '../../features/result-cards/publishResultCardApi';
-import { createRoom } from '../../features/rooms/createRoomApi';
+import { createRoom, type CreateRoomRequest } from '../../features/rooms/createRoomApi';
 import { castVote } from '../../features/voting/castVoteApi';
 import { createCommandClient } from './commandClient';
 
@@ -25,6 +25,30 @@ function createRecordingClient() {
     }
   };
 }
+
+const resultVisibilityTypeCanary: CreateRoomRequest = {
+  title: 'type canary',
+  description: 'result visibility type canary',
+  categoryId: 'category-1',
+  primaryTargetId: 'target-1',
+  voteMode: 'pick',
+  topic: 'type canary',
+  candidateTargetIds: ['candidate-target-1'],
+  customCandidates: [],
+  endAt: '2026-06-05T14:59:59.000Z',
+  goalValue: 500,
+  rewardIcon: 'Spotlight',
+  allowCandidateSuggestion: false,
+  resultVisibility: 'live'
+};
+
+const invalidResultVisibilityTypeCanary: CreateRoomRequest = {
+  ...resultVisibilityTypeCanary,
+  // @ts-expect-error public belongs to room visibility, not result visibility.
+  resultVisibility: 'public'
+};
+
+void invalidResultVisibilityTypeCanary;
 
 describe('command API wrappers', () => {
   it('creates a room with the documented Edge Function request body', async () => {
