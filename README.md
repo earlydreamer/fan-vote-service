@@ -57,6 +57,7 @@ VITE_SUPABASE_FUNCTIONS_URL=https://your-project-ref.functions.supabase.co
 6. `npm test`, `npm run build`를 통과시킵니다.
 7. pull request를 열고 GitHub Codex 리뷰 후 merge합니다.
 8. Codex 리뷰 피드백이 남으면 follow-up issue로 추적합니다.
+9. merge 전 모든 PR conversation과 review thread가 resolved 상태인지 확인합니다.
 
 ## 중요한 아키텍처 원칙
 

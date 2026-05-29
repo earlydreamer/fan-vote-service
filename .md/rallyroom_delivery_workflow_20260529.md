@@ -51,7 +51,8 @@
 16. GitHub PR에서 `@codex review`를 요청한다.
 17. GitHub Codex 리뷰는 GitHub 이벤트와 follow-up issue를 source of truth로 추적한다.
 18. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트 또는 follow-up issue에 남긴다.
-19. 결함이 없다고 판단되면 최종 검증 후 merge한다.
+19. 관련 PR conversation과 review thread가 모두 resolved 상태인지 확인한다. unresolved thread가 있으면 merge하지 않는다.
+20. 결함이 없다고 판단되면 최종 검증 후 merge한다.
 
 ## 커밋 정책
 
@@ -76,6 +77,8 @@
 - follow-up issue는 리뷰 원문 링크, PR 번호, head SHA, 처리 체크리스트를 포함한다.
 - 자동화는 issue 생성까지만 책임진다. 수정은 issue 기반 feature workflow로 진행한다.
 - 자동화가 실패하더라도 PR 리뷰 원문과 issue/label 상태를 기준으로 복구한다.
+- follow-up issue는 PR conversation resolution을 대체하지 않는다. repository rule이 unresolved conversation을 막으면 PR thread를 resolved 처리해야 merge할 수 있다.
+- 이 워크플로우 파일이 아직 default branch에 없는 bootstrap PR에서는 review event가 자동 실행되지 않는다. 이 경우 Codex 피드백을 수동으로 follow-up issue에 이관한다.
 
 ## merge 전 체크
 
@@ -91,6 +94,8 @@
 - GitHub Codex 코드리뷰 요청 및 응답 처리 완료
 - GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 스캔으로 확인
 - Codex follow-up issue가 있으면 처리 여부 확인
+- 모든 PR conversation/review thread가 resolved 상태인지 확인
+- GitHub MCP가 resolution 상태를 제공하지 못하면 GitHub UI에서 unresolved conversation이 없는지 수동 확인
 - GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰로 대체하지 않았는지 확인
 - 적용하지 않은 리뷰가 있으면 보류 근거 코멘트 작성
 - merge 전 최종 검증 완료

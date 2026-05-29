@@ -57,6 +57,9 @@
 - feature 완성 판단 후 draft를 ready for review로 전환하고 GitHub PR에서 수동 코드리뷰를 요청한다.
 - 코드리뷰 요청 기본 대상은 `codex`다. `AGENTS.md`의 "코드리뷰 공급자 우선순위"에서 기본값을 `coderabbit`으로 바꿀 수 있다.
 - GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인하고, 적용/보류 판단과 근거를 PR 코멘트 또는 follow-up issue에 남긴다.
+- 저장소 규칙상 unresolved PR conversation 또는 review thread가 남아 있으면 merge하지 않는다.
+- follow-up issue는 리뷰 피드백 추적 수단일 뿐이며, PR conversation resolved 상태를 대체하지 않는다.
+- 수정 또는 보류 판단을 남긴 뒤 관련 PR thread를 resolved 처리해야 한다. GitHub MCP로 resolution 상태 확인이나 처리가 불가능하면 GitHub UI에서 수동 확인한다.
 - 의존성 없는 기능은 subagent 병렬 개발을 허용한다.
 - merge 전에는 충돌, 테스트, 빌드 상태를 확인한다.
 

@@ -100,7 +100,9 @@ fallback 기록:
 6. 수정이 필요하면 별도 의미 단위 커밋으로 반영한다.
 7. PR 코멘트 또는 review reply로 판단 근거를 남긴다.
 8. 리뷰가 별도 작업으로 분리되어야 하면 follow-up issue로 추적한다.
-9. 리뷰 반영 커밋을 push한 뒤 필요한 경우 같은 공급자에게 재리뷰를 요청한다.
+9. follow-up issue를 만들었더라도 관련 PR conversation 또는 review thread를 resolved 상태로 만들기 전에는 merge하지 않는다.
+10. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
+11. 리뷰 반영 커밋을 push한 뒤 필요한 경우 같은 공급자에게 재리뷰를 요청한다.
 
 ## ready for review와 merge
 
@@ -119,9 +121,11 @@ draft 해제 후:
 4. GitHub Codex 리뷰 응답이 없으면 merge하지 않고 대기한다.
 5. 리뷰 내용을 적용하거나 보류 판단을 기록한다.
 6. 보류한 리뷰가 있다면 PR 코멘트에 근거를 작성한다.
-7. 최종 검증을 다시 수행한다.
-8. 최종 merge 전에 head SHA를 확인한다.
-9. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
+7. 모든 PR conversation/review thread가 resolved 상태인지 확인한다.
+8. GitHub MCP가 unresolved thread 상태를 제공하지 못하면 GitHub UI에서 수동 확인한다.
+9. 최종 검증을 다시 수행한다.
+10. 최종 merge 전에 head SHA를 확인한다.
+11. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
 
 ## 금지
 
@@ -132,6 +136,8 @@ draft 해제 후:
 - GitHub Codex 리뷰 응답 확인 없이 merge
 - GitHub Codex 리뷰 진행 중 로컬 Codex 리뷰 중복 실행
 - tracked 진행도 파일 또는 status-only commit 생성
+- unresolved PR conversation 또는 review thread가 남은 상태에서 merge
+- follow-up issue 생성만으로 PR conversation을 resolved 처리했다고 간주
 - 리뷰 근거 없이 의견 무시
 - `.env` 커밋
 - service role key 프론트 노출
