@@ -3,6 +3,7 @@ export type CommandErrorCode =
   | 'FORBIDDEN'
   | 'VALIDATION_ERROR'
   | 'DUPLICATE_VOTE'
+  | 'DUPLICATE_MISSION_COMPLETION'
   | 'RATE_LIMITED'
   | 'NOT_FOUND'
   | 'SERVER_ERROR'
@@ -22,6 +23,7 @@ const knownErrorCodes: CommandErrorCode[] = [
   'FORBIDDEN',
   'VALIDATION_ERROR',
   'DUPLICATE_VOTE',
+  'DUPLICATE_MISSION_COMPLETION',
   'RATE_LIMITED',
   'NOT_FOUND',
   'SERVER_ERROR',
@@ -40,6 +42,8 @@ export function mapCommandErrorMessage(error: { code?: string; message?: string 
       return '입력값을 다시 확인해 주세요.';
     case 'DUPLICATE_VOTE':
       return '이미 이 투표에 참여했어요.';
+    case 'DUPLICATE_MISSION_COMPLETION':
+      return '이미 완료한 미션이에요.';
     case 'RATE_LIMITED':
       return '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.';
     case 'NOT_FOUND':

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { CommandResult } from '../../shared/api/commandClient';
 import type { Mission } from '../../shared/types/rallyroom';
-import type { CompleteMissionInput, CompleteMissionResponse } from './completeMissionApi';
+import type { CompleteMissionInput, CompleteMissionResponse, EarnedReward } from './completeMissionApi';
 
 export const MIN_TEXT_MISSION_LENGTH = 10;
 
@@ -12,7 +12,7 @@ export type CompleteMissionCommand = (
 export interface MissionRewardReceipt {
   awardedRp: number;
   awardedEnergy: number;
-  earnedRewards: string[];
+  earnedRewards: EarnedReward[];
 }
 
 export interface UseCompleteMissionOptions {
@@ -68,9 +68,7 @@ export function useCompleteMission(options: UseCompleteMissionOptions): UseCompl
     });
 
     if (result.ok) {
-      setMissions((current) =>
-        current.map((item) => (item.id === missionId ? { ...item, isCompleted: true } : item))
-      );
+      markMissionCompleted(missionId);
       setReceipts((current) => ({
         ...current,
         [missionId]: {
@@ -84,9 +82,18 @@ export function useCompleteMission(options: UseCompleteMissionOptions): UseCompl
         ...current,
         [missionId]: result.error.message
       }));
+      if (result.error.code === 'DUPLICATE_MISSION_COMPLETION') {
+        markMissionCompleted(missionId);
+      }
     }
 
     setSubmittingMissionId(null);
+  };
+
+  const markMissionCompleted = (missionIdToComplete: string) => {
+    setMissions((current) =>
+      current.map((item) => (item.id === missionIdToComplete ? { ...item, isCompleted: true } : item))
+    );
   };
 
   return {

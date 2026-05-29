@@ -182,7 +182,15 @@ function createDemoCompleteMissionCommand(room: RallyRoom): CompleteMissionComma
         missionId,
         awardedRp: mission?.rewardRp ?? 0,
         awardedEnergy: mission?.rewardEnergy ?? 0,
-        earnedRewards: mission ? [`${mission.title} 배지`] : []
+        earnedRewards: mission
+          ? [
+              {
+                code: mission.id,
+                name: `${mission.title} 배지`,
+                icon: '✨'
+              }
+            ]
+          : []
       }
     };
   };
