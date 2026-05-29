@@ -68,6 +68,8 @@ h1,
 h2,
 h3 {
   margin-block: 0;
+  overflow-wrap: break-word;
+  word-break: keep-all;
 }
 
 button:focus-visible,
@@ -318,7 +320,12 @@ select:focus-visible {
   overflow-x: auto;
   padding: 8px 2px 4px;
   color: var(--ink-muted);
-  scrollbar-width: thin;
+  scrollbar-width: none;
+}
+
+.top-signal-strip::-webkit-scrollbar,
+.category-filter::-webkit-scrollbar {
+  display: none;
 }
 
 .top-signal-strip span {
@@ -480,7 +487,7 @@ select:focus-visible {
   gap: 8px;
   overflow-x: auto;
   padding-block: 2px 8px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
 }
 
 .category-filter button,
