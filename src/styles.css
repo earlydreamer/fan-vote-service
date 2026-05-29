@@ -210,11 +210,9 @@ select {
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 24px;
   align-items: end;
-  margin-block-end: 24px;
-  padding: 24px;
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  margin-block-end: 28px;
+  padding: 22px 0 24px;
+  border-block-end: 2px solid var(--ink);
 }
 
 .dashboard-intro > *,
@@ -253,7 +251,7 @@ select {
 .dashboard-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 360px;
-  gap: 20px;
+  gap: 28px;
 }
 
 .content-panel,
@@ -266,6 +264,19 @@ select {
 
 .content-panel {
   padding: 20px;
+}
+
+.board-section {
+  min-width: 0;
+  padding-block-start: 6px;
+}
+
+.board-section .section-heading {
+  padding-inline: 4px;
+}
+
+.room-feed .room-list {
+  gap: 14px;
 }
 
 .section-heading {
@@ -745,7 +756,7 @@ select {
   .dashboard-intro,
   .detail-hero {
     grid-template-columns: 1fr;
-    padding: 18px;
+    padding-block: 16px 18px;
   }
 
   .content-panel {

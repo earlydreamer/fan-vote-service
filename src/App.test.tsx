@@ -18,7 +18,10 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByRole('heading', { name: '오늘의 응원방 보드' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
     expect(within(banner).getByRole('link', { name: '응원방 만들기' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: '진행 중인 응원방' })).toBeInTheDocument();
+    const roomFeed = screen.getByRole('region', { name: '진행 중인 응원방' });
+    expect(roomFeed).toBeInTheDocument();
+    expect(roomFeed).toHaveClass('board-section');
+    expect(roomFeed).not.toHaveClass('content-panel');
     expect(screen.getByRole('region', { name: '마감 임박' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '오늘의 미션' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '내 RP' })).toBeInTheDocument();

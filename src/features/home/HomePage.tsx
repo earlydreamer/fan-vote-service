@@ -23,7 +23,7 @@ export function HomePage() {
       </section>
 
       <div className="dashboard-grid">
-        <section className="content-panel room-feed" aria-labelledby="active-rooms-title">
+        <section className="board-section room-feed" aria-labelledby="active-rooms-title">
           <div className="section-heading">
             <div>
               <p className="eyebrow">Live rooms</p>
