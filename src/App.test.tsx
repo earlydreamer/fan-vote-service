@@ -53,6 +53,17 @@ describe('RallyRoom app shell', () => {
     expect(within(banner).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
+  it('keeps hash-only skip links out of the SPA router', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(screen.getByRole('link', { name: '본문으로 건너뛰기' }));
+
+    expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표를 직접 만들어보세요' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '페이지를 찾을 수 없어요' })).not.toBeInTheDocument();
+    expect(window.location.hash).toBe('#main-content');
+  });
+
   it('filters the home gallery by category chips', async () => {
     const user = userEvent.setup();
     render(<App />);
@@ -109,13 +120,14 @@ describe('RallyRoom app shell', () => {
     expect(screen.queryByText('오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.')).not.toBeInTheDocument();
   });
 
-  it('lets a user add a vote option by spending a vote ticket on the room detail page', async () => {
+  it('submits a vote option command intent without mutating trusted read model state', async () => {
     const user = userEvent.setup();
     render(<App />);
 
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
     await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
 
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
     const optionComposer = screen.getByRole('region', { name: '투표 항목 추가' });
 
     expect(within(optionComposer).getByText('보유 투표권 3장')).toBeInTheDocument();
@@ -123,9 +135,11 @@ describe('RallyRoom app shell', () => {
     await user.type(within(optionComposer).getByRole('textbox', { name: '새 투표 항목' }), '레이저 엔딩 하트');
     await user.click(within(optionComposer).getByRole('button', { name: '투표 항목 추가 - 투표권 1장' }));
 
-    expect(screen.getByText('레이저 엔딩 하트')).toBeInTheDocument();
-    expect(within(optionComposer).getByText('보유 투표권 2장')).toBeInTheDocument();
-    expect(within(optionComposer).getByText(/추가 항목은 검수 대기 상태/)).toBeInTheDocument();
+    expect(within(votePanel).queryByText('레이저 엔딩 하트')).not.toBeInTheDocument();
+    expect(within(optionComposer).getByText('보유 투표권 3장')).toBeInTheDocument();
+    expect(screen.getByRole('banner')).toHaveTextContent('투표권 3장');
+    expect(within(optionComposer).getByText(/후보 추가 요청을 만들었어요/)).toBeInTheDocument();
+    expect(within(optionComposer).getByText(/레이저 엔딩 하트/)).toBeInTheDocument();
   });
 
   it('renders a published result card only for published rooms', () => {
