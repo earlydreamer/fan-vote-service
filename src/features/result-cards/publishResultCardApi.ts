@@ -6,7 +6,7 @@ export interface PublishResultCardInput {
 
 export interface PublishResultCardResponse {
   resultCardId: string;
-  publishedAt: string;
+  redirectTo: string;
 }
 
 export function publishResultCard(
