@@ -2,6 +2,15 @@ import { Clock3, UsersRound } from 'lucide-react';
 import type { Category, RallyRoom } from '../types/rallyroom';
 import { ProgressMeter } from './ProgressMeter';
 
+const SERVICE_CALENDAR_TIME_ZONE = 'Asia/Seoul';
+const SERVICE_DAY_MS = 86_400_000;
+const serviceCalendarFormatter = new Intl.DateTimeFormat('en-CA', {
+  timeZone: SERVICE_CALENDAR_TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit'
+});
+
 interface RoomCardProps {
   room: RallyRoom;
   category?: Category;
@@ -45,8 +54,17 @@ function formatDday(endAt: string): string {
 }
 
 function calendarDayDiff(end: Date, now: Date): number {
-  const endDay = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-  const nowDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const endDay = serviceCalendarDayValue(end);
+  const nowDay = serviceCalendarDayValue(now);
 
-  return Math.round((endDay.getTime() - nowDay.getTime()) / 86_400_000);
+  return Math.round((endDay - nowDay) / SERVICE_DAY_MS);
+}
+
+function serviceCalendarDayValue(date: Date): number {
+  const parts = serviceCalendarFormatter.formatToParts(date);
+  const year = Number(parts.find((part) => part.type === 'year')?.value);
+  const month = Number(parts.find((part) => part.type === 'month')?.value);
+  const day = Number(parts.find((part) => part.type === 'day')?.value);
+
+  return Date.UTC(year, month - 1, day);
 }
