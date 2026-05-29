@@ -273,13 +273,14 @@ The design requires enough mock content to look real.
 
 Minimum demo content for home:
 
-- 12 or more vote rooms
-- 6 or more categories
-- 3 or more poll formats
+- 24 or more vote rooms
+- 10 or more categories
+- 6 or more poll formats
 - at least 1 Featured candidate
 - at least 4 ending-soon votes
-- at least 4 result-card items
+- at least 6 result-card items
 - at least 2 category-specific collections
+- varied candidate counts from simple 1:1 matchup rooms to 6+ candidate rooms
 
 Poll format examples:
 
@@ -303,7 +304,22 @@ Each vote room should model:
 - D-day or status
 - tags
 - poll format
+- option-add cost in vote tickets or RP
 - result state if published
+
+## Reward-To-Participation Loop
+
+Fans should feel that rewards are useful inside the service, not just decorative.
+
+MVP behavior:
+
+- each vote room exposes a cost for adding a new vote option
+- adding an option consumes a vote ticket first when available
+- if no ticket is available, the fallback cost can be RP
+- newly added options enter a pending or review state before becoming trusted candidates
+- candidate counts should vary so option addition feels meaningful on some rooms and unnecessary on others
+
+This loop supports future monetization because vote tickets, RP, badges, result-card themes, and priority review can become subscription or paid-pack benefits without implying official artist or agency delivery.
 
 ## Visual Language
 

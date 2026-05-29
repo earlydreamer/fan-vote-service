@@ -98,10 +98,10 @@ describe('RallyRoom app shell', () => {
 
     expect(within(optionComposer).getByText('보유 투표권 3장')).toBeInTheDocument();
 
-    await user.type(within(optionComposer).getByRole('textbox', { name: '새 투표 항목' }), '커튼콜 실루엣');
+    await user.type(within(optionComposer).getByRole('textbox', { name: '새 투표 항목' }), '레이저 엔딩 하트');
     await user.click(within(optionComposer).getByRole('button', { name: '투표 항목 추가 - 투표권 1장' }));
 
-    expect(screen.getByText('커튼콜 실루엣')).toBeInTheDocument();
+    expect(screen.getByText('레이저 엔딩 하트')).toBeInTheDocument();
     expect(within(optionComposer).getByText('보유 투표권 2장')).toBeInTheDocument();
     expect(within(optionComposer).getByText(/추가 항목은 검수 대기 상태/)).toBeInTheDocument();
   });

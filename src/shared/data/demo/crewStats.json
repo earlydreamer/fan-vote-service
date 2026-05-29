@@ -1,26 +1,58 @@
 {
-  "totalRooms": 12,
-  "activeRooms": 4,
-  "totalParticipants": 2150,
-  "averageMissionCompletionRate": 64,
+  "totalRooms": 26,
+  "activeRooms": 18,
+  "totalParticipants": 15104,
+  "averageMissionCompletionRate": 68,
   "strongestCategoryId": "cat-stage",
   "roomStats": [
     {
       "roomId": "room-stage-opening",
       "title": "은하 무대 오프닝 투표방",
-      "participantCount": 328,
-      "voteCount": 746,
-      "missionCompletionRate": 71,
-      "messageCount": 84
+      "participantCount": 1368,
+      "voteCount": 3175,
+      "missionCompletionRate": 76,
+      "messageCount": 184
     },
     {
-      "roomId": "room-aurora-ending",
-      "title": "오로라 결말 한 줄 투표방",
-      "participantCount": 186,
-      "voteCount": 393,
-      "missionCompletionRate": 58,
-      "messageCount": 42
+      "roomId": "room-neon-character",
+      "title": "네온 시티 주인공 인기투표",
+      "participantCount": 908,
+      "voteCount": 1717,
+      "missionCompletionRate": 71,
+      "messageCount": 139
+    },
+    {
+      "roomId": "room-meme-line",
+      "title": "이번 주 밈 대사 월드컵",
+      "participantCount": 1044,
+      "voteCount": 1983,
+      "missionCompletionRate": 74,
+      "messageCount": 210
+    },
+    {
+      "roomId": "room-synth-mv",
+      "title": "신스 시티 MV 최고의 컷",
+      "participantCount": 344,
+      "voteCount": 557,
+      "missionCompletionRate": 52,
+      "messageCount": 48
+    },
+    {
+      "roomId": "room-byte-boss",
+      "title": "바이트 던전 보스전 MVP",
+      "participantCount": 539,
+      "voteCount": 898,
+      "missionCompletionRate": 63,
+      "messageCount": 92
+    },
+    {
+      "roomId": "room-open-topic",
+      "title": "주말에 다시 보고 싶은 장면",
+      "participantCount": 250,
+      "voteCount": 262,
+      "missionCompletionRate": 44,
+      "messageCount": 31
     }
   ],
-  "nextMissionSuggestion": "마감 24시간 전에는 팬월 메시지 미션을 노출해 결과 카드 재료를 모으는 편이 좋아요."
+  "nextMissionSuggestion": "마감 24시간 전에는 팬월 메시지 미션과 후보 추가권 리워드를 같이 노출해 결과 카드 재료를 모으는 편이 좋아요."
 }

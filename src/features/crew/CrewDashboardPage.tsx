@@ -1,3 +1,4 @@
+import { BarChart3 } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 
 export function CrewDashboardPage() {
@@ -5,12 +6,13 @@ export function CrewDashboardPage() {
 
   return (
     <div className="crew-page">
-      <section className="dashboard-intro" aria-labelledby="crew-title">
+      <section className="ops-hero" aria-labelledby="crew-title">
         <div>
           <p className="eyebrow">Creator operations</p>
           <h1 id="crew-title">Crew 대시보드</h1>
-          <p>원시 이벤트 로그가 아니라 aggregate read model로 방 운영 흐름을 확인하는 화면이에요.</p>
+          <p>공식 계정이나 크리에이터 확장 시 aggregate read model로 운영 흐름을 확인하는 화면이에요.</p>
         </div>
+        <BarChart3 size={32} aria-hidden="true" />
       </section>
 
       <section className="stat-grid wide" aria-label="Crew 요약 지표">
@@ -32,11 +34,16 @@ export function CrewDashboardPage() {
         </div>
       </section>
 
-      <section className="content-panel" aria-labelledby="crew-room-title">
-        <h2 id="crew-room-title">투표방별 성과</h2>
-        <div className="table-like">
+      <section className="content-collection" aria-labelledby="crew-room-title">
+        <div className="collection-heading">
+          <div>
+            <p className="eyebrow">Room performance</p>
+            <h2 id="crew-room-title">투표방별 성과</h2>
+          </div>
+        </div>
+        <div className="performance-grid">
           {crewStats.roomStats.map((room) => (
-            <article key={room.roomId}>
+            <article key={room.roomId} className="performance-card">
               <strong>{room.title}</strong>
               <span>{room.participantCount.toLocaleString()}명</span>
               <span>{room.voteCount.toLocaleString()}표</span>
@@ -46,10 +53,11 @@ export function CrewDashboardPage() {
         </div>
       </section>
 
-      <aside className="content-panel">
+      <section className="content-shelf">
+        <p className="eyebrow">Next action</p>
         <h2>다음 미션 추천</h2>
         <p>{crewStats.nextMissionSuggestion}</p>
-      </aside>
+      </section>
     </div>
   );
 }
