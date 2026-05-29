@@ -81,7 +81,7 @@ RallyRoom의 최신 기획, TDD feature slicing, Supabase 보안 아키텍처는
 | Commit | 의미 단위 | 검증 | 비고 |
 |---|---|---|---|
 | `0106f74` | 구현 순서와 범위 문서화 | `npm test`, `npm run build` | Phase 0-13, MVP 컷라인, AGENTS/README 참조 |
-| 예정 | feature 상태 문서 갱신 | `npm test`, `npm run build` | PR URL과 검증 결과 반영 |
+| `25c6161` | feature 상태 문서 갱신 | `npm test`, `npm run build` | PR URL과 검증 결과 반영 |
 
 ## 리뷰 장부
 
