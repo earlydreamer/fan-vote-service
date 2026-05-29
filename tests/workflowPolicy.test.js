@@ -58,6 +58,15 @@ describe('Codex review automation policy', () => {
     expect(workflow).not.toContain('comments(first: 50)');
   });
 
+  it('explicitly closes same-repository linked issues after workflow-driven merge', () => {
+    const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
+
+    expect(workflow).toContain('extractClosingIssueNumbers');
+    expect(workflow).toContain('closeLinkedIssuesAfterMerge(pr)');
+    expect(workflow).toContain('github.rest.issues.update');
+    expect(workflow).toContain("state_reason: 'completed'");
+  });
+
   it('keeps the embedded github-script body syntactically valid', () => {
     const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
     const script = extractGithubScript(workflow);
