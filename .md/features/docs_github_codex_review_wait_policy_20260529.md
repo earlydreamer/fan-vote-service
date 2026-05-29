@@ -4,8 +4,8 @@
 
 ## 상태
 
-- 상태: draft_pr_created
-- 현재 진행 중: draft PR 생성 완료, ready for review 전환 전 최종 검증 대기
+- 상태: feedback_applied
+- 현재 진행 중: GitHub Codex 리뷰 피드백 반영 및 검증 통과, 재리뷰 요청 준비
 - GitHub issue: https://github.com/earlydreamer/fan-vote-service/issues/4
 - GitHub PR: https://github.com/earlydreamer/fan-vote-service/pull/5
 - Branch: `feature/4-github-codex-review-wait-policy`
@@ -45,11 +45,13 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] 의미 단위 커밋
 - [x] 원격 push
 - [x] draft PR 생성
-- [ ] ready for review 전환
-- [ ] GitHub Codex 리뷰 요청
-- [ ] GitHub Codex 리뷰 응답 대기
-- [ ] 피드백 적용/보류 판단 기록
-- [ ] 최종 검증
+- [x] ready for review 전환
+- [x] GitHub Codex 리뷰 요청
+- [x] GitHub Codex 리뷰 응답 스캔
+- [x] 피드백 적용/보류 판단 기록
+- [x] 피드백 반영 후 검증
+- [ ] 재리뷰 응답 확인
+- [ ] 최종 merge 전 검증
 - [ ] merge
 
 ## 진행 중 작업
@@ -59,6 +61,13 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] `git diff --check` 통과
 - [x] `npm test` 통과
 - [x] `npm run build` 통과
+- [x] PR #5 ready for review 전환
+- [x] `@codex review` 요청
+- [x] GitHub Codex 리뷰 응답 확인
+- [x] Codex P2 피드백 적용
+- [x] 피드백 반영 후 `git diff --check` 통과
+- [x] 피드백 반영 후 `npm test` 통과
+- [x] 피드백 반영 후 `npm run build` 통과
 
 ## 완료 작업
 
@@ -76,12 +85,14 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 |---|---|---|---|
 | `f472f94` | GitHub Codex 리뷰 대기 정책 문서화 | `git diff --check`, `npm test`, `npm run build` | AGENTS/workflow/delivery/feature log |
 | `27df2ab` | feature 작업 로그 갱신 | `git diff --check`, `npm test`, `npm run build` | 첫 커밋 해시 반영 |
+| `854c56f` | PR 상태 기록 | `git diff --check`, `npm test`, `npm run build` | PR #5 URL과 상태 반영 |
+| 예정 | Codex 리뷰 피드백 반영 | 예정 | draft 해제 금지 문구 충돌 수정, 리뷰 스캔 절차 추가 |
 
 ## 리뷰 장부
 
 | Provider | 요청 방식 | 결과 | 적용/보류 판단 | 근거 |
 |---|---|---|---|---|
-| GitHub Codex | PR ready 후 `@codex review` | 대기 | 대기 | 이번 feature의 merge gate |
+| GitHub Codex | PR ready 후 `@codex review` | P2 코멘트 1건 | 적용 | `draft 해제 후 리뷰 요청` 순서와 금지 항목 충돌 수정 |
 
 ## React Best Practice 점검
 
@@ -115,6 +126,7 @@ npm run build
 ## 결정 로그
 
 - GitHub Codex 리뷰는 기본 차단 리뷰로 둔다.
+- GitHub Codex 리뷰 요청 뒤 PR comment/review/review thread를 스캔해 응답 도착 여부를 확인한다.
 - 로컬 Codex 리뷰는 GitHub Codex 리뷰를 대체하지 않는다.
 - fallback은 GitHub Codex 미연결, 명시 실패, 사용자 승인 시에만 허용한다.
 - fallback을 쓰더라도 사유와 판단 근거를 PR/feature 파일에 기록한다.

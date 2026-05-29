@@ -49,9 +49,10 @@
 15. feature 완성 판단 후 검증을 통과시킨다.
 16. draft PR을 ready for review로 전환한다.
 17. GitHub PR에서 `@codex review`를 요청한다.
-18. GitHub Codex 리뷰 응답을 기다린다.
-19. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
-20. 결함이 없다고 판단되면 최종 검증 후 merge한다.
+18. GitHub MCP로 PR comment/review/review thread를 스캔해 GitHub Codex 리뷰 응답 도착 여부를 확인한다.
+19. 응답이 없으면 merge하지 않고 대기하거나 heartbeat/manual scan을 반복한다.
+20. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
+21. 결함이 없다고 판단되면 최종 검증 후 merge한다.
 
 ## 커밋 정책
 
@@ -138,6 +139,7 @@
 - React/TSX 변경 시 `vercel:react-best-practices` 점검 기록 확인
 - GitHub MCP로 PR 코멘트/리뷰 확인
 - GitHub Codex 코드리뷰 요청 및 응답 처리 완료
+- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 스캔으로 확인
 - GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰로 대체하지 않았는지 확인
 - 적용하지 않은 리뷰가 있으면 보류 근거 코멘트 작성
 - merge 전 최종 검증 완료

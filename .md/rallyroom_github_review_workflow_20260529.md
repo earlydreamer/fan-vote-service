@@ -68,6 +68,8 @@ feature 완성 판단 후, 먼저 검증을 통과시킨 뒤 draft PR을 ready f
 - `AGENTS.md`에서 우선순위를 바꾸면 해당 공급자를 먼저 호출한다.
 - GitHub Codex 리뷰가 기본 차단 리뷰다.
 - `@codex review`를 요청한 뒤에는 GitHub PR comment/review timeline에서 응답을 확인할 때까지 기다린다.
+- 리뷰 대기 중에는 GitHub MCP로 PR comment, review, review thread를 스캔한다. 자동 trigger가 없다면 수동 또는 heartbeat 방식으로 이 스캔을 반복해야 한다.
+- `chatgpt-codex-connector[bot]`의 review submission 또는 inline review comment가 확인되면 GitHub Codex 리뷰 응답이 도착한 것으로 본다.
 - CodeRabbit의 release notes 또는 "review in progress" 코멘트는 리뷰 완료로 보지 않는다.
 - 로컬 Codex 리뷰는 GitHub Codex 리뷰를 대체하지 않는다.
 
@@ -115,18 +117,20 @@ draft 해제 후:
 
 1. GitHub MCP로 draft PR을 ready for review 상태로 바꾼다.
 2. GitHub MCP로 PR 코멘트에 `@codex review`를 남긴다.
-3. GitHub Codex 리뷰 응답을 기다린다.
-4. 리뷰 내용을 적용하거나 보류 판단을 기록한다.
-5. 보류한 리뷰가 있다면 PR 코멘트에 근거를 작성한다.
-6. 최종 검증을 다시 수행한다.
-7. 최종 merge 전에 head SHA를 확인한다.
-8. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
+3. GitHub MCP로 PR comment/review/review thread를 스캔해 GitHub Codex 리뷰 응답 도착 여부를 확인한다.
+4. GitHub Codex 리뷰 응답이 없으면 merge하지 않고 대기한다.
+5. 리뷰 내용을 적용하거나 보류 판단을 기록한다.
+6. 보류한 리뷰가 있다면 PR 코멘트에 근거를 작성한다.
+7. 최종 검증을 다시 수행한다.
+8. 최종 merge 전에 head SHA를 확인한다.
+9. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
 
 ## 금지
 
 - feature branch에서 rebase로 커밋 재작성
 - squash commit으로 의미 단위 이력 제거
-- 리뷰 요청 없이 draft 해제
+- ready for review 전환 직후 GitHub Codex 리뷰 요청을 생략
+- GitHub Codex 리뷰 도착 여부 스캔 없이 merge
 - GitHub Codex 리뷰 응답 확인 없이 merge
 - GitHub Codex 리뷰 진행 중 로컬 Codex 리뷰 중복 실행
 - 리뷰 근거 없이 의견 무시
