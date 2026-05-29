@@ -67,6 +67,14 @@ describe('Codex review automation policy', () => {
     expect(workflow).toContain("state_reason: 'completed'");
   });
 
+  it('only closes linked issues when the PR targets the default branch', () => {
+    const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
+
+    expect(workflow).toContain('isDefaultBranchMerge(pr)');
+    expect(workflow).toContain('pr.base.ref === pr.base.repo.default_branch');
+    expect(workflow).toContain('if (!isDefaultBranchMerge(pr)) return;');
+  });
+
   it('keeps the embedded github-script body syntactically valid', () => {
     const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
     const script = extractGithubScript(workflow);

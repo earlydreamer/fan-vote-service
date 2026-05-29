@@ -88,7 +88,7 @@
 - 사람이 답변한 review thread는 자동 resolve하지 않는다. Codex만 남긴 thread만 자동 resolve 대상이다.
 - Codex review thread 자동 resolve 전에는 thread의 모든 댓글 페이지를 확인해 51번째 이후 사람 댓글도 놓치지 않는다.
 - Actions check 완료 이벤트가 누락되는 경우를 보완하기 위해 schedule retry가 open PR의 자동 merge 조건을 주기적으로 다시 확인한다.
-- workflow가 자동 merge를 수행한 경우 PR body의 same-repo closing keyword issue를 `completed`로 명시 종료한다. GitHub closing keyword 자동 종료에만 의존하지 않는다.
+- workflow가 기본 브랜치 대상 PR을 자동 merge한 경우에만 PR body의 same-repo closing keyword issue를 `completed`로 명시 종료한다. GitHub closing keyword 자동 종료에만 의존하지 않는다.
 - follow-up issue의 수정은 issue 기반 feature workflow로 별도 진행한다.
 - 자동화가 실패하더라도 PR 리뷰 원문과 issue/label 상태를 기준으로 복구한다.
 - 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
