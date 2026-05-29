@@ -4,8 +4,8 @@
 
 ## 상태
 
-- 상태: feedback_applied
-- 현재 진행 중: GitHub Codex 리뷰 피드백 반영 및 검증 통과, 재리뷰 요청 준비
+- 상태: github_re_review_requested
+- 현재 진행 중: GitHub Codex 재리뷰 응답 대기
 - GitHub issue: https://github.com/earlydreamer/fan-vote-service/issues/4
 - GitHub PR: https://github.com/earlydreamer/fan-vote-service/pull/5
 - Branch: `feature/4-github-codex-review-wait-policy`
@@ -50,6 +50,8 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] GitHub Codex 리뷰 응답 스캔
 - [x] 피드백 적용/보류 판단 기록
 - [x] 피드백 반영 후 검증
+- [x] GitHub Codex 리뷰 코멘트 답변
+- [x] GitHub Codex 재리뷰 요청
 - [ ] 재리뷰 응답 확인
 - [ ] 최종 merge 전 검증
 - [ ] merge
@@ -68,6 +70,8 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 - [x] 피드백 반영 후 `git diff --check` 통과
 - [x] 피드백 반영 후 `npm test` 통과
 - [x] 피드백 반영 후 `npm run build` 통과
+- [x] Codex 리뷰 코멘트에 반영 내역 답변
+- [x] `@codex review` 재요청
 
 ## 완료 작업
 
@@ -86,13 +90,15 @@ PR마다 리뷰 주체와 merge gate가 명확해진다. GitHub Codex 리뷰가 
 | `f472f94` | GitHub Codex 리뷰 대기 정책 문서화 | `git diff --check`, `npm test`, `npm run build` | AGENTS/workflow/delivery/feature log |
 | `27df2ab` | feature 작업 로그 갱신 | `git diff --check`, `npm test`, `npm run build` | 첫 커밋 해시 반영 |
 | `854c56f` | PR 상태 기록 | `git diff --check`, `npm test`, `npm run build` | PR #5 URL과 상태 반영 |
-| 예정 | Codex 리뷰 피드백 반영 | 예정 | draft 해제 금지 문구 충돌 수정, 리뷰 스캔 절차 추가 |
+| `1d82b4f` | Codex 리뷰 피드백 반영 | `git diff --check`, `npm test`, `npm run build` | draft 해제 금지 문구 충돌 수정, 리뷰 스캔 절차 추가 |
+| 예정 | 재리뷰 요청 상태 기록 | `git diff --check` | PR 답변 및 재리뷰 요청 반영 |
 
 ## 리뷰 장부
 
 | Provider | 요청 방식 | 결과 | 적용/보류 판단 | 근거 |
 |---|---|---|---|---|
 | GitHub Codex | PR ready 후 `@codex review` | P2 코멘트 1건 | 적용 | `draft 해제 후 리뷰 요청` 순서와 금지 항목 충돌 수정 |
+| GitHub Codex | 피드백 반영 후 `@codex review` | 대기 | 대기 | `1d82b4f` 기준 재리뷰 요청 |
 
 ## React Best Practice 점검
 
