@@ -34,6 +34,7 @@ describe('Codex review automation policy', () => {
     const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
 
     expect(workflow).toContain('listUnresolvedReviewThreads');
+    expect(workflow).toContain('listReviewThreadComments');
     expect(workflow).toContain('resolveReviewThread');
     expect(workflow).toContain('hasBlockingChecks');
     expect(workflow).toContain('contents: write');
@@ -47,6 +48,14 @@ describe('Codex review automation policy', () => {
     expect(workflow).toContain('getFeedbackCommitSha');
     expect(workflow).toContain('recordCodexReviewRequest');
     expect(workflow).not.toContain('- [ ] merge 전 관련 PR conversation 또는 review thread resolved 처리');
+  });
+
+  it('paginates review thread comments before classifying pure Codex threads', () => {
+    const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
+
+    expect(workflow).toContain('comments(first: 100, after: $cursor)');
+    expect(workflow).toContain('listReviewThreadComments(thread.id)');
+    expect(workflow).not.toContain('comments(first: 50)');
   });
 
   it('keeps the embedded github-script body syntactically valid', () => {
