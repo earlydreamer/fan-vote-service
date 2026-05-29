@@ -14,7 +14,7 @@ on:
   status:
 
 permissions:
-  contents: read
+  contents: write
   checks: read
   statuses: read
   issues: write
@@ -28,6 +28,7 @@ jobs:
   codex-review-followup:
     if: >-
       github.event.sender.login == 'chatgpt-codex-connector[bot]' ||
+      (github.event_name == 'issue_comment' && github.event.issue.pull_request && contains(github.event.comment.body, '@codex review')) ||
       github.event_name == 'pull_request' ||
       github.event_name == 'check_suite' ||
       github.event_name == 'status'
@@ -46,9 +47,20 @@ jobs:
               'chatgpt-codex-connector[bot]',
             ]);
             const TRACKING_LABELS = ['codex-reviewed', 'codex-feedback'];
+            const REVIEW_REQUEST_LABEL_PREFIX = 'codex-review-request-';
 
             function isCodexSender() {
               return payload.sender?.login === 'chatgpt-codex-connector[bot]';
+            }
+
+            function isCodexReviewRequestComment() {
+              return eventName === 'issue_comment'
+                && !isCodexSender()
+                && /@codex\s+review/i.test(payload.comment.body || '');
+            }
+
+            function reviewRequestLabel(headSha) {
+              return `${REVIEW_REQUEST_LABEL_PREFIX}${headSha.slice(0, 12)}`;
             }
 
             async function getPullRequestRef() {
@@ -114,6 +126,18 @@ jobs:
               };
             }
 
+            function getFeedbackCommitSha() {
+              if (eventName === 'pull_request_review') {
+                return payload.review.commit_id || null;
+              }
+
+              if (eventName === 'pull_request_review_comment') {
+                return payload.comment.commit_id || null;
+              }
+
+              return null;
+            }
+
             async function ensureLabel(name, color, description) {
               try {
                 await github.rest.issues.getLabel({ owner, repo, name });
@@ -162,6 +186,18 @@ jobs:
               }
             }
 
+            async function removeWorkflowStateLabels(issue_number) {
+              const labels = await getIssueLabels(issue_number);
+
+              for (const label of labels) {
+                const isStateLabel = TRACKING_LABELS.includes(label)
+                  || label.startsWith(REVIEW_REQUEST_LABEL_PREFIX);
+                if (isStateLabel) {
+                  await removeLabelIfExists(issue_number, label);
+                }
+              }
+            }
+
             async function getIssueLabels(issue_number) {
               const { data: issue } = await github.rest.issues.get({
                 owner,
@@ -171,6 +207,31 @@ jobs:
               return new Set(issue.labels.map((label) => {
                 return typeof label === 'string' ? label : label.name;
               }));
+            }
+
+            async function recordCodexReviewRequest(prNumber) {
+              const { data: pr } = await github.rest.pulls.get({
+                owner,
+                repo,
+                pull_number: prNumber,
+              });
+              const label = reviewRequestLabel(pr.head.sha);
+              await ensureLabel(label, '1D76DB', `GitHub Codex 리뷰 요청 head: ${pr.head.sha.slice(0, 12)}`);
+              await addLabel(prNumber, label);
+            }
+
+            async function isFeedbackForCurrentHead(pr) {
+              const feedbackCommitSha = getFeedbackCommitSha();
+              if (feedbackCommitSha) {
+                return feedbackCommitSha === pr.head.sha;
+              }
+
+              if (eventName === 'issue_comment') {
+                const labels = await getIssueLabels(pr.number);
+                return labels.has(reviewRequestLabel(pr.head.sha));
+              }
+
+              return false;
             }
 
             async function listUnresolvedReviewThreads(prNumber) {
@@ -398,10 +459,13 @@ jobs:
 
             await ensureWorkflowLabels();
 
+            if (isCodexReviewRequestComment()) {
+              await recordCodexReviewRequest(prRef.number);
+              return;
+            }
+
             if (eventName === 'pull_request' && payload.action === 'synchronize') {
-              for (const label of TRACKING_LABELS) {
-                await removeLabelIfExists(prRef.number, label);
-              }
+              await removeWorkflowStateLabels(prRef.number);
               return;
             }
 
@@ -416,16 +480,21 @@ jobs:
                 pull_number: prRef.number,
               });
 
+              const genericReviewEnvelope = /Here are some automated review suggestions/i.test(body)
+                && eventName === 'pull_request_review';
+              if (genericReviewEnvelope) return;
+
+              if (!(await isFeedbackForCurrentHead(pr))) {
+                core.info(`Codex 피드백 head가 현재 PR head와 일치하지 않아 자동 처리하지 않습니다. PR head: ${pr.head.sha}`);
+                return;
+              }
+
               const noMajorIssue = /did(?:n't| not) find any major issues|no major issues|major issues \uC5C6\uC74C/i.test(body);
               if (noMajorIssue) {
                 await addLabel(prRef.number, 'codex-reviewed');
                 await tryAutoMerge(prRef.number);
                 return;
               }
-
-              const genericReviewEnvelope = /Here are some automated review suggestions/i.test(body)
-                && eventName === 'pull_request_review';
-              if (genericReviewEnvelope) return;
 
               await addLabel(prRef.number, 'codex-feedback');
               await createOrUpdateFollowUpIssue(pr, feedback, body);

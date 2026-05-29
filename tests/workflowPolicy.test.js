@@ -36,7 +36,11 @@ describe('Codex review automation policy', () => {
     expect(workflow).toContain('listUnresolvedReviewThreads');
     expect(workflow).toContain('resolveReviewThread');
     expect(workflow).toContain('hasBlockingChecks');
+    expect(workflow).toContain('contents: write');
     expect(workflow).toContain('github.rest.pulls.merge');
+    expect(workflow).toContain('isFeedbackForCurrentHead');
+    expect(workflow).toContain('getFeedbackCommitSha');
+    expect(workflow).toContain('recordCodexReviewRequest');
     expect(workflow).not.toContain('- [ ] merge 전 관련 PR conversation 또는 review thread resolved 처리');
   });
 
