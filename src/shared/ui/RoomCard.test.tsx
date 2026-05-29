@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import { within } from '@testing-library/dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RallyRoom } from '../types/rallyroom';
 import { RoomCard } from './RoomCard';
@@ -35,6 +36,16 @@ describe('RoomCard', () => {
     render(<RoomCard room={buildRoom({ endAt: '2026-05-31T14:59:00.000Z' })} />);
 
     expect(screen.getByText('오늘 마감')).toBeInTheDocument();
+  });
+
+  it('shows a compact candidate ranking preview', () => {
+    render(<RoomCard room={buildRoom()} />);
+
+    const ranking = screen.getByRole('list', { name: '후보 랭킹 미리보기' });
+
+    expect(within(ranking).getByText('1')).toBeInTheDocument();
+    expect(within(ranking).getByText('테스트 후보')).toBeInTheDocument();
+    expect(within(ranking).getByText('10표')).toBeInTheDocument();
   });
 });
 
