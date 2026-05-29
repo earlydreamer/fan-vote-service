@@ -16,6 +16,14 @@
 - 기술 스택/디렉터리 기준: `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`
 - GitHub MCP 확인: `earlydreamer/fan-vote-service` 접근 가능, admin/push/triage 권한 확인.
 
+## GitHub 기록 언어
+
+- 사람이 작성하는 GitHub issue 본문, PR 본문, PR 코멘트, review reply, follow-up issue 본문은 기본적으로 한국어로 작성한다.
+- 외부 리뷰 원문을 follow-up issue로 옮길 때는 한국어 요약을 먼저 쓰고 원문 링크를 함께 남긴다.
+- 명령어, 코드 식별자, 파일 경로, label 이름, 봇 호출문, 고유한 제품명은 원문 표기를 유지할 수 있다.
+- GitHub Actions가 자동 생성하는 issue/comment 템플릿도 한국어를 기본으로 작성한다.
+- 외부 봇 자동 코멘트는 예외지만, 사람이 판단 근거를 남길 때는 한국어로 다시 정리한다.
+
 ## main 브랜치 예외
 
 현재 `main`에 직접 쌓인 초기 커밋은 remote가 비어 있는 상태에서 저장소 bootstrap을 구성하기 위한 예외로 본다.
@@ -74,7 +82,7 @@
 
 - GitHub Codex 리뷰가 actionable feedback을 남기면 GitHub Actions가 `codex-feedback` label을 붙이고 follow-up issue를 만든다.
 - "major issues 없음" 응답은 follow-up issue를 만들지 않고 `codex-reviewed` label만 붙인다.
-- follow-up issue는 리뷰 원문 링크, PR 번호, head SHA, 처리 체크리스트를 포함한다.
+- follow-up issue는 한국어 본문으로 리뷰 요약, 원문 링크, PR 번호, head SHA, 처리 체크리스트를 포함한다.
 - 자동화는 issue 생성까지만 책임진다. 수정은 issue 기반 feature workflow로 진행한다.
 - 자동화가 실패하더라도 PR 리뷰 원문과 issue/label 상태를 기준으로 복구한다.
 - follow-up issue는 PR conversation resolution을 대체하지 않는다. repository rule이 unresolved conversation을 막으면 PR thread를 resolved 처리해야 merge할 수 있다.

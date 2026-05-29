@@ -23,6 +23,14 @@
 - Default branch: `main`
 - GitHub MCP 확인: 접근 가능, admin/push/triage 권한 확인.
 
+## GitHub 기록 언어
+
+- 사람이 작성하는 GitHub issue 본문, PR 본문, PR 코멘트, review reply, follow-up issue 본문은 기본적으로 한국어로 작성한다.
+- 리뷰 요청 코멘트도 `@codex review`, `@coderabbitai review` 같은 호출문을 제외한 설명은 한국어로 작성한다.
+- 외부 리뷰 원문을 follow-up issue로 이관할 때는 한국어 요약을 먼저 적고 원문 링크를 남긴다.
+- 명령어, 코드 식별자, 파일 경로, label 이름, 봇 호출문, 고유한 제품명은 원문 표기를 유지할 수 있다.
+- 외부 봇 자동 코멘트는 예외지만, 적용/보류 판단과 재리뷰 요청은 한국어로 기록한다.
+
 ## feature 시작 절차
 
 1. GitHub MCP로 issue를 만든다.
@@ -98,8 +106,8 @@ fallback 기록:
 4. `critical`과 `important`는 기본적으로 수정한다.
 5. 적용하지 않는 항목은 PR 코멘트 또는 follow-up issue에 근거를 남긴다.
 6. 수정이 필요하면 별도 의미 단위 커밋으로 반영한다.
-7. PR 코멘트 또는 review reply로 판단 근거를 남긴다.
-8. 리뷰가 별도 작업으로 분리되어야 하면 follow-up issue로 추적한다.
+7. PR 코멘트 또는 review reply로 판단 근거를 한국어로 남긴다.
+8. 리뷰가 별도 작업으로 분리되어야 하면 한국어 follow-up issue로 추적한다.
 9. follow-up issue를 만들었더라도 관련 PR conversation 또는 review thread를 resolved 상태로 만들기 전에는 merge하지 않는다.
 10. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
 11. 리뷰 반영 커밋을 push한 뒤 필요한 경우 같은 공급자에게 재리뷰를 요청한다.

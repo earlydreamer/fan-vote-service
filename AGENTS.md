@@ -23,6 +23,11 @@
 장기 기획, 아키텍처, 운영 정책은 `.md/` 아래에 `.md` 파일로 남긴다. 전체 작업 목록과 feature 진행 상태의 source of truth는 GitHub Issues와 Pull Requests다.
 
 - 기능/작업 단위의 영구 기록은 GitHub issue, PR 본문, PR 코멘트, review thread에 남긴다.
+- 사람이 작성하는 GitHub issue 본문, PR 본문, PR 코멘트, review reply, follow-up issue 본문은 기본적으로 한국어로 작성한다.
+- 외부 리뷰 원문을 옮길 때도 한국어 요약을 먼저 쓰고, 필요한 경우에만 원문 링크나 짧은 원문 인용을 덧붙인다.
+- 명령어, 코드 식별자, 파일 경로, label 이름, 봇 호출문, 고유한 제품명은 원문 표기를 유지할 수 있다.
+- GitHub Actions가 자동 생성하는 issue/comment 템플릿도 한국어를 기본으로 한다.
+- 외부 봇이 자동으로 남기는 영어 코멘트는 예외지만, 그 내용을 사람이 정리할 때는 한국어로 기록한다.
 - 브랜치 작업 중 임시 체크리스트가 필요하면 `.md/local/` 아래에 로컬 `.md` 파일로 둔다. `.md/local/`은 gitignore 대상이며 커밋하지 않는다.
 - 최신 운영 절차는 [.md/rallyroom_delivery_workflow_20260529.md](.md/rallyroom_delivery_workflow_20260529.md) 를 따른다.
 - GitHub issue, draft PR, review, merge 절차는 [.md/rallyroom_github_review_workflow_20260529.md](.md/rallyroom_github_review_workflow_20260529.md) 를 따른다.

@@ -22,7 +22,7 @@ jobs:
     if: github.event.sender.login == 'chatgpt-codex-connector[bot]'
     runs-on: ubuntu-latest
     steps:
-      - name: Create follow-up issue for actionable Codex feedback
+      - name: Codex 피드백 후속 이슈 생성
         uses: actions/github-script@v7
         with:
           script: |
@@ -112,9 +112,9 @@ jobs:
               pull_number: prRef.number,
             });
 
-            await ensureLabel('codex-feedback', 'D93F0B', 'Actionable GitHub Codex review feedback exists.');
-            await ensureLabel('codex-reviewed', '0E8A16', 'GitHub Codex found no major issues.');
-            await ensureLabel('codex-follow-up', '5319E7', 'Issue created from GitHub Codex review feedback.');
+            await ensureLabel('codex-feedback', 'D93F0B', '처리할 GitHub Codex 리뷰 피드백이 있습니다.');
+            await ensureLabel('codex-reviewed', '0E8A16', 'GitHub Codex가 주요 문제를 찾지 않았습니다.');
+            await ensureLabel('codex-follow-up', '5319E7', 'GitHub Codex 리뷰 피드백에서 생성된 후속 이슈입니다.');
 
             const noMajorIssue = /did(?:n't| not) find any major issues|no major issues|major issues \uC5C6\uC74C/i.test(body);
             if (noMajorIssue) {
@@ -138,26 +138,26 @@ jobs:
             const excerpt = body.length > 3500 ? `${body.slice(0, 3500)}\n\n...` : body;
             const issueBody = [
               `<!-- ${marker} -->`,
-              `# Codex Review Follow-up: PR #${prRef.number}`,
+              `# Codex 리뷰 후속 처리: PR #${prRef.number}`,
               '',
-              '## Source PR',
+              '## 원본 PR',
               `- PR: #${prRef.number}`,
               `- Head SHA: \`${pr.head.sha}\``,
-              `- Review source: ${feedback.source}`,
-              `- Review link: ${feedback.url}`,
+              `- 리뷰 출처: ${feedback.source}`,
+              `- 리뷰 링크: ${feedback.url}`,
               '',
-              '## Review Feedback',
+              '## 리뷰 피드백',
               '',
               excerpt,
               '',
-              '## Handling Checklist',
+              '## 처리 체크리스트',
               '',
-              '- [ ] Confirm whether the feedback still applies to current code/docs',
-              '- [ ] Decide whether to apply or defer the feedback',
-              '- [ ] Run required tests and verification',
-              '- [ ] Leave the decision rationale on the PR thread or comment',
-              '- [ ] Resolve the related PR conversation or review thread before merge',
-              '- [ ] Request `@codex review` again if substantive changes are made',
+              '- [ ] 피드백이 현재 코드/문서에도 유효한지 확인',
+              '- [ ] 수정 또는 보류 여부 판단',
+              '- [ ] 필요한 테스트와 검증 실행',
+              '- [ ] PR thread 또는 코멘트에 판단 근거를 한국어로 기록',
+              '- [ ] merge 전 관련 PR conversation 또는 review thread resolved 처리',
+              '- [ ] 실질 변경이 있으면 `@codex review` 재요청',
             ].join('\n');
 
             if (search.items.length > 0) {
@@ -166,10 +166,10 @@ jobs:
                 repo,
                 issue_number: search.items[0].number,
                 body: [
-                  `Additional Codex feedback was added to PR #${prRef.number}.`,
+                  `PR #${prRef.number}에 Codex 피드백이 추가되었습니다.`,
                   '',
                   `- Head SHA: \`${pr.head.sha}\``,
-                  `- Review link: ${feedback.url}`,
+                  `- 리뷰 링크: ${feedback.url}`,
                   '',
                   excerpt,
                 ].join('\n'),
@@ -180,7 +180,7 @@ jobs:
             await github.rest.issues.create({
               owner,
               repo,
-              title: `Codex review follow-up: PR #${prRef.number}`,
+              title: `Codex 리뷰 후속 처리: PR #${prRef.number}`,
               body: issueBody,
               labels: ['codex-follow-up', 'codex-feedback'],
             });
