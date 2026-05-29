@@ -38,6 +38,8 @@ describe('Codex review automation policy', () => {
     expect(workflow).toContain('hasBlockingChecks');
     expect(workflow).toContain('contents: write');
     expect(workflow).toContain('github.rest.pulls.merge');
+    expect(workflow).toContain('SELF_CHECK_NAMES');
+    expect(workflow).toContain("'codex-review-followup'");
     expect(workflow).toContain('isFeedbackForCurrentHead');
     expect(workflow).toContain('getFeedbackCommitSha');
     expect(workflow).toContain('recordCodexReviewRequest');

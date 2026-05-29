@@ -48,6 +48,10 @@ jobs:
             ]);
             const TRACKING_LABELS = ['codex-reviewed', 'codex-feedback'];
             const REVIEW_REQUEST_LABEL_PREFIX = 'codex-review-request-';
+            const SELF_CHECK_NAMES = new Set([
+              'Codex Review Follow-up',
+              'codex-review-followup',
+            ]);
 
             function isCodexSender() {
               return payload.sender?.login === 'chatgpt-codex-connector[bot]';
@@ -334,7 +338,7 @@ jobs:
               });
 
               for (const checkRun of checkData.check_runs) {
-                if (checkRun.name === 'Codex Review Follow-up') continue;
+                if (SELF_CHECK_NAMES.has(checkRun.name)) continue;
                 if (checkRun.status !== 'completed') {
                   blocking.push(`check:${checkRun.name}:${checkRun.status}`);
                   continue;
