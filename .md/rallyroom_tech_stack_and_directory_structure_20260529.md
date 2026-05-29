@@ -127,7 +127,11 @@ D:\Projects\vibex
 │  │  │  └─ ProfilePage.tsx
 │  │  ├─ result-cards/
 │  │  │  ├─ publishResultCardApi.ts
-│  │  │  └─ ResultCardPage.tsx
+│  │  │  ├─ ResultCardPage.tsx
+│  │  │  ├─ ResultCardPreview.tsx
+│  │  │  ├─ ResultCardPublishPanel.test.tsx
+│  │  │  ├─ ResultCardPublishPanel.tsx
+│  │  │  └─ usePublishResultCard.ts
 │  │  ├─ rooms/
 │  │  │  ├─ createRoomApi.ts
 │  │  │  ├─ createRoomCommand.test.ts
@@ -258,3 +262,14 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/messages/usePostRoomMessage.ts`: 메시지 본문 검증, command 호출 상태, 성공/에러 응답 반영 상태 관리
 - `src/features/messages/RoomMessagePanel.test.tsx`: 팬월 메시지 command input 계약, 본문 검증, 보상 응답 표시 테스트
 - `src/App.test.tsx`: 방 상세에서 팬월 메시지 작성 플로우가 내비게이션과 함께 동작하는지 검증
+
+## 2026-05-30 Phase 8 Result Card UX 추가 파일
+
+`features/result-cards` 아래에 결과 카드 발행 요청 UX와 공유용 preview 컴포넌트를 추가했다.
+
+- `src/features/result-cards/publishResultCardApi.ts`: `publish-result-card` command request/response DTO와 command wrapper
+- `src/features/result-cards/ResultCardPreview.tsx`: 공개 결과 카드의 winner, 참여자 수, top message preview UI
+- `src/features/result-cards/ResultCardPublishPanel.tsx`: 방장 전용 결과 카드 발행 요청 UI와 성공/에러 피드백
+- `src/features/result-cards/usePublishResultCard.ts`: `publishResultCard` command 호출 상태와 redirect receipt 관리
+- `src/features/result-cards/ResultCardPublishPanel.test.tsx`: 발행 권한, 진행 중 방 guard, command input 계약 테스트
+- `src/shared/data/demo/demoRooms.ts`, `src/shared/data/demo/profile.json`: 종료된 미발행 방과 방장 demo state 추가
