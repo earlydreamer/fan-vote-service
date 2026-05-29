@@ -100,6 +100,53 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByText(/공식 제휴나 전달 보장을 암시하지 않도록/)).toBeInTheDocument();
   });
 
+  it('builds a safe create-room command intent from the room creation form', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(within(screen.getByRole('region', { name: 'Featured 투표' })).getByRole('link', { name: '투표방 만들기' }));
+
+    await user.clear(screen.getByRole('textbox', { name: '방 이름' }));
+    await user.type(screen.getByRole('textbox', { name: '방 이름' }), '팬이 고르는 오프닝 명장면');
+    await user.clear(screen.getByRole('textbox', { name: '투표 제목' }));
+    await user.type(screen.getByRole('textbox', { name: '투표 제목' }), '가장 다시 보고 싶은 오프닝은?');
+    await user.clear(screen.getByRole('textbox', { name: '투표 주제' }));
+    await user.type(screen.getByRole('textbox', { name: '투표 주제' }), '공식 전달 없이 팬 기록으로 남기는 장면 투표');
+
+    await user.click(screen.getByRole('button', { name: '후보 4 삭제' }));
+    await user.type(screen.getByRole('textbox', { name: '새 후보 항목' }), '암전 후 첫 조명');
+    await user.click(screen.getByRole('button', { name: '후보 항목 추가 - 투표권 1장 또는 120 RP' }));
+    await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
+
+    const preview = screen.getByRole('region', { name: '생성 command preview' });
+
+    expect(within(preview).getByText('create-room')).toBeInTheDocument();
+    expect(within(preview).getByText(/팬이 고르는 오프닝 명장면/)).toBeInTheDocument();
+    expect(within(preview).getByText(/암전 후 첫 조명/)).toBeInTheDocument();
+    expect(within(preview).queryByText(/vote_count/)).not.toBeInTheDocument();
+    expect(within(preview).queryByText(/current_goal_value/)).not.toBeInTheDocument();
+    expect(within(preview).queryByText(/reward_rp/)).not.toBeInTheDocument();
+    expect(within(preview).queryByText(/total_rp/)).not.toBeInTheDocument();
+  });
+
+  it('shows creation validation errors for officiality phrases and too few candidates', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    await user.click(within(screen.getByRole('region', { name: 'Featured 투표' })).getByRole('link', { name: '투표방 만들기' }));
+
+    await user.clear(screen.getByRole('textbox', { name: '투표 주제' }));
+    await user.type(screen.getByRole('textbox', { name: '투표 주제' }), '공식 인증 후 소속사 전달 보장');
+    await user.click(screen.getByRole('button', { name: '후보 4 삭제' }));
+    await user.click(screen.getByRole('button', { name: '후보 3 삭제' }));
+    await user.click(screen.getByRole('button', { name: '후보 2 삭제' }));
+    await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('공식');
+    expect(screen.getByRole('alert')).toHaveTextContent('전달 보장');
+    expect(screen.getByRole('alert')).toHaveTextContent('투표 항목은 최소 2개 이상 필요해요.');
+  });
+
   it('opens a room detail page and gates an unpublished result card route', async () => {
     const user = userEvent.setup();
     render(<App />);
