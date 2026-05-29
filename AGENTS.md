@@ -25,6 +25,7 @@
 - 기능/작업 단위 기록은 `.md/features/` 아래에 둔다.
 - 최신 운영 절차는 [.md/rallyroom_delivery_workflow_20260529.md](.md/rallyroom_delivery_workflow_20260529.md) 를 따른다.
 - GitHub issue, draft PR, review, merge 절차는 [.md/rallyroom_github_review_workflow_20260529.md](.md/rallyroom_github_review_workflow_20260529.md) 를 따른다.
+- 기술 스택과 디렉터리 구조는 [.md/rallyroom_tech_stack_and_directory_structure_20260529.md](.md/rallyroom_tech_stack_and_directory_structure_20260529.md) 에 명시하고, 구조나 의존성이 바뀔 때마다 갱신한다.
 - TDD 스펙 분해 기준은 [.md/rallyroom_tdd_feature_slicing_20260529.md](.md/rallyroom_tdd_feature_slicing_20260529.md) 를 따른다.
 - 초기 세팅 작업 로그는 [.md/features/foundation_project_setup_20260529.md](.md/features/foundation_project_setup_20260529.md) 를 확인한다.
 
@@ -46,6 +47,7 @@
 
 - GitHub remote: `https://github.com/earlydreamer/fan-vote-service.git`
 - 계정: `earlydreamer`
+- 빈 remote에 올리는 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 기능/수정/문서 변경은 feature branch에서 진행한다.
 - 작업 단위: issue 생성, feature branch, draft pull request, 테스트, review, ready for review, merge
 - GitHub 작업은 가능한 한 GitHub MCP를 우선 사용한다. 로컬 커밋과 push는 local `git`을 사용하고, issue/PR/comment/review/merge는 GitHub MCP를 우선한다.
 - 각 feature는 `.md/features/` 안에 독립 작업 상태 파일을 가진다. 예정, 진행 중, 완료, 보류, 커밋 장부, PR/리뷰 상태를 그 파일에서 추적한다.
@@ -86,8 +88,11 @@ gstack, superpowers 계열 스킬을 적극적으로 사용한다.
 
 - 기획/리뷰: `autoplan`, `office-hours`, `plan-eng-review`, `plan-design-review`
 - 구현: `test-driven-development`, `executing-plans`
+- React 구현 검증: `vercel:react-best-practices`
 - 완료 전 검증: `verification-before-completion`, `requesting-code-review`
 - 병렬 작업: `subagent-driven-development`, `dispatching-parallel-agents`
 - GitHub 운영: `github`, `yeet`, GitHub MCP
 
 스킬이 적용될 가능성이 있으면 먼저 관련 스킬 지침을 확인하고 따른다.
+
+React/TSX 구현 또는 구조 변경이 있는 feature는 merge 요청 전에 `vercel:react-best-practices` 기준으로 컴포넌트 구조, hooks, 상태 위치, 접근성, 성능, TypeScript 패턴을 점검하고 결과를 feature 작업 파일과 PR에 기록한다.

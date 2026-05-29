@@ -14,6 +14,7 @@
 - PR은 feature 시작 시 draft로 연다.
 - feature branch의 커밋은 rebase/squash하지 않고 의미 단위로 쌓는다.
 - merge method는 `merge`를 기본으로 한다. squash/rebase merge는 사용하지 않는다.
+- 빈 remote 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 작업은 feature branch와 draft PR을 거친다.
 
 ## 저장소
 
@@ -26,12 +27,13 @@
 
 1. `.md/features/<feature>_<date>.md` 파일을 만든다.
 2. 상태를 `planned`로 둔다.
-3. GitHub MCP로 issue를 만든다.
-4. feature 파일에 issue URL을 적는다.
-5. `feature/<issue-number>-<short-name>` 브랜치를 만든다.
-6. 상태를 `in_progress`로 바꾼다.
-7. 첫 커밋 또는 초기 스펙 커밋을 push한다.
-8. GitHub MCP로 draft PR을 만든다.
+3. 기술 스택 또는 디렉터리 구조 변경 여부를 판단하고 필요 시 `.md/rallyroom_tech_stack_and_directory_structure_20260529.md` 갱신을 범위에 넣는다.
+4. GitHub MCP로 issue를 만든다.
+5. feature 파일에 issue URL을 적는다.
+6. `feature/<issue-number>-<short-name>` 브랜치를 만든다.
+7. 상태를 `in_progress`로 바꾼다.
+8. 첫 커밋 또는 초기 스펙 커밋을 push한다.
+9. GitHub MCP로 draft PR을 만든다.
 
 ## feature 진행 절차
 
@@ -44,6 +46,7 @@
 5. 의미 단위 커밋을 만든다.
 6. feature 파일의 커밋 장부에 commit hash, 의미, 검증 결과를 기록한다.
 7. PR 본문 또는 코멘트에 진행 상태를 갱신한다.
+8. React/TSX 변경이 있으면 `vercel:react-best-practices` 기준 점검 결과를 feature 파일과 PR에 기록한다.
 
 ## 코드리뷰 요청
 
@@ -101,4 +104,3 @@ feature 완성 판단 후, draft를 풀기 전에 코드리뷰를 요청한다.
 - 리뷰 근거 없이 의견 무시
 - `.env` 커밋
 - service role key 프론트 노출
-

@@ -12,25 +12,42 @@
 - remote: `https://github.com/earlydreamer/fan-vote-service.git`
 - 기본 브랜치 후보: `main`
 - 작업 단위 기록 위치: `.md/features/`
+- 기술 스택/디렉터리 기준: `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`
 - GitHub MCP 확인: `earlydreamer/fan-vote-service` 접근 가능, admin/push/triage 권한 확인.
+
+## main 브랜치 예외
+
+현재 `main`에 직접 쌓인 초기 커밋은 remote가 비어 있는 상태에서 저장소 bootstrap을 구성하기 위한 예외로 본다.
+
+이 예외는 초기 init commit 범위에만 적용한다. 이후 모든 기능, 문서 변경, 설정 변경은 다음 절차를 따른다.
+
+1. GitHub issue 생성
+2. feature branch 생성
+3. draft PR 생성
+4. 의미 단위 커밋 누적
+5. 코드리뷰 요청
+6. draft 해제
+7. merge commit으로 main 반영
 
 ## 작업 흐름
 
 1. 기획서에서 feature 후보를 고른다.
 2. `.md/features/<feature-name>_<date>.md` 파일을 만든다.
 3. 예정 작업, 진행 중 작업, 완료 작업, 보류 작업, 테스트 목록, 검증 명령을 기록한다.
-4. GitHub MCP로 issue를 만든다.
-5. `feature/<issue-number>-<short-name>` 브랜치를 만든다.
-6. draft pull request를 열고, PR 본문에 feature 파일 링크와 현재 상태를 적는다.
-7. 실패하는 테스트를 먼저 작성한다.
-8. 실패 이유를 확인한다.
-9. 최소 구현을 작성한다.
-10. 의미 단위마다 커밋한다.
-11. 커밋이 추가될 때마다 feature 파일과 draft PR 본문 또는 코멘트를 갱신한다.
-12. 테스트와 빌드를 통과시킨다.
-13. feature 완성 판단 후 수동 코드리뷰를 요청한다.
-14. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
-15. 결함이 없다고 판단되면 draft를 풀고 merge한다.
+4. 변경이 기술 스택 또는 디렉터리 구조에 영향을 주는지 확인하고, 필요하면 기술 스택/디렉터리 문서를 갱신 대상으로 추가한다.
+5. GitHub MCP로 issue를 만든다.
+6. `feature/<issue-number>-<short-name>` 브랜치를 만든다.
+7. draft pull request를 열고, PR 본문에 feature 파일 링크와 현재 상태를 적는다.
+8. 실패하는 테스트를 먼저 작성한다.
+9. 실패 이유를 확인한다.
+10. 최소 구현을 작성한다.
+11. 의미 단위마다 커밋한다.
+12. 커밋이 추가될 때마다 feature 파일과 draft PR 본문 또는 코멘트를 갱신한다.
+13. React/TSX 변경이 있으면 `vercel:react-best-practices` 기준 점검을 수행하고 기록한다.
+14. 테스트와 빌드를 통과시킨다.
+15. feature 완성 판단 후 수동 코드리뷰를 요청한다.
+16. 리뷰 내용을 적용/보류 판단하고 근거를 PR 코멘트와 feature 파일에 남긴다.
+17. 결함이 없다고 판단되면 draft를 풀고 merge한다.
 
 ## 커밋 정책
 
@@ -85,6 +102,16 @@
 | Provider | 요청 방식 | 결과 | 적용/보류 판단 | 근거 |
 |---|---|---|---|---|
 
+## React Best Practice 점검
+
+- 대상 파일:
+- 컴포넌트 구조:
+- hooks/state:
+- 접근성:
+- 성능:
+- TypeScript:
+- 조치:
+
 ## 검증 명령
 
 ## PR/Issue
@@ -102,7 +129,9 @@
 - `.env` 또는 시크릿 커밋 여부 확인
 - Supabase service role key 프론트 노출 여부 확인
 - `legacy/` 변경 여부 확인
+- 기술 스택/디렉터리 구조 문서 갱신 필요 여부 확인
 - conflict 없음 확인
+- React/TSX 변경 시 `vercel:react-best-practices` 점검 기록 확인
 - GitHub MCP로 PR 코멘트/리뷰 확인
 - 코드리뷰 요청 및 응답 처리 완료
 - 적용하지 않은 리뷰가 있으면 보류 근거 코멘트 작성
