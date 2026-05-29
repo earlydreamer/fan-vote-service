@@ -96,6 +96,7 @@
 - RallyRoom MVP의 화면 이동 골격을 만든다.
 - 아직 서버 데이터 없이도 홈, 방 만들기, 방 상세, 마이페이지, Crew 대시보드, 요금제 화면으로 이동할 수 있게 한다.
 - `DESIGN.md` 기준으로 첫 화면을 홈/탐색 대시보드로 구성한다.
+- 페이지 단위 렌더링은 하드코딩 배열이 아니라 Supabase read model로 바꾸기 쉬운 최소 demo JSON/repository를 사용한다.
 
 포함 범위:
 
@@ -106,6 +107,10 @@
 - 페이지 컴포넌트 파일 구조
 - React Best Practice 기준에 맞는 컴포넌트 분리
 - `DESIGN.md`의 페이지/라우트 구조 반영
+- 결과 카드 route skeleton
+- `src/shared/types/rallyroom.ts`
+- `src/shared/data/demo/*`
+- `src/shared/api/demoReadRepository.ts`
 
 제외 범위:
 
@@ -113,17 +118,22 @@
 - 투표/미션 상태 변경
 - Supabase 연결
 - 인증
+- read model 고도화와 command boundary 상세 정책은 Phase 2 이후 별도 feature에서 확장
 
 주요 파일 후보:
 
 - `src/app/AppShell.tsx`
-- `src/app/routes.tsx`
+- `src/app/routes.ts`
 - `src/features/home/HomePage.tsx`
 - `src/features/rooms/RoomCreatePage.tsx`
 - `src/features/rooms/RoomDetailPage.tsx`
+- `src/features/result-cards/ResultCardPage.tsx`
 - `src/features/profile/ProfilePage.tsx`
 - `src/features/crew/CrewDashboardPage.tsx`
 - `src/features/pricing/PricingPage.tsx`
+- `src/shared/api/demoReadRepository.ts`
+- `src/shared/data/demo/*.json`
+- `src/shared/types/rallyroom.ts`
 
 테스트 범위:
 

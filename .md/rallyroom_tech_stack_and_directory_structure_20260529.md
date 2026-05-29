@@ -30,6 +30,7 @@
 - CSS, 현재는 전역 `src/styles.css`만 사용
 - lucide-react, 아이콘 필요 시 사용
 - 디자인 시스템: 루트 `DESIGN.md`
+- 라우팅: React Router 미도입, `window.history.pushState`와 `popstate` 기반의 얇은 SPA 라우터
 
 ### Test
 
@@ -99,6 +100,40 @@ D:\Projects\vibex
 ├─ legacy/
 │  └─ 1차 산출물 참조용, 현재 구현 기준 아님
 ├─ src/
+│  ├─ app/
+│  │  ├─ AppShell.tsx
+│  │  └─ routes.ts
+│  ├─ features/
+│  │  ├─ crew/
+│  │  │  └─ CrewDashboardPage.tsx
+│  │  ├─ home/
+│  │  │  └─ HomePage.tsx
+│  │  ├─ not-found/
+│  │  │  └─ NotFoundPage.tsx
+│  │  ├─ pricing/
+│  │  │  └─ PricingPage.tsx
+│  │  ├─ profile/
+│  │  │  └─ ProfilePage.tsx
+│  │  ├─ result-cards/
+│  │  │  └─ ResultCardPage.tsx
+│  │  └─ rooms/
+│  │     ├─ RoomCreatePage.tsx
+│  │     └─ RoomDetailPage.tsx
+│  ├─ shared/
+│  │  ├─ api/
+│  │  │  ├─ demoReadRepository.test.ts
+│  │  │  └─ demoReadRepository.ts
+│  │  ├─ data/demo/
+│  │  │  ├─ categories.json
+│  │  │  ├─ crewStats.json
+│  │  │  ├─ profile.json
+│  │  │  ├─ rooms.json
+│  │  │  └─ targets.json
+│  │  ├─ types/
+│  │  │  └─ rallyroom.ts
+│  │  └─ ui/
+│  │     ├─ ProgressMeter.tsx
+│  │     └─ RoomCard.tsx
 │  ├─ test/
 │  │  └─ setup.ts
 │  ├─ App.test.tsx
@@ -122,9 +157,9 @@ D:\Projects\vibex
 └─ vite.config.ts
 ```
 
-## 예정 디렉터리 구조
+## 다음 예정 디렉터리 구조
 
-기능 구현이 시작되면 다음 구조를 우선 검토한다. 실제 추가 시 이 문서를 갱신한다.
+Phase 1에서 앱 셸, 페이지, 최소 demo read model 구조가 추가되었다. 이후 command/API, Supabase, feature 세부 구현이 시작되면 다음 구조를 확장한다.
 
 ```text
 src/
