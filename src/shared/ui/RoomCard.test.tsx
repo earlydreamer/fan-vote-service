@@ -5,6 +5,7 @@ import { RoomCard } from './RoomCard';
 
 describe('RoomCard', () => {
   afterEach(() => {
+    vi.unstubAllEnvs();
     vi.useRealTimers();
   });
 
@@ -20,6 +21,16 @@ describe('RoomCard', () => {
   it('marks same-calendar-day rooms as ending today', () => {
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-05-31T09:00:00+09:00'));
+
+    render(<RoomCard room={buildRoom({ endAt: '2026-05-31T14:59:00.000Z' })} />);
+
+    expect(screen.getByText('오늘 마감')).toBeInTheDocument();
+  });
+
+  it('uses the service calendar date when the local timezone lags KST', () => {
+    vi.stubEnv('TZ', 'UTC');
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date('2026-05-30T15:30:00.000Z'));
 
     render(<RoomCard room={buildRoom({ endAt: '2026-05-31T14:59:00.000Z' })} />);
 
