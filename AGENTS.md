@@ -54,17 +54,19 @@
 - GitHub remote: `https://github.com/earlydreamer/fan-vote-service.git`
 - 계정: `earlydreamer`
 - 빈 remote에 올리는 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 기능/수정/문서 변경은 feature branch에서 진행한다.
-- 작업 단위: issue 생성, feature branch, draft pull request, 테스트, ready for review, review, 피드백 반영, merge
+- 작업 단위: issue 생성, feature branch, draft pull request, 테스트, ready for review, review, 피드백 이관 또는 반영, merge
 - GitHub 작업은 가능한 한 GitHub MCP를 우선 사용한다. 로컬 커밋과 push는 local `git`을 사용하고, issue/PR/comment/review/merge는 GitHub MCP를 우선한다.
 - 각 feature의 예정, 진행 중, 완료, 보류, 리뷰 상태는 GitHub issue와 PR에서 추적한다. tracked 진행도 파일을 만들지 않는다.
 - feature 브랜치 안에서는 의미 단위 커밋을 잘게 쌓는다. 최종 merge 전까지 rebase나 squash로 커밋을 합치지 않는다.
 - PR은 초기에 draft로 열고, 커밋이 쌓일 때마다 설명과 작업 상태를 갱신한다.
 - feature 완성 판단 후 draft를 ready for review로 전환하고 GitHub PR에서 수동 코드리뷰를 요청한다.
 - 코드리뷰 요청 기본 대상은 `codex`다. `AGENTS.md`의 "코드리뷰 공급자 우선순위"에서 기본값을 `coderabbit`으로 바꿀 수 있다.
-- GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인하고, 적용/보류 판단과 근거를 PR 코멘트 또는 follow-up issue에 남긴다.
+- GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인한다. 현재 PR에서 바로 고치지 않을 피드백은 follow-up issue로 이관한다.
 - 저장소 규칙상 unresolved PR conversation 또는 review thread가 남아 있으면 merge하지 않는다.
-- follow-up issue는 리뷰 피드백 추적 수단일 뿐이며, PR conversation resolved 상태를 대체하지 않는다.
-- 수정 또는 보류 판단을 남긴 뒤 관련 PR thread를 resolved 처리해야 한다. GitHub MCP로 resolution 상태 확인이나 처리가 불가능하면 GitHub UI에서 수동 확인한다.
+- follow-up issue는 현재 PR의 merge gate가 아니다. follow-up issue의 수정은 별도 feature branch와 PR에서 처리한다.
+- Codex 리뷰 자동화는 Codex 피드백을 follow-up issue로 이관한 뒤 관련 Codex review thread resolve와 자동 merge를 시도한다.
+- 자동 merge 조건은 PR이 draft가 아니고, Codex 리뷰 응답이 확인되었고, CI/status/check가 실패 또는 대기 상태가 아니며, 남은 unresolved review thread가 없는 상태다.
+- 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다. GitHub MCP로 resolution 상태 확인이나 처리가 불가능하면 GitHub UI에서 수동 확인한다.
 - 의존성 없는 기능은 subagent 병렬 개발을 허용한다.
 - merge 전에는 충돌, 테스트, 빌드 상태를 확인한다.
 

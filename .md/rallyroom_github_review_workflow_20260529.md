@@ -10,7 +10,7 @@
 
 - GitHub 작업은 가능한 한 GitHub MCP를 우선 사용한다.
 - 로컬 브랜치 생성, staging, commit, push는 local `git`을 사용한다.
-- issue 생성, PR 생성, PR 코멘트, 리뷰 요청, draft 해제, merge는 GitHub MCP를 우선 사용한다.
+- issue 생성, PR 생성, PR 코멘트, 리뷰 요청, draft 해제, 수동 merge는 GitHub MCP를 우선 사용한다.
 - PR은 feature 시작 시 draft로 연다.
 - feature branch의 커밋은 rebase/squash하지 않고 의미 단위로 쌓는다.
 - merge method는 `merge`를 기본으로 한다. squash/rebase merge는 사용하지 않는다.
@@ -104,13 +104,15 @@ fallback 기록:
 2. 요청한 GitHub 리뷰 공급자의 응답이 실제로 도착했는지 확인한다.
 3. 리뷰 항목을 `critical`, `important`, `minor`, `question`, `won't fix`로 분류한다.
 4. `critical`과 `important`는 기본적으로 수정한다.
-5. 적용하지 않는 항목은 PR 코멘트 또는 follow-up issue에 근거를 남긴다.
+5. 현재 PR에서 바로 고치지 않을 항목은 follow-up issue로 이관한다.
 6. 수정이 필요하면 별도 의미 단위 커밋으로 반영한다.
 7. PR 코멘트 또는 review reply로 판단 근거를 한국어로 남긴다.
 8. 리뷰가 별도 작업으로 분리되어야 하면 한국어 follow-up issue로 추적한다.
-9. follow-up issue를 만들었더라도 관련 PR conversation 또는 review thread를 resolved 상태로 만들기 전에는 merge하지 않는다.
-10. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
-11. 리뷰 반영 커밋을 push한 뒤 필요한 경우 같은 공급자에게 재리뷰를 요청한다.
+9. follow-up issue는 현재 PR의 merge gate가 아니다.
+10. Codex 리뷰 자동화는 follow-up issue 생성 후 Codex review thread resolve와 자동 merge를 시도한다.
+11. 자동 resolve가 실패하거나 사람이 남긴 unresolved thread가 있으면 merge하지 않는다.
+12. GitHub MCP로 resolution 상태를 확인하거나 처리할 수 없으면 GitHub UI에서 수동 확인한다.
+13. 현재 PR에 실질 수정 커밋을 push한 경우에는 같은 공급자에게 재리뷰를 요청한다.
 
 ## ready for review와 merge
 
@@ -125,27 +127,26 @@ draft 해제 후:
 
 1. GitHub MCP로 draft PR을 ready for review 상태로 바꾼다.
 2. GitHub MCP로 PR 코멘트에 `@codex review`를 남긴다.
-3. GitHub MCP로 PR comment/review/review thread를 스캔해 GitHub Codex 리뷰 응답 도착 여부를 확인한다.
+3. GitHub Codex 리뷰 응답은 PR comment/review/review thread 또는 `codex-reviewed`/`codex-feedback` label로 확인한다.
 4. GitHub Codex 리뷰 응답이 없으면 merge하지 않고 대기한다.
-5. 리뷰 내용을 적용하거나 보류 판단을 기록한다.
-6. 보류한 리뷰가 있다면 PR 코멘트에 근거를 작성한다.
-7. 모든 PR conversation/review thread가 resolved 상태인지 확인한다.
-8. GitHub MCP가 unresolved thread 상태를 제공하지 못하면 GitHub UI에서 수동 확인한다.
-9. 최종 검증을 다시 수행한다.
-10. 최종 merge 전에 head SHA를 확인한다.
-11. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
+5. Codex가 actionable feedback을 남기면 workflow가 follow-up issue로 이관한다.
+6. follow-up issue는 현재 PR의 merge gate가 아니다.
+7. workflow는 Codex review thread resolve를 시도한다.
+8. workflow는 PR이 draft가 아니고, CI/status/check가 실패 또는 대기 상태가 아니며, 남은 unresolved review thread가 없으면 `merge_method: merge`로 자동 merge를 시도한다.
+9. 자동 merge가 실패하면 GitHub MCP로 PR 상태, head SHA, check 상태, unresolved thread를 확인하고 수동 merge 여부를 판단한다.
 
 ## 금지
 
 - feature branch에서 rebase로 커밋 재작성
 - squash commit으로 의미 단위 이력 제거
 - ready for review 전환 직후 GitHub Codex 리뷰 요청을 생략
-- GitHub Codex 리뷰 도착 여부 스캔 없이 merge
+- GitHub Codex 리뷰 도착 여부 또는 `codex-reviewed`/`codex-feedback` label 확인 없이 merge
 - GitHub Codex 리뷰 응답 확인 없이 merge
 - GitHub Codex 리뷰 진행 중 로컬 Codex 리뷰 중복 실행
 - tracked 진행도 파일 또는 status-only commit 생성
 - unresolved PR conversation 또는 review thread가 남은 상태에서 merge
-- follow-up issue 생성만으로 PR conversation을 resolved 처리했다고 간주
+- follow-up issue 생성만으로 사람이 남긴 PR conversation을 resolved 처리했다고 간주
+- follow-up issue 처리 여부를 현재 PR의 merge gate로 삼아 자동 merge를 멈추는 것
 - 리뷰 근거 없이 의견 무시
 - `.env` 커밋
 - service role key 프론트 노출
