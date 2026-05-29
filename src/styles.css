@@ -1318,6 +1318,25 @@ select:focus-visible {
   background: var(--surface-raised);
 }
 
+.candidate-card--selectable {
+  cursor: pointer;
+  position: relative;
+}
+
+.candidate-card--selectable input {
+  position: absolute;
+  inset-block-start: 14px;
+  inset-inline-end: 14px;
+  inline-size: 18px;
+  block-size: 18px;
+  accent-color: var(--vote);
+}
+
+.candidate-card--selectable[data-selected="true"] {
+  border-color: rgb(98 91 246 / 58%);
+  box-shadow: 0 0 0 3px rgb(98 91 246 / 12%);
+}
+
 .candidate-card > span {
   display: grid;
   place-items: center;
@@ -1347,6 +1366,50 @@ select:focus-visible {
   color: var(--ink-soft);
   font-size: 13px;
   line-height: 1.45;
+}
+
+.vote-panel__summary {
+  display: grid;
+  gap: 10px;
+  margin-block-start: 12px;
+}
+
+.vote-panel__summary > span {
+  color: var(--ink-muted);
+  font-weight: 850;
+}
+
+.vote-form {
+  display: grid;
+  gap: 14px;
+}
+
+.vote-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+.vote-action-row button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 8px;
+  background: var(--vote);
+  color: #fff;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.vote-action-row button:disabled {
+  cursor: not-allowed;
+  background: var(--surface-muted);
+  color: var(--ink-soft);
 }
 
 .option-composer,

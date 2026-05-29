@@ -1,9 +1,11 @@
 import { type FormEvent, useState } from 'react';
-import { MessageSquareText, PlusCircle, Ticket, Vote } from 'lucide-react';
+import { MessageSquareText, PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { getVoteTitle } from '../../shared/domain/roomDisplay';
-import { ProgressMeter } from '../../shared/ui/ProgressMeter';
+import type { RallyRoom } from '../../shared/types/rallyroom';
 import { NotFoundPage } from '../not-found/NotFoundPage';
+import { VotePanel } from '../voting/VotePanel';
+import type { CastVoteCommand } from '../voting/useCastVote';
 
 interface RoomDetailPageProps {
   roomId: string;
@@ -24,6 +26,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
 
   const category = demoReadRepository.getCategory(room.categoryId);
   const voteTitle = getVoteTitle(room);
+  const castVoteCommand = createDemoCastVoteCommand(room);
   const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
   const canSpendRp = profile.totalRp >= room.addOptionCost.rp;
   const optionCostLabel = canSpendTicket ? `투표권 ${room.addOptionCost.voteTickets}장` : `${room.addOptionCost.rp} RP`;
@@ -67,26 +70,15 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
       </section>
 
       <div className="detail-content-grid">
-        <section className="content-panel vote-panel" aria-labelledby="vote-status-title">
-          <div className="collection-heading compact">
-            <div>
-              <p className="eyebrow">Ranking</p>
-              <h2 id="vote-status-title">투표 현황</h2>
-            </div>
-            <Vote size={18} aria-hidden="true" />
-          </div>
-          <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
-          <div className="candidate-grid">
-            {room.candidates.map((candidate, index) => (
-              <article key={candidate.id} className="candidate-card" data-status={candidate.status}>
-                <span>{index + 1}</span>
-                <h3>{candidate.title}</h3>
-                <strong>{candidate.voteCount.toLocaleString()}표</strong>
-                <p>{candidate.status === 'pending' ? '검수 대기 중인 팬 추가 항목' : '서버 read model 기준 집계'}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <VotePanel
+          key={room.id}
+          roomId={room.id}
+          candidates={room.candidates}
+          currentGoalValue={room.currentGoalValue}
+          goalValue={room.goalValue}
+          participantCount={room.participantCount}
+          castVoteCommand={castVoteCommand}
+        />
 
         <section className="content-panel option-composer" aria-labelledby="option-composer-title">
           <div className="collection-heading compact">
@@ -107,7 +99,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
                 id="new-option-title"
                 value={newOptionTitle}
                 onChange={(event) => setNewOptionTitle(event.target.value)}
-                placeholder="예: 커튼콜 실루엣"
+                placeholder="예: 커튼콜 마지막 장면"
               />
               <button type="submit" disabled={!canAddOption}>
                 <PlusCircle size={17} aria-hidden="true" />
@@ -116,13 +108,13 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
             </div>
           </form>
           <p className="guard-copy">
-            지금은 후보 추가 command intent만 만들어요. 실제 투표권/RP 차감과 후보 반영은 서버 승인 후 read model에서
-            같이 갱신되는 흐름으로 이어질 예정이에요.
+            지금은 후보 추가 command intent만 만들어요. 실제 투표권/RP 차감과 후보 반영은 서버 승인 후 read model에서 같이 갱신되는 흐름으로
+            이어질 예정이에요.
           </p>
           {optionAddIntent && (
             <p className="success-copy" role="status">
-              후보 추가 요청을 만들었어요. {optionAddIntent.title} 항목은 command API 승인 후 read model에 반영돼요.
-              예상 비용: {optionAddIntent.costLabel}
+              후보 추가 요청을 만들었어요. {optionAddIntent.title} 항목은 command API 승인 후 read model에 반영돼요. 예상 비용:{' '}
+              {optionAddIntent.costLabel}
             </p>
           )}
         </section>
@@ -158,4 +150,23 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
       </div>
     </div>
   );
+}
+
+function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
+  return async ({ roomId, candidateIds }) => {
+    const selectedCandidateIds = new Set(candidateIds);
+
+    return {
+      ok: true,
+      data: {
+        roomId,
+        candidateVotes: room.candidates.map((candidate) => ({
+          candidateId: candidate.id,
+          voteCount: candidate.voteCount + (selectedCandidateIds.has(candidate.id) ? 1 : 0)
+        })),
+        currentGoalValue: Math.min(room.currentGoalValue + candidateIds.length, room.goalValue),
+        participantCount: room.participantCount + 1
+      }
+    };
+  };
 }
