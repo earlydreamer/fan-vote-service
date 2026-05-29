@@ -1139,11 +1139,47 @@ select:focus-visible {
 }
 
 .candidate-chip-grid span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   padding: 10px 12px;
   border-radius: 999px;
   background: var(--surface-raised);
   color: var(--ink-muted);
   font-weight: 850;
+}
+
+.candidate-chip-grid button {
+  display: inline-grid;
+  place-items: center;
+  inline-size: 24px;
+  block-size: 24px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line-soft);
+  color: var(--ink-soft);
+}
+
+.candidate-chip-grid button:hover,
+.candidate-chip-grid button:focus-visible {
+  background: var(--live-soft);
+  color: var(--danger);
+}
+
+.command-preview {
+  grid-column: 1 / -1;
+}
+
+.command-preview pre {
+  overflow-x: auto;
+  max-block-size: 360px;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #101318;
+  color: #f8fafc;
+  font: 13px/1.55 "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
 }
 
 .live-preview {
