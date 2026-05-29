@@ -3,15 +3,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { RallyRoom } from '../types/rallyroom';
 import { RoomCard } from './RoomCard';
 
-const originalTimezone = process.env.TZ;
-
 describe('RoomCard', () => {
   afterEach(() => {
-    if (originalTimezone === undefined) {
-      delete process.env.TZ;
-    } else {
-      process.env.TZ = originalTimezone;
-    }
+    vi.unstubAllEnvs();
     vi.useRealTimers();
   });
 
@@ -34,7 +28,7 @@ describe('RoomCard', () => {
   });
 
   it('uses the service calendar date when the local timezone lags KST', () => {
-    process.env.TZ = 'UTC';
+    vi.stubEnv('TZ', 'UTC');
     vi.useFakeTimers();
     vi.setSystemTime(new Date('2026-05-30T15:30:00.000Z'));
 
