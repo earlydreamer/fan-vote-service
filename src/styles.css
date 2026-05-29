@@ -118,7 +118,7 @@ select:focus-visible {
 
 .app-header {
   position: sticky;
-  inset-block-start: 0;
+  inset-block-start: 10px;
   z-index: 20;
   display: grid;
   grid-template-columns: auto 1fr auto;
@@ -126,9 +126,12 @@ select:focus-visible {
   gap: 18px;
   inline-size: min(1440px, calc(100% - 48px));
   min-block-size: 68px;
-  margin-inline: auto;
-  padding: 12px 0;
+  margin: 10px auto 0;
+  padding: 12px 14px;
+  border: 1px solid rgb(221 211 255 / 70%);
+  border-radius: 24px;
   background: rgb(255 255 255 / 92%);
+  box-shadow: 0 16px 40px rgb(108 60 233 / 10%);
   backdrop-filter: blur(18px);
 }
 
@@ -211,10 +214,16 @@ select:focus-visible {
   color: var(--primary);
 }
 
-.account-chip {
+.account-area {
   display: inline-flex;
   align-items: center;
   justify-self: end;
+  gap: 8px;
+}
+
+.account-chip {
+  display: inline-flex;
+  align-items: center;
   gap: 8px;
   min-block-size: 44px;
   padding: 5px 6px 5px 12px;
@@ -256,6 +265,27 @@ select:focus-visible {
   font-weight: 950;
 }
 
+.auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 38px;
+  padding: 8px 13px;
+  border: 1px solid #ddd3ff;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink-muted);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.auth-button--primary {
+  background: linear-gradient(135deg, var(--primary), #5967f3);
+  color: #fff;
+  box-shadow: 0 12px 26px rgb(108 60 233 / 18%);
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -293,7 +323,7 @@ select:focus-visible {
 .app-main {
   inline-size: min(1440px, calc(100% - 48px));
   margin-inline: auto;
-  padding-block: 18px 64px;
+  padding-block: 16px 64px;
 }
 
 .bottom-nav {
@@ -398,11 +428,12 @@ select:focus-visible {
   min-block-size: 560px;
   padding: 54px 64px;
   border: 0;
-  border-radius: 0;
+  border-radius: 30px;
   background:
     linear-gradient(135deg, rgb(246 241 255 / 92%) 0%, #fff 48%, rgb(239 253 250 / 92%) 100%);
   color: var(--ink);
   box-shadow: none;
+  overflow: hidden;
 }
 
 .featured-copy {
@@ -1600,6 +1631,7 @@ select:focus-visible {
 
   .app-header {
     grid-template-columns: 1fr auto;
+    border-radius: 20px;
   }
 
   .shell-search,
@@ -1696,6 +1728,12 @@ select:focus-visible {
 
   .account-chip__wallet {
     display: none;
+  }
+
+  .auth-button {
+    min-block-size: 34px;
+    padding: 7px 10px;
+    font-size: 12px;
   }
 
   .top-signal-strip span {

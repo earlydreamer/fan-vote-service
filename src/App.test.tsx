@@ -21,6 +21,7 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표를 직접 만들어보세요' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
     expect(within(banner).getByRole('link', { name: '내 프로필' })).toBeInTheDocument();
+    expect(within(banner).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
     expect(banner).toHaveTextContent('투표권 3장');
     expect(within(banner).queryByRole('link', { name: '투표방 만들기' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Featured 투표' })).toBeInTheDocument();
@@ -33,6 +34,23 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByRole('region', { name: '마감 임박 투표' })).toBeInTheDocument();
     expect(screen.queryByText('Fan-led micro rally rooms')).not.toBeInTheDocument();
     expect(screen.queryByText('Fan Ops Board')).not.toBeInTheDocument();
+  });
+
+  it('toggles between login and logout controls in the account area', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const banner = screen.getByRole('banner');
+
+    await user.click(within(banner).getByRole('button', { name: '로그아웃' }));
+
+    expect(within(banner).getByRole('button', { name: '로그인' })).toBeInTheDocument();
+    expect(within(banner).queryByRole('link', { name: '내 프로필' })).not.toBeInTheDocument();
+
+    await user.click(within(banner).getByRole('button', { name: '로그인' }));
+
+    expect(within(banner).getByRole('link', { name: '내 프로필' })).toBeInTheDocument();
+    expect(within(banner).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
   });
 
   it('filters the home gallery by category chips', async () => {

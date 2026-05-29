@@ -13,6 +13,7 @@ import { type AppRoute, matchRoute, primaryNavItems } from './routes';
 
 export function AppShell() {
   const [route, setRoute] = useState<AppRoute>(() => matchRoute(window.location.pathname));
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const profile = demoReadRepository.getProfile();
 
   useEffect(() => {
@@ -67,16 +68,29 @@ export function AppShell() {
           ))}
         </nav>
 
-        <a className="account-chip" href="/profile" aria-label="내 프로필">
-          <span className="account-chip__wallet">
-            <Ticket size={16} aria-hidden="true" />
-            <span>투표권 {profile.voteTickets}장</span>
-          </span>
-          <span className="account-chip__rp">{profile.totalRp.toLocaleString()} RP</span>
-          <span className="account-avatar" aria-hidden="true">
-            나
-          </span>
-        </a>
+        <div className="account-area">
+          {isAuthenticated ? (
+            <>
+              <a className="account-chip" href="/profile" aria-label="내 프로필">
+                <span className="account-chip__wallet">
+                  <Ticket size={16} aria-hidden="true" />
+                  <span>투표권 {profile.voteTickets}장</span>
+                </span>
+                <span className="account-chip__rp">{profile.totalRp.toLocaleString()} RP</span>
+                <span className="account-avatar" aria-hidden="true">
+                  나
+                </span>
+              </a>
+              <button className="auth-button" type="button" onClick={() => setIsAuthenticated(false)}>
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <button className="auth-button auth-button--primary" type="button" onClick={() => setIsAuthenticated(true)}>
+              로그인
+            </button>
+          )}
+        </div>
       </header>
 
       <main id="main-content" className="app-main">
