@@ -39,6 +39,7 @@ export function AppShell() {
 
     const url = new URL(anchor.href);
     if (url.origin !== window.location.origin) return;
+    if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) return;
 
     event.preventDefault();
     navigate(`${url.pathname}${url.search}${url.hash}`);

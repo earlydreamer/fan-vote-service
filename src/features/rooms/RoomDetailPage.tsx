@@ -2,7 +2,6 @@ import { type FormEvent, useState } from 'react';
 import { MessageSquareText, PlusCircle, Ticket, Vote } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { getVoteTitle } from '../../shared/domain/roomDisplay';
-import type { Candidate } from '../../shared/types/rallyroom';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { NotFoundPage } from '../not-found/NotFoundPage';
 
@@ -10,21 +9,23 @@ interface RoomDetailPageProps {
   roomId: string;
 }
 
+interface OptionAddIntent {
+  title: string;
+  costLabel: string;
+}
+
 export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const room = demoReadRepository.getRoomDetail(roomId);
   const profile = demoReadRepository.getProfile();
-  const [candidates, setCandidates] = useState<Candidate[]>(() => room?.candidates ?? []);
   const [newOptionTitle, setNewOptionTitle] = useState('');
-  const [voteTickets, setVoteTickets] = useState(profile.voteTickets);
-  const [rp, setRp] = useState(profile.totalRp);
-  const [optionAddMessage, setOptionAddMessage] = useState('');
+  const [optionAddIntent, setOptionAddIntent] = useState<OptionAddIntent | null>(null);
 
   if (!room) return <NotFoundPage />;
 
   const category = demoReadRepository.getCategory(room.categoryId);
   const voteTitle = getVoteTitle(room);
-  const canSpendTicket = voteTickets >= room.addOptionCost.voteTickets;
-  const canSpendRp = rp >= room.addOptionCost.rp;
+  const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
+  const canSpendRp = profile.totalRp >= room.addOptionCost.rp;
   const optionCostLabel = canSpendTicket ? `투표권 ${room.addOptionCost.voteTickets}장` : `${room.addOptionCost.rp} RP`;
   const canAddOption = newOptionTitle.trim().length > 0 && (canSpendTicket || canSpendRp);
 
@@ -33,22 +34,8 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
     if (!canAddOption) return;
 
     const title = newOptionTitle.trim();
-    const pendingCandidate: Candidate = {
-      id: `candidate-user-${Date.now()}`,
-      targetId: room.primaryTargetId,
-      title,
-      status: 'pending',
-      voteCount: 0
-    };
-
-    setCandidates((currentCandidates) => [...currentCandidates, pendingCandidate]);
-    if (canSpendTicket) {
-      setVoteTickets((currentTickets) => currentTickets - room.addOptionCost.voteTickets);
-    } else {
-      setRp((currentRp) => currentRp - room.addOptionCost.rp);
-    }
+    setOptionAddIntent({ title, costLabel: optionCostLabel });
     setNewOptionTitle('');
-    setOptionAddMessage('추가 항목은 검수 대기 상태로 올라갔어요. 승인되면 투표 후보에 반영돼요.');
   };
 
   return (
@@ -90,7 +77,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           </div>
           <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
           <div className="candidate-grid">
-            {candidates.map((candidate, index) => (
+            {room.candidates.map((candidate, index) => (
               <article key={candidate.id} className="candidate-card" data-status={candidate.status}>
                 <span>{index + 1}</span>
                 <h3>{candidate.title}</h3>
@@ -110,8 +97,8 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
             <Ticket size={18} aria-hidden="true" />
           </div>
           <div className="wallet-strip">
-            <span>보유 투표권 {voteTickets}장</span>
-            <span>{rp.toLocaleString()} RP</span>
+            <span>보유 투표권 {profile.voteTickets}장</span>
+            <span>{profile.totalRp.toLocaleString()} RP</span>
           </div>
           <form className="option-form" onSubmit={handleAddOption}>
             <label htmlFor="new-option-title">새 투표 항목</label>
@@ -129,10 +116,15 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
             </div>
           </form>
           <p className="guard-copy">
-            투표권이 있으면 먼저 투표권을 사용하고, 없을 때는 RP로 후보 제안 비용을 지불하는 데모
-            흐름이에요.
+            지금은 후보 추가 command intent만 만들어요. 실제 투표권/RP 차감과 후보 반영은 서버 승인 후 read model에서
+            같이 갱신되는 흐름으로 이어질 예정이에요.
           </p>
-          {optionAddMessage && <p className="success-copy">{optionAddMessage}</p>}
+          {optionAddIntent && (
+            <p className="success-copy" role="status">
+              후보 추가 요청을 만들었어요. {optionAddIntent.title} 항목은 command API 승인 후 read model에 반영돼요.
+              예상 비용: {optionAddIntent.costLabel}
+            </p>
+          )}
         </section>
 
         <section className="content-panel mission-panel" aria-labelledby="mission-panel-title">
