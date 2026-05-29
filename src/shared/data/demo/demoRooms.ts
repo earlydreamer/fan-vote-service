@@ -340,6 +340,30 @@ export const demoRooms: RallyRoom[] = [
     earnedIcon: 'Open Picker'
   }),
   createRoom({
+    id: 'room-closed-finale',
+    slug: 'closed-finale-scene',
+    title: '종료된 결승 장면 투표',
+    topic: '발행 대기 중인 가상 결승 장면 투표. 방장은 결과 카드를 요청할 수 있어요.',
+    categoryId: 'cat-stage',
+    targetId: 'target-eunha-stage',
+    createdAt: '2026-05-22T09:00:00.000Z',
+    status: 'closed',
+    endAt: '2026-05-28T14:59:00.000Z',
+    pollFormat: 'scene',
+    tags: ['종료', '결과대기', '방장'],
+    thumbnail: { tone: 'stage', label: 'FINALE', accent: '#6C3CE9' },
+    goalValue: 1000,
+    currentGoalValue: 1000,
+    participantCount: 612,
+    candidates: [
+      ['cand-finale-light', '마지막 조명 엔딩', 344],
+      ['cand-finale-wave', '팬월 손인사 장면', 288],
+      ['cand-finale-silence', '무음 암전 컷', 190]
+    ],
+    topMessage: '결승 장면은 결과 카드로 남겨야 진짜 마무리되는 느낌이에요.',
+    earnedIcon: 'Finale Maker'
+  }),
+  createRoom({
     id: 'room-music-hook',
     slug: 'hook-repeat-vote',
     title: '계속 맴도는 훅 파트',

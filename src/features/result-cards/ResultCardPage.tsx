@@ -1,7 +1,10 @@
-import { Trophy } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
+import type { RallyRoom } from '../../shared/types/rallyroom';
 import { RoomCard } from '../../shared/ui/RoomCard';
 import { NotFoundPage } from '../not-found/NotFoundPage';
+import { ResultCardPreview } from './ResultCardPreview';
+import { ResultCardPublishPanel } from './ResultCardPublishPanel';
+import type { PublishResultCardCommand } from './usePublishResultCard';
 
 interface ResultCardPageProps {
   roomId: string;
@@ -11,6 +14,10 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
   const room = demoReadRepository.getRoomDetail(roomId);
 
   if (!room) return <NotFoundPage />;
+
+  const profile = demoReadRepository.getProfile();
+  const isOwner = profile.createdRoomIds.includes(room.id);
+  const publishResultCardCommand = createDemoPublishResultCardCommand(room);
 
   if (room.status !== 'result_published' || !room.resultCard.publishedAt) {
     return (
@@ -26,6 +33,14 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
             투표방으로 돌아가기
           </a>
         </section>
+        <ResultCardPublishPanel
+          roomId={room.id}
+          roomTitle={room.title}
+          isOwner={isOwner}
+          isPublishable={room.status === 'closed'}
+          unavailableReason="투표가 종료된 뒤 발행할 수 있어요."
+          publishResultCardCommand={publishResultCardCommand}
+        />
       </div>
     );
   }
@@ -36,14 +51,13 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
   return (
     <div className="result-page">
       <section className="result-showcase" aria-labelledby="result-title">
-        <div className="result-poster">
-          <Trophy size={32} aria-hidden="true" />
-          <p className="result-kicker">{room.title}</p>
-          <h1 id="result-title">결과 카드</h1>
-          <h2>{winner?.title ?? '집계 대기 중'}</h2>
-          <p>{room.resultCard.topMessage}</p>
-          <span className="chip chip-reward">{room.resultCard.earnedIcon}</span>
-        </div>
+        <ResultCardPreview
+          roomTitle={room.title}
+          winnerTitle={winner?.title ?? '집계 대기 중'}
+          topMessage={room.resultCard.topMessage}
+          totalParticipants={room.resultCard.totalParticipants}
+          earnedIcon={room.resultCard.earnedIcon}
+        />
         <div className="result-context">
           <p className="eyebrow">Published vote memory</p>
           <h2>{room.resultCard.totalParticipants.toLocaleString()}명이 만든 투표 기록</h2>
@@ -76,4 +90,14 @@ export function ResultCardPage({ roomId }: ResultCardPageProps) {
       </section>
     </div>
   );
+}
+
+function createDemoPublishResultCardCommand(room: RallyRoom): PublishResultCardCommand {
+  return async ({ roomId }) => ({
+    ok: true,
+    data: {
+      resultCardId: `${roomId}-result-card`,
+      redirectTo: `/rooms/${room.id}/result`
+    }
+  });
 }

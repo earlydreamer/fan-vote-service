@@ -246,6 +246,26 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByText('역전승 하이라이트')).toBeInTheDocument();
   });
 
+  it('lets a room owner request result card publishing for a closed unpublished room', async () => {
+    const user = userEvent.setup();
+    window.history.pushState({}, '', '/rooms/room-closed-finale/result');
+
+    render(<App />);
+
+    const publishPanel = screen.getByRole('region', { name: '결과 카드 발행' });
+
+    expect(screen.getByRole('heading', { name: '결과 카드 준비 중' })).toBeInTheDocument();
+    expect(within(publishPanel).getByText('종료된 결승 장면 투표')).toBeInTheDocument();
+
+    await user.click(within(publishPanel).getByRole('button', { name: '결과 카드 발행' }));
+
+    expect(await within(publishPanel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
+    expect(within(publishPanel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute(
+      'href',
+      '/rooms/room-closed-finale/result'
+    );
+  });
+
   it('routes to profile, crew dashboard, and pricing pages from navigation', async () => {
     const user = userEvent.setup();
     render(<App />);

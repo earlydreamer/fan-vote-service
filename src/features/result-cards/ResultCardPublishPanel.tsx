@@ -1,0 +1,71 @@
+import { Rocket } from 'lucide-react';
+import { type PublishResultCardCommand, usePublishResultCard } from './usePublishResultCard';
+
+export interface ResultCardPublishPanelProps {
+  roomId: string;
+  roomTitle: string;
+  isOwner: boolean;
+  isPublishable: boolean;
+  unavailableReason: string;
+  publishResultCardCommand: PublishResultCardCommand;
+}
+
+export function ResultCardPublishPanel({
+  roomId,
+  roomTitle,
+  isOwner,
+  isPublishable,
+  unavailableReason,
+  publishResultCardCommand
+}: ResultCardPublishPanelProps) {
+  const publishState = usePublishResultCard({
+    roomId,
+    publishResultCardCommand
+  });
+  const titleId = `${roomId}-result-publish-title`;
+
+  return (
+    <section className="content-panel result-publish-panel" aria-labelledby={titleId}>
+      <div className="collection-heading compact">
+        <div>
+          <p className="eyebrow">Owner action</p>
+          <h2 id={titleId}>결과 카드 발행</h2>
+        </div>
+        <Rocket size={18} aria-hidden="true" />
+      </div>
+
+      {isPublishable && <p className="result-publish-panel__room">{roomTitle}</p>}
+
+      {!isOwner ? (
+        <p className="guard-copy">방장만 결과 카드를 발행할 수 있어요.</p>
+      ) : (
+        <>
+          {!isPublishable && <p className="guard-copy">{unavailableReason}</p>}
+          <button
+            type="button"
+            className="result-publish-panel__button"
+            disabled={!isPublishable || publishState.isSubmitting}
+            onClick={() => {
+              void publishState.publishResultCard();
+            }}
+          >
+            {publishState.isSubmitting ? '발행 요청 중' : '결과 카드 발행'}
+          </button>
+        </>
+      )}
+
+      {publishState.error && (
+        <p className="error-copy" role="alert">
+          {publishState.error}
+        </p>
+      )}
+
+      {publishState.receipt && (
+        <div className="result-publish-panel__receipt" role="status">
+          <p>결과 카드 발행 요청 완료</p>
+          <a href={publishState.receipt.redirectTo}>발행된 결과 카드로 이동</a>
+        </div>
+      )}
+    </section>
+  );
+}
