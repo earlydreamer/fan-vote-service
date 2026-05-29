@@ -1323,6 +1323,11 @@ select:focus-visible {
   position: relative;
 }
 
+.candidate-card--selectable[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
 .candidate-card--selectable input {
   position: absolute;
   inset-block-start: 14px;
@@ -1377,6 +1382,17 @@ select:focus-visible {
 .vote-panel__summary > span {
   color: var(--ink-muted);
   font-weight: 850;
+}
+
+.vote-panel__closed {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  border: 1px solid rgb(98 91 246 / 16%);
+  border-radius: 8px;
+  background: rgb(98 91 246 / 8%);
+  color: var(--ink-strong);
+  font-size: 0.92rem;
+  font-weight: 800;
 }
 
 .vote-form {

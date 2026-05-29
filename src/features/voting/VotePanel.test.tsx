@@ -16,8 +16,14 @@ function candidate(id: string, title: string, voteCount: number): Candidate {
   };
 }
 
-function renderVotePanel(
-  castVoteCommand: (input: CastVoteInput) => Promise<CommandResult<CastVoteResponse>> = async () => ({
+interface RenderVotePanelOptions {
+  castVoteCommand?: (input: CastVoteInput) => Promise<CommandResult<CastVoteResponse>>;
+  isVotingOpen?: boolean;
+  closedReason?: string;
+}
+
+function renderVotePanel({
+  castVoteCommand = async () => ({
     ok: true,
     data: {
       roomId: 'room-1',
@@ -25,8 +31,10 @@ function renderVotePanel(
       currentGoalValue: 230,
       participantCount: 42
     }
-  })
-) {
+  }),
+  isVotingOpen,
+  closedReason
+}: RenderVotePanelOptions = {}) {
   return render(
     <VotePanel
       roomId="room-1"
@@ -35,6 +43,8 @@ function renderVotePanel(
       goalValue={500}
       participantCount={41}
       castVoteCommand={castVoteCommand}
+      isVotingOpen={isVotingOpen}
+      closedReason={closedReason}
     />
   );
 }
@@ -52,7 +62,7 @@ describe('VotePanel', () => {
       }
     }));
 
-    renderVotePanel(castVoteCommand);
+    renderVotePanel({ castVoteCommand });
 
     const votePanel = screen.getByRole('region', { name: '투표 현황' });
     const submitButton = within(votePanel).getByRole('button', { name: '투표하기' });
@@ -101,7 +111,7 @@ describe('VotePanel', () => {
       }
     }));
 
-    renderVotePanel(castVoteCommand);
+    renderVotePanel({ castVoteCommand });
 
     const votePanel = screen.getByRole('region', { name: '투표 현황' });
 
@@ -109,6 +119,38 @@ describe('VotePanel', () => {
     await user.click(within(votePanel).getByRole('button', { name: '투표하기' }));
 
     expect(await within(votePanel).findByRole('alert')).toHaveTextContent('이미 이 투표에 참여했어요.');
+    expect(within(votePanel).getByText('10표')).toBeInTheDocument();
+    expect(within(votePanel).getByText('41명 참여')).toBeInTheDocument();
+  });
+
+  it('keeps closed rooms read-only and never calls the vote command', async () => {
+    const user = userEvent.setup();
+    const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => ({
+      ok: true,
+      data: {
+        roomId: 'room-1',
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 17 }],
+        currentGoalValue: 230,
+        participantCount: 42
+      }
+    }));
+
+    renderVotePanel({
+      castVoteCommand,
+      isVotingOpen: false,
+      closedReason: '결과가 공개된 방은 투표가 종료됐어요.'
+    });
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const submitButton = within(votePanel).getByRole('button', { name: '투표 종료' });
+
+    expect(within(votePanel).getByText('결과가 공개된 방은 투표가 종료됐어요.')).toBeInTheDocument();
+    expect(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ })).toBeDisabled();
+    expect(submitButton).toBeDisabled();
+
+    await user.click(submitButton);
+
+    expect(castVoteCommand).not.toHaveBeenCalled();
     expect(within(votePanel).getByText('10표')).toBeInTheDocument();
     expect(within(votePanel).getByText('41명 참여')).toBeInTheDocument();
   });
