@@ -1,0 +1,30 @@
+[
+  {
+    "id": "cat-stage",
+    "name": "무대",
+    "tone": "stage",
+    "colorToken": "primary",
+    "isActive": true
+  },
+  {
+    "id": "cat-story",
+    "name": "작품",
+    "tone": "story",
+    "colorToken": "mission",
+    "isActive": true
+  },
+  {
+    "id": "cat-game",
+    "name": "게임",
+    "tone": "game",
+    "colorToken": "reward",
+    "isActive": true
+  },
+  {
+    "id": "cat-sports",
+    "name": "스포츠",
+    "tone": "sports",
+    "colorToken": "energy",
+    "isActive": true
+  }
+]

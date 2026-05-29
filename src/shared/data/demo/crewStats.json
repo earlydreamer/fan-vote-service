@@ -1,0 +1,26 @@
+{
+  "totalRooms": 12,
+  "activeRooms": 4,
+  "totalParticipants": 2150,
+  "averageMissionCompletionRate": 64,
+  "strongestCategoryId": "cat-stage",
+  "roomStats": [
+    {
+      "roomId": "room-stage-opening",
+      "title": "은하 무대 오프닝 응원방",
+      "participantCount": 328,
+      "voteCount": 746,
+      "missionCompletionRate": 71,
+      "messageCount": 84
+    },
+    {
+      "roomId": "room-aurora-ending",
+      "title": "오로라 결말 한 줄 응원방",
+      "participantCount": 186,
+      "voteCount": 393,
+      "missionCompletionRate": 58,
+      "messageCount": 42
+    }
+  ],
+  "nextMissionSuggestion": "마감 24시간 전에는 팬월 메시지 미션을 노출해 결과 카드 재료를 모으는 편이 좋아요."
+}
