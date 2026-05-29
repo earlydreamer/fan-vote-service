@@ -418,7 +418,13 @@ jobs:
               return [...issueNumbers];
             }
 
+            function isDefaultBranchMerge(pr) {
+              return pr.base.ref === pr.base.repo.default_branch;
+            }
+
             async function closeLinkedIssuesAfterMerge(pr) {
+              if (!isDefaultBranchMerge(pr)) return;
+
               const issueNumbers = extractClosingIssueNumbers(pr.body || '');
 
               for (const issue_number of issueNumbers) {
