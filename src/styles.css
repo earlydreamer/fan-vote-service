@@ -211,6 +211,51 @@ select:focus-visible {
   color: var(--primary);
 }
 
+.account-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+  min-block-size: 44px;
+  padding: 5px 6px 5px 12px;
+  border: 1px solid #ddd3ff;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 88%);
+  color: var(--ink-muted);
+  box-shadow: 0 12px 28px rgb(108 60 233 / 10%);
+}
+
+.account-chip__wallet,
+.account-chip__rp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.account-chip__wallet {
+  color: var(--primary);
+}
+
+.account-chip__rp {
+  padding-inline-start: 2px;
+  color: var(--ink-soft);
+}
+
+.account-avatar {
+  display: grid;
+  place-items: center;
+  inline-size: 34px;
+  block-size: 34px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), #5967f3 62%, var(--mint));
+  color: #fff;
+  font-size: 13px;
+  font-weight: 950;
+}
+
 .button {
   display: inline-flex;
   align-items: center;
@@ -1562,8 +1607,8 @@ select:focus-visible {
     display: none;
   }
 
-  .header-cta {
-    padding-inline: 12px;
+  .account-chip__rp {
+    display: none;
   }
 
   .featured-stage,
@@ -1645,9 +1690,12 @@ select:focus-visible {
     gap: 8px;
   }
 
-  .header-cta {
-    padding-inline: 11px;
-    white-space: nowrap;
+  .account-chip {
+    padding: 5px;
+  }
+
+  .account-chip__wallet {
+    display: none;
   }
 
   .top-signal-strip span {

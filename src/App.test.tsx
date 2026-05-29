@@ -20,7 +20,9 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByAltText('RallyRoom 팬 투표 커뮤니티')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: '지금 뜨는 팬 투표를 직접 만들어보세요' })).toBeInTheDocument();
     expect(primaryNav).toBeInTheDocument();
-    expect(within(banner).getByRole('link', { name: '투표방 만들기' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: '내 프로필' })).toBeInTheDocument();
+    expect(banner).toHaveTextContent('투표권 3장');
+    expect(within(banner).queryByRole('link', { name: '투표방 만들기' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Featured 투표' })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: '카테고리 탐색' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: '전체' })).toHaveAttribute('aria-pressed', 'true');
@@ -59,11 +61,11 @@ describe('RallyRoom app shell', () => {
     expect(cards[0]).toHaveTextContent('은하 무대 오프닝 투표방');
   });
 
-  it('navigates to room creation from the global CTA', async () => {
+  it('navigates to room creation from the hero CTA', async () => {
     const user = userEvent.setup();
     render(<App />);
 
-    await user.click(within(screen.getByRole('banner')).getByRole('link', { name: '투표방 만들기' }));
+    await user.click(within(screen.getByRole('region', { name: 'Featured 투표' })).getByRole('link', { name: '투표방 만들기' }));
 
     expect(screen.getByRole('heading', { name: '새 투표방 열기' })).toBeInTheDocument();
     expect(screen.getByText(/공식 제휴나 전달 보장을 암시하지 않도록/)).toBeInTheDocument();

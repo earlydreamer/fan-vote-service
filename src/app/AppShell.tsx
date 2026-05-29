@@ -1,5 +1,5 @@
 import { type MouseEvent, useEffect, useState } from 'react';
-import { Home, PlusCircle, UserRound } from 'lucide-react';
+import { Home, PlusCircle, Ticket, UserRound } from 'lucide-react';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
 import { NotFoundPage } from '../features/not-found/NotFoundPage';
@@ -8,10 +8,12 @@ import { ProfilePage } from '../features/profile/ProfilePage';
 import { ResultCardPage } from '../features/result-cards/ResultCardPage';
 import { RoomCreatePage } from '../features/rooms/RoomCreatePage';
 import { RoomDetailPage } from '../features/rooms/RoomDetailPage';
+import { demoReadRepository } from '../shared/api/demoReadRepository';
 import { type AppRoute, matchRoute, primaryNavItems } from './routes';
 
 export function AppShell() {
   const [route, setRoute] = useState<AppRoute>(() => matchRoute(window.location.pathname));
+  const profile = demoReadRepository.getProfile();
 
   useEffect(() => {
     const handlePopState = () => {
@@ -65,9 +67,15 @@ export function AppShell() {
           ))}
         </nav>
 
-        <a className="button button-primary header-cta" href="/rooms/new">
-          <PlusCircle size={18} aria-hidden="true" />
-          투표방 만들기
+        <a className="account-chip" href="/profile" aria-label="내 프로필">
+          <span className="account-chip__wallet">
+            <Ticket size={16} aria-hidden="true" />
+            <span>투표권 {profile.voteTickets}장</span>
+          </span>
+          <span className="account-chip__rp">{profile.totalRp.toLocaleString()} RP</span>
+          <span className="account-avatar" aria-hidden="true">
+            나
+          </span>
         </a>
       </header>
 
