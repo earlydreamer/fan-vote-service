@@ -38,6 +38,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 a {
@@ -91,6 +92,17 @@ select {
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   border-bottom: 1px solid var(--line-soft);
   backdrop-filter: blur(18px);
+}
+
+.app-header,
+.app-main,
+.dashboard-grid,
+.page-grid,
+.detail-grid,
+.side-rail,
+.content-panel,
+.room-card__body {
+  min-width: 0;
 }
 
 .brand-mark {
@@ -203,6 +215,13 @@ select {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 8px;
+}
+
+.dashboard-intro > *,
+.detail-hero > *,
+.room-card *,
+.content-panel * {
+  min-width: 0;
 }
 
 .dashboard-intro h1,
@@ -431,6 +450,7 @@ select {
 
 .progress-meter__row {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   align-items: center;
   justify-content: space-between;
@@ -442,6 +462,7 @@ select {
 .progress-meter__row strong {
   color: var(--ink);
   font-family: "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
+  white-space: nowrap;
 }
 
 .progress-meter__track {
@@ -716,14 +737,66 @@ select {
   }
 
   .app-main {
-    width: min(100% - 24px, 1280px);
-    padding-block-start: 16px;
+    width: min(360px, calc(100vw - 24px));
+    margin: 0 0 0 12px;
+    padding: 16px 0 48px;
   }
 
   .dashboard-intro,
   .detail-hero {
     grid-template-columns: 1fr;
     padding: 18px;
+  }
+
+  .content-panel {
+    padding: 16px;
+  }
+
+  .dashboard-intro h1,
+  .content-panel h1,
+  .detail-hero h1,
+  .result-card h1 {
+    font-size: 30px;
+  }
+
+  .room-card__body {
+    padding: 16px 14px;
+  }
+
+  .section-heading {
+    display: grid;
+    grid-template-columns: 1fr;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .app-frame,
+  .dashboard-page,
+  .dashboard-grid,
+  .dashboard-intro,
+  .content-panel,
+  .room-card {
+    max-inline-size: 100%;
+  }
+
+  .dashboard-intro p,
+  .room-card h3 a,
+  .room-card p,
+  .content-panel p {
+    overflow-wrap: anywhere;
+  }
+
+  .progress-meter__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .bottom-nav {
+    left: 16px;
+    right: auto;
+    width: min(358px, calc(100vw - 32px));
+    transform: none;
   }
 
   .stat-grid,
