@@ -56,9 +56,22 @@ function buildRoom(overrides: Partial<RallyRoom> = {}): RallyRoom {
     topic: '테스트 투표 주제',
     categoryId: 'cat-stage',
     primaryTargetId: 'target-test',
+    createdAt: '2026-05-29T00:00:00.000Z',
     status: 'active',
     visibility: 'public',
     endAt: '2026-05-31T14:59:00.000Z',
+    pollFormat: 'single',
+    tags: ['테스트'],
+    thumbnail: {
+      tone: 'stage',
+      label: 'TEST',
+      accent: '#00D084'
+    },
+    isFeatured: false,
+    addOptionCost: {
+      voteTickets: 1,
+      rp: 120
+    },
     goalValue: 100,
     currentGoalValue: 50,
     participantCount: 12,

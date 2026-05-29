@@ -8,6 +8,14 @@
     "fictionalNotice": true
   },
   {
+    "id": "target-comet-showcase",
+    "categoryId": "cat-stage",
+    "name": "코멧 쇼케이스",
+    "targetType": "fictional-work",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
     "id": "target-aurora-cast",
     "categoryId": "cat-story",
     "name": "오로라 캐스트",
@@ -24,10 +32,82 @@
     "fictionalNotice": true
   },
   {
+    "id": "target-byte-dungeon",
+    "categoryId": "cat-game",
+    "name": "바이트 던전",
+    "targetType": "fictional-work",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
     "id": "target-sunday-club",
     "categoryId": "cat-sports",
     "name": "선데이 클럽",
     "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-neon-cast",
+    "categoryId": "cat-character",
+    "name": "네온 시티 캐스트",
+    "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-meme-board",
+    "categoryId": "cat-meme",
+    "name": "커뮤니티 밈 보드",
+    "targetType": "topic",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-sidekick-crew",
+    "categoryId": "cat-anime",
+    "name": "사이드킥 크루",
+    "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-synth-city",
+    "categoryId": "cat-music",
+    "name": "신스 시티",
+    "targetType": "fictional-work",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-snack-table",
+    "categoryId": "cat-food",
+    "name": "스낵 테이블",
+    "targetType": "topic",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-concept-style",
+    "categoryId": "cat-fashion",
+    "name": "콘셉트 스타일",
+    "targetType": "topic",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-creator-lab",
+    "categoryId": "cat-creator",
+    "name": "크리에이터 랩",
+    "targetType": "fictional-team",
+    "isSelectable": true,
+    "fictionalNotice": true
+  },
+  {
+    "id": "target-free-board",
+    "categoryId": "cat-free",
+    "name": "자유 주제 보드",
+    "targetType": "topic",
     "isSelectable": true,
     "fictionalNotice": true
   }

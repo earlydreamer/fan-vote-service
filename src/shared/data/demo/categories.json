@@ -17,7 +17,7 @@
     "id": "cat-game",
     "name": "게임",
     "tone": "game",
-    "colorToken": "reward",
+    "colorToken": "game",
     "isActive": true
   },
   {
@@ -25,6 +25,62 @@
     "name": "스포츠",
     "tone": "sports",
     "colorToken": "energy",
+    "isActive": true
+  },
+  {
+    "id": "cat-character",
+    "name": "캐릭터",
+    "tone": "character",
+    "colorToken": "reward",
+    "isActive": true
+  },
+  {
+    "id": "cat-meme",
+    "name": "밈/장면",
+    "tone": "meme",
+    "colorToken": "live",
+    "isActive": true
+  },
+  {
+    "id": "cat-anime",
+    "name": "애니",
+    "tone": "anime",
+    "colorToken": "anime",
+    "isActive": true
+  },
+  {
+    "id": "cat-music",
+    "name": "음악",
+    "tone": "music",
+    "colorToken": "vote",
+    "isActive": true
+  },
+  {
+    "id": "cat-food",
+    "name": "푸드",
+    "tone": "food",
+    "colorToken": "food",
+    "isActive": true
+  },
+  {
+    "id": "cat-fashion",
+    "name": "스타일",
+    "tone": "fashion",
+    "colorToken": "fashion",
+    "isActive": true
+  },
+  {
+    "id": "cat-creator",
+    "name": "크리에이터",
+    "tone": "creator",
+    "colorToken": "creator",
+    "isActive": true
+  },
+  {
+    "id": "cat-free",
+    "name": "자유 주제",
+    "tone": "free",
+    "colorToken": "free",
     "isActive": true
   }
 ]

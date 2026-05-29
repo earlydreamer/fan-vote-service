@@ -1,4 +1,16 @@
-export type CategoryTone = 'stage' | 'story' | 'game' | 'sports';
+export type CategoryTone =
+  | 'stage'
+  | 'story'
+  | 'game'
+  | 'sports'
+  | 'character'
+  | 'meme'
+  | 'anime'
+  | 'music'
+  | 'food'
+  | 'fashion'
+  | 'creator'
+  | 'free';
 export type TargetType = 'fictional-person' | 'fictional-work' | 'fictional-team' | 'topic';
 export type RoomStatus = 'active' | 'closed' | 'result_published';
 export type RoomVisibility = 'public' | 'link_only';
@@ -6,6 +18,8 @@ export type CandidateStatus = 'approved' | 'pending' | 'hidden';
 export type MissionType = 'check_in' | 'share' | 'message' | 'vote';
 export type MessageType = 'cheer' | 'question';
 export type MessageStatus = 'visible' | 'hidden' | 'pending';
+export type PollFormat = 'single' | 'matchup' | 'bracket' | 'scene' | 'line' | 'quick' | 'multi_pick';
+export type DiscoverySort = 'popular' | 'endingSoon' | 'newest' | 'results';
 
 export interface Category {
   id: string;
@@ -30,6 +44,17 @@ export interface Candidate {
   title: string;
   status: CandidateStatus;
   voteCount: number;
+}
+
+export interface RoomThumbnail {
+  tone: CategoryTone;
+  label: string;
+  accent: string;
+}
+
+export interface OptionAddCost {
+  voteTickets: number;
+  rp: number;
 }
 
 export interface Mission {
@@ -64,9 +89,16 @@ export interface RallyRoom {
   topic: string;
   categoryId: string;
   primaryTargetId: string;
+  createdAt: string;
   status: RoomStatus;
   visibility: RoomVisibility;
   endAt: string;
+  pollFormat: PollFormat;
+  tags: string[];
+  thumbnail: RoomThumbnail;
+  isFeatured: boolean;
+  featuredLabel?: string;
+  addOptionCost: OptionAddCost;
   goalValue: number;
   currentGoalValue: number;
   participantCount: number;
@@ -80,6 +112,9 @@ export interface ProfileReadModel {
   totalRp: number;
   weeklyRp: number;
   streakDays: number;
+  voteTickets: number;
+  todayVotes: number;
+  followedCategoryIds: string[];
   earnedRewards: string[];
   joinedRoomIds: string[];
   createdRoomIds: string[];
@@ -112,8 +147,11 @@ export interface MissionSummary extends Mission {
 export interface DashboardReadModel {
   categories: Category[];
   targets: RallyTarget[];
+  allRooms: RallyRoom[];
   activeRooms: RallyRoom[];
   expiringRooms: RallyRoom[];
+  featuredRooms: RallyRoom[];
+  resultRooms: RallyRoom[];
   todayMissions: MissionSummary[];
   profile: ProfileReadModel;
   templates: Array<{

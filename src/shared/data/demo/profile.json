@@ -1,8 +1,18 @@
 {
   "totalRp": 2480,
-  "weeklyRp": 320,
+  "weeklyRp": 520,
   "streakDays": 5,
-  "earnedRewards": ["Spotlight Crew", "Story Maker", "Mission Starter"],
-  "joinedRoomIds": ["room-stage-opening", "room-aurora-ending", "room-pixel-season"],
-  "createdRoomIds": ["room-stage-opening"]
+  "voteTickets": 3,
+  "todayVotes": 8,
+  "followedCategoryIds": ["cat-stage", "cat-game", "cat-character", "cat-meme"],
+  "earnedRewards": ["Spotlight Crew", "Story Maker", "Mission Starter", "Meme Curator", "Neon Editor"],
+  "joinedRoomIds": [
+    "room-stage-opening",
+    "room-aurora-ending",
+    "room-pixel-season",
+    "room-neon-character",
+    "room-meme-line",
+    "room-byte-boss"
+  ],
+  "createdRoomIds": ["room-stage-opening", "room-open-topic"]
 }
