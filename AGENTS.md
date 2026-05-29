@@ -20,15 +20,15 @@
 
 ## 문서와 작업 기록
 
-모든 기획 변경, 작업 로그, 기능 스펙은 `.md/` 아래에 `.md` 파일로 남긴다.
+장기 기획, 아키텍처, 운영 정책은 `.md/` 아래에 `.md` 파일로 남긴다. 전체 작업 목록과 feature 진행 상태의 source of truth는 GitHub Issues와 Pull Requests다.
 
-- 기능/작업 단위 기록은 `.md/features/` 아래에 둔다.
+- 기능/작업 단위의 영구 기록은 GitHub issue, PR 본문, PR 코멘트, review thread에 남긴다.
+- 브랜치 작업 중 임시 체크리스트가 필요하면 `.md/local/` 아래에 로컬 `.md` 파일로 둔다. `.md/local/`은 gitignore 대상이며 커밋하지 않는다.
 - 최신 운영 절차는 [.md/rallyroom_delivery_workflow_20260529.md](.md/rallyroom_delivery_workflow_20260529.md) 를 따른다.
 - GitHub issue, draft PR, review, merge 절차는 [.md/rallyroom_github_review_workflow_20260529.md](.md/rallyroom_github_review_workflow_20260529.md) 를 따른다.
 - 기술 스택과 디렉터리 구조는 [.md/rallyroom_tech_stack_and_directory_structure_20260529.md](.md/rallyroom_tech_stack_and_directory_structure_20260529.md) 에 명시하고, 구조나 의존성이 바뀔 때마다 갱신한다.
 - 구현 순서와 범위는 [.md/rallyroom_implementation_sequence_and_scope_20260529.md](.md/rallyroom_implementation_sequence_and_scope_20260529.md) 를 따른다.
 - TDD 스펙 분해 기준은 [.md/rallyroom_tdd_feature_slicing_20260529.md](.md/rallyroom_tdd_feature_slicing_20260529.md) 를 따른다.
-- 초기 세팅 작업 로그는 [.md/features/foundation_project_setup_20260529.md](.md/features/foundation_project_setup_20260529.md) 를 확인한다.
 
 ## 개발 방식
 
@@ -51,12 +51,12 @@
 - 빈 remote에 올리는 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 기능/수정/문서 변경은 feature branch에서 진행한다.
 - 작업 단위: issue 생성, feature branch, draft pull request, 테스트, ready for review, review, 피드백 반영, merge
 - GitHub 작업은 가능한 한 GitHub MCP를 우선 사용한다. 로컬 커밋과 push는 local `git`을 사용하고, issue/PR/comment/review/merge는 GitHub MCP를 우선한다.
-- 각 feature는 `.md/features/` 안에 독립 작업 상태 파일을 가진다. 예정, 진행 중, 완료, 보류, 커밋 장부, PR/리뷰 상태를 그 파일에서 추적한다.
+- 각 feature의 예정, 진행 중, 완료, 보류, 리뷰 상태는 GitHub issue와 PR에서 추적한다. tracked 진행도 파일을 만들지 않는다.
 - feature 브랜치 안에서는 의미 단위 커밋을 잘게 쌓는다. 최종 merge 전까지 rebase나 squash로 커밋을 합치지 않는다.
 - PR은 초기에 draft로 열고, 커밋이 쌓일 때마다 설명과 작업 상태를 갱신한다.
 - feature 완성 판단 후 draft를 ready for review로 전환하고 GitHub PR에서 수동 코드리뷰를 요청한다.
 - 코드리뷰 요청 기본 대상은 `codex`다. `AGENTS.md`의 "코드리뷰 공급자 우선순위"에서 기본값을 `coderabbit`으로 바꿀 수 있다.
-- GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인하고, 적용/보류 판단과 근거를 PR 코멘트와 feature 작업 상태 파일에 남긴다.
+- GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인하고, 적용/보류 판단과 근거를 PR 코멘트 또는 follow-up issue에 남긴다.
 - 의존성 없는 기능은 subagent 병렬 개발을 허용한다.
 - merge 전에는 충돌, 테스트, 빌드 상태를 확인한다.
 
@@ -82,7 +82,7 @@ GitHub MCP로 PR 코멘트에 위 명령을 남겨 리뷰를 요청한다. GitHu
 - GitHub Codex 요청이 명시적으로 실패한 경우
 - 사용자가 응답 대기 중단과 로컬 fallback 사용을 명시적으로 승인한 경우
 
-로컬 fallback을 사용한 경우에도 사유, 대기 시간, 판단 근거를 PR 코멘트와 feature 작업 파일에 남긴다. GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰를 중복 실행하지 않는다.
+로컬 fallback을 사용한 경우에도 사유, 대기 시간, 판단 근거를 PR 코멘트 또는 follow-up issue에 남긴다. GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰를 중복 실행하지 않는다.
 
 ## 환경 변수와 시크릿
 
@@ -104,4 +104,4 @@ gstack, superpowers 계열 스킬을 적극적으로 사용한다.
 
 스킬이 적용될 가능성이 있으면 먼저 관련 스킬 지침을 확인하고 따른다.
 
-React/TSX 구현 또는 구조 변경이 있는 feature는 merge 요청 전에 `vercel:react-best-practices` 기준으로 컴포넌트 구조, hooks, 상태 위치, 접근성, 성능, TypeScript 패턴을 점검하고 결과를 feature 작업 파일과 PR에 기록한다.
+React/TSX 구현 또는 구조 변경이 있는 feature는 merge 요청 전에 `vercel:react-best-practices` 기준으로 컴포넌트 구조, hooks, 상태 위치, 접근성, 성능, TypeScript 패턴을 점검하고 결과를 PR 또는 GitHub issue에 기록한다.

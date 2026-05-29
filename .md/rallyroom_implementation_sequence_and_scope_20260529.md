@@ -20,7 +20,8 @@
 - 핵심 mutation은 command API 경계로만 표현한다.
 - MVP라도 클라이언트 직접 Supabase insert/update 구조를 만들지 않는다.
 - UI 구현은 React Best Practice 점검을 거친다.
-- 모든 기능은 feature 단위로 쪼개고, 각 feature마다 상태 파일과 커밋 장부를 둔다.
+- 모든 기능은 feature 단위로 쪼개고, GitHub issue와 PR에서 상태와 완료 기준을 관리한다.
+- 브랜치 내부 임시 메모가 필요하면 `.md/local/`에 untracked 파일로 둔다.
 - 각 단계는 작은 의미 단위 커밋을 누적한다. rebase/squash하지 않는다.
 
 ## Phase 0. Foundation
@@ -568,7 +569,7 @@
 주요 파일 후보:
 
 - `.md/rallyroom_submission_prompts_20260529.md`
-- `.md/features/submission_ready_<date>.md`
+- GitHub issue 또는 PR comment
 - `README.md`
 - UI polish 대상 파일
 
