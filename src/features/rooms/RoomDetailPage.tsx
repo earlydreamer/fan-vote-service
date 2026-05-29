@@ -3,6 +3,8 @@ import { MessageSquareText, PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { getVoteTitle } from '../../shared/domain/roomDisplay';
 import type { RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
+import { MissionList } from '../missions/MissionList';
+import type { CompleteMissionCommand } from '../missions/useCompleteMission';
 import { NotFoundPage } from '../not-found/NotFoundPage';
 import { VotePanel } from '../voting/VotePanel';
 import type { CastVoteCommand } from '../voting/useCastVote';
@@ -27,6 +29,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const category = demoReadRepository.getCategory(room.categoryId);
   const voteTitle = getVoteTitle(room);
   const castVoteCommand = createDemoCastVoteCommand(room);
+  const completeMissionCommand = createDemoCompleteMissionCommand(room);
   const isVotingOpen = room.status === 'active';
   const voteClosedReason = isVotingOpen ? undefined : getVoteClosedReason(room.status);
   const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
@@ -123,18 +126,12 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           )}
         </section>
 
-        <section className="content-panel mission-panel" aria-labelledby="mission-panel-title">
-          <h2 id="mission-panel-title">참여 미션</h2>
-          <div className="mission-card-grid">
-            {room.missions.map((mission) => (
-              <article key={mission.id} className="mission-card">
-                <span className="chip chip-mission">+{mission.rewardRp} RP</span>
-                <h3>{mission.title}</h3>
-                <p>Energy +{mission.rewardEnergy}</p>
-              </article>
-            ))}
-          </div>
-        </section>
+        <MissionList
+          key={`${room.id}-missions`}
+          roomId={room.id}
+          missions={room.missions}
+          completeMissionCommand={completeMissionCommand}
+        />
 
         <section className="content-panel fan-wall" aria-labelledby="fan-wall-title">
           <div className="collection-heading compact">
@@ -170,6 +167,22 @@ function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
         })),
         currentGoalValue: Math.min(room.currentGoalValue + candidateIds.length, room.goalValue),
         participantCount: room.participantCount + 1
+      }
+    };
+  };
+}
+
+function createDemoCompleteMissionCommand(room: RallyRoom): CompleteMissionCommand {
+  return async ({ missionId }) => {
+    const mission = room.missions.find((item) => item.id === missionId);
+
+    return {
+      ok: true,
+      data: {
+        missionId,
+        awardedRp: mission?.rewardRp ?? 0,
+        awardedEnergy: mission?.rewardEnergy ?? 0,
+        earnedRewards: mission ? [`${mission.title} 배지`] : []
       }
     };
   };

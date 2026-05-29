@@ -112,7 +112,10 @@ D:\Projects\vibex
 │  │  ├─ messages/
 │  │  │  └─ postRoomMessageApi.ts
 │  │  ├─ missions/
-│  │  │  └─ completeMissionApi.ts
+│  │  │  ├─ completeMissionApi.ts
+│  │  │  ├─ MissionList.test.tsx
+│  │  │  ├─ MissionList.tsx
+│  │  │  └─ useCompleteMission.ts
 │  │  ├─ not-found/
 │  │  │  └─ NotFoundPage.tsx
 │  │  ├─ pricing/
@@ -129,7 +132,12 @@ D:\Projects\vibex
 │  │  │  ├─ RoomCreatePage.tsx
 │  │  │  └─ RoomDetailPage.tsx
 │  │  └─ voting/
-│  │     └─ castVoteApi.ts
+│  │     ├─ castVoteApi.ts
+│  │     ├─ useCastVote.ts
+│  │     ├─ VotePanel.test.tsx
+│  │     ├─ VotePanel.tsx
+│  │     ├─ voteResultMapper.test.ts
+│  │     └─ voteResultMapper.ts
 │  ├─ shared/
 │  │  ├─ api/
 │  │  │  ├─ commandApiWrappers.test.ts
@@ -229,3 +237,11 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/voting/voteResultMapper.ts`: command 응답 DTO 기반 후보 득표 수, Vote Energy, 참여자 수 갱신
 - `src/features/voting/VotePanel.test.tsx`: 투표 UI와 command input 계약 테스트
 - `src/features/voting/voteResultMapper.test.ts`: 응답 DTO 기반 read state 갱신 테스트
+
+## 2026-05-30 Phase 6 Mission UX 추가 파일
+
+`features/missions` 아래에 방 상세 미션 완료 UX를 위한 UI와 hook을 추가했다.
+
+- `src/features/missions/MissionList.tsx`: 미션 카드, 텍스트 미션 입력, 완료 버튼, 보상 receipt UI
+- `src/features/missions/useCompleteMission.ts`: `completeMission` command 호출 상태와 보상 응답 표시 상태 관리
+- `src/features/missions/MissionList.test.tsx`: 미션 완료 command input 계약, 텍스트 검증, 완료 상태 테스트
