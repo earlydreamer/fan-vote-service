@@ -648,4 +648,3 @@ feature/<issue-number>-app-shell-routing
 - TDD 기록
 - React Best Practice 점검 기록
 - draft PR에서 `@codex review` 요청 전까지 누적 커밋 유지
-

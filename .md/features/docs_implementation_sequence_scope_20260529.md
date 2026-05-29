@@ -5,8 +5,8 @@
 
 ## 상태
 
-- 상태: ready_for_review
-- 현재 진행 중: draft PR 리뷰 대기
+- 상태: reviewed_ready_to_merge
+- 현재 진행 중: PR ready 전환 및 리뷰 기록 완료, merge 전 최종 검증 대기
 - GitHub issue: https://github.com/earlydreamer/fan-vote-service/issues/2
 - GitHub PR: https://github.com/earlydreamer/fan-vote-service/pull/3
 - Branch: `feature/2-implementation-sequence-scope`
@@ -48,8 +48,11 @@ RallyRoom의 최신 기획, TDD feature slicing, Supabase 보안 아키텍처는
 - [x] 의미 단위 커밋
 - [x] 원격 push
 - [x] draft PR 생성
-- [ ] 필요 시 PR 리뷰 요청
-- [ ] 리뷰 후 draft 해제 및 merge
+- [x] PR ready for review 전환
+- [x] PR 리뷰 요청
+- [x] 로컬 Codex 리뷰 수행
+- [x] 리뷰 판단 근거 PR 코멘트 기록
+- [ ] merge
 
 ## 진행 중 작업
 
@@ -57,6 +60,10 @@ RallyRoom의 최신 기획, TDD feature slicing, Supabase 보안 아키텍처는
 - [x] 구현 순서 초안 작성
 - [x] 검증 결과 반영
 - [x] draft PR 생성
+- [x] PR ready for review 전환
+- [x] `@codex review` 요청
+- [x] 로컬 Codex 리뷰 수행
+- [x] `git diff --check` 지적 사항 수정
 
 ## 완료 작업
 
@@ -71,9 +78,9 @@ RallyRoom의 최신 기획, TDD feature slicing, Supabase 보안 아키텍처는
 
 ## 보류 작업
 
-- [ ] `@codex review` 요청
-- [ ] 리뷰 의견 적용 여부 판단 및 PR 코멘트 기록
-- [ ] draft 해제
+- [x] `@codex review` 요청
+- [x] 리뷰 의견 적용 여부 판단 및 PR 코멘트 기록
+- [x] draft 해제
 - [ ] merge
 
 ## 커밋 장부
@@ -82,12 +89,15 @@ RallyRoom의 최신 기획, TDD feature slicing, Supabase 보안 아키텍처는
 |---|---|---|---|
 | `0106f74` | 구현 순서와 범위 문서화 | `npm test`, `npm run build` | Phase 0-13, MVP 컷라인, AGENTS/README 참조 |
 | `25c6161` | feature 상태 문서 갱신 | `npm test`, `npm run build` | PR URL과 검증 결과 반영 |
+| `cdd42b5` | feature 커밋 장부 보정 | `npm test`, `npm run build` | 실제 커밋 해시 반영 |
+| 후속 커밋 | 리뷰 전 품질 보정과 리뷰 로그 갱신 | `git diff --check`, `npm test`, `npm run build` | EOF 빈 줄 수정, PR 절차 기록 |
 
 ## 리뷰 장부
 
 | Provider | 요청 방식 | 결과 | 적용/보류 판단 | 근거 |
 |---|---|---|---|---|
-| codex | draft PR 코멘트 `@codex review` | 대기 | 대기 | 문서 PR 생성 후 요청 예정 |
+| codex | PR 코멘트 `@codex review` | 요청 완료 | 자동 응답 대기 | https://github.com/earlydreamer/fan-vote-service/pull/3#issuecomment-4574088536 |
+| local codex | 로컬 diff/문서 검토 | 중요 결함 없음, EOF 빈 줄 1건 수정 필요 | 수정 적용 | `git diff --check` 결과와 문서 범위 검토 기준 |
 
 ## React Best Practice 점검
 
