@@ -71,6 +71,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
 
       <div className="detail-content-grid">
         <VotePanel
+          key={room.id}
           roomId={room.id}
           candidates={room.candidates}
           currentGoalValue={room.currentGoalValue}

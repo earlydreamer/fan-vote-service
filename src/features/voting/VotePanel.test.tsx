@@ -66,9 +66,12 @@ describe('VotePanel', () => {
       roomId: 'room-1',
       candidateIds: ['candidate-1']
     });
-    expect(JSON.stringify(castVoteCommand.mock.calls[0]?.[0])).not.toContain('voteCount');
-    expect(JSON.stringify(castVoteCommand.mock.calls[0]?.[0])).not.toContain('currentGoalValue');
-    expect(JSON.stringify(castVoteCommand.mock.calls[0]?.[0])).not.toContain('participantCount');
+    const submittedInputs = castVoteCommand.mock.calls as unknown as Array<[CastVoteInput]>;
+    const submittedInput = submittedInputs[0]?.[0];
+
+    expect(JSON.stringify(submittedInput)).not.toContain('voteCount');
+    expect(JSON.stringify(submittedInput)).not.toContain('currentGoalValue');
+    expect(JSON.stringify(submittedInput)).not.toContain('participantCount');
   });
 
   it('updates counts and the energy gauge from a successful command response', async () => {
