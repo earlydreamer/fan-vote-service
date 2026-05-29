@@ -9,7 +9,7 @@ export interface CreateRoomFormInput {
   pollFormat: PollFormat;
   endAt: string;
   rewardIcon: string;
-  candidates: string[];
+  candidates: readonly string[];
   addOptionCost: OptionAddCost;
 }
 
@@ -112,7 +112,7 @@ function validateCreateRoomInput(input: CreateRoomFormInput, candidateTitles: st
   return [...new Set(errors)];
 }
 
-function normalizeCandidateTitles(candidates: string[]): string[] {
+function normalizeCandidateTitles(candidates: readonly string[]): string[] {
   const seen = new Set<string>();
 
   return candidates
