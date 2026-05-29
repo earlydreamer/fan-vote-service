@@ -18,6 +18,7 @@
 - repository workflow 또는 최상위 테스트 디렉터리 추가/변경
 - feature 소유권이나 책임 경계 변경
 - alias, routing, state management, server-state 전략 변경
+- `DESIGN.md` 디자인 토큰, 컴포넌트 규칙, 페이지 구조 원칙 변경
 
 ## 현재 기술 스택
 
@@ -28,6 +29,7 @@
 - Vite
 - CSS, 현재는 전역 `src/styles.css`만 사용
 - lucide-react, 아이콘 필요 시 사용
+- 디자인 시스템: 루트 `DESIGN.md`
 
 ### Test
 
@@ -69,6 +71,16 @@ Postgres RPC / transaction functions
 
 프론트엔드는 `vote_count`, `current_goal_value`, `reward_rp`, `reward_energy`, `total_rp`, `winner_candidate_id` 같은 신뢰 필드를 직접 쓰지 않는다.
 
+## 디자인 시스템 원칙
+
+루트 `DESIGN.md`는 RallyRoom UI의 시각 source of truth다. UI 구현 전 반드시 읽는다.
+
+- 방향: `Fan Ops Board`, 팬이 직접 여는 응원방 운영 대시보드
+- 첫 화면: 랜딩 히어로가 아니라 홈/탐색 대시보드
+- 주요 시각 객체: 응원방 카드, Room Energy 게이지, 미션 카드, RP/아이콘 칩, 결과 카드
+- 금지: 실존 스타/작품 이미지, 공식성 오인 문구, 베이지 SaaS 히어로, 보라/파랑 그라디언트 중심 디자인, `Inter` primary font
+- 목데이터: 이후 Supabase read model로 교체 가능한 JSON/typed fixture 구조 우선
+
 ## 현재 디렉터리 구조
 
 ```text
@@ -99,6 +111,7 @@ D:\Projects\vibex
 ├─ .env.example
 ├─ .gitignore
 ├─ AGENTS.md
+├─ DESIGN.md
 ├─ README.md
 ├─ index.html
 ├─ package-lock.json
@@ -117,15 +130,19 @@ D:\Projects\vibex
 src/
 ├─ app/                  # 앱 셸, providers, routing
 ├─ features/             # feature 단위 UI와 도메인 로직
+│  ├─ home/
 │  ├─ rooms/
 │  ├─ voting/
 │  ├─ missions/
 │  ├─ messages/
 │  ├─ result-cards/
-│  └─ crew-dashboard/
+│  ├─ profile/
+│  ├─ pricing/
+│  └─ crew/
 ├─ shared/
 │  ├─ api/               # command client, query client
 │  ├─ config/            # env parsing
+│  ├─ data/demo/         # 구조화된 mock read model JSON
 │  ├─ types/             # 공유 타입
 │  └─ ui/                # 재사용 UI 컴포넌트
 └─ test/                 # 테스트 setup, fixture, helper

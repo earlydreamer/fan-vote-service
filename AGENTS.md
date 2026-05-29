@@ -9,6 +9,7 @@
 ## 최신 기획 기준
 
 최신 기획서는 [.md/rallyroom_v2_backend_architecture_20260529.md](.md/rallyroom_v2_backend_architecture_20260529.md) 이다.
+UI와 시각 설계의 최우선 기준은 [DESIGN.md](DESIGN.md) 이다. React/TSX, CSS, 화면 문구, 페이지 구조, 목데이터 표시를 바꾸기 전에는 반드시 `DESIGN.md`를 먼저 읽고 적용한다.
 
 핵심 방향:
 
@@ -46,6 +47,17 @@
 5. 리팩터링 후 전체 검증한다.
 
 기능 구현 코드를 테스트 없이 먼저 작성하지 않는다. 설정 파일, 문서, 스캐폴딩은 예외일 수 있지만, 사용자 동작이나 도메인 로직은 반드시 테스트 우선이다.
+
+## 디자인 시스템
+
+`DESIGN.md`는 RallyRoom UI의 source of truth다.
+
+- 첫 화면은 랜딩 페이지가 아니라 앱 대시보드로 설계한다.
+- `Fan Ops Board` 방향을 따른다. 팬 커뮤니티의 즐거움은 방 카드, 미션, RP, 게이지, 결과 카드로 표현하고, 공식 아이돌 앱처럼 보이게 만들지 않는다.
+- `Inter`, 베이지 SaaS 히어로, 보라/파랑 그라디언트, 실존 스타/작품 이미지, 공식성 오인 문구는 기본 금지다.
+- `응원방 만들기`는 모든 주요 화면에서 가장 강한 primary command로 유지한다.
+- 목데이터는 컴포넌트 내부 하드코딩 배열이 아니라, 이후 Supabase read model로 교체 가능한 구조화된 fixture/schema를 우선한다.
+- React/TSX 구현 또는 CSS 변경이 있는 feature는 `DESIGN.md` 준수 여부와 `vercel:react-best-practices` 점검 결과를 PR에 기록한다.
 
 ## 브랜치, 이슈, PR
 
