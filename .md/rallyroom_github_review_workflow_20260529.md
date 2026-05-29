@@ -50,7 +50,7 @@
 
 ## 코드리뷰 요청
 
-feature 완성 판단 후, draft를 풀기 전에 코드리뷰를 요청한다.
+feature 완성 판단 후, 먼저 검증을 통과시킨 뒤 draft PR을 ready for review 상태로 바꾸고 코드리뷰를 요청한다.
 
 기본 공급자:
 
@@ -66,41 +66,69 @@ feature 완성 판단 후, draft를 풀기 전에 코드리뷰를 요청한다.
 
 - GitHub MCP의 PR comment 기능으로 위 명령을 남긴다.
 - `AGENTS.md`에서 우선순위를 바꾸면 해당 공급자를 먼저 호출한다.
-- 저장소에 봇이 연결되어 있지 않거나 응답이 없으면 로컬 Codex 리뷰를 수행하고, 리뷰 결과를 PR 코멘트로 남긴다.
+- GitHub Codex 리뷰가 기본 차단 리뷰다.
+- `@codex review`를 요청한 뒤에는 GitHub PR comment/review timeline에서 응답을 확인할 때까지 기다린다.
+- CodeRabbit의 release notes 또는 "review in progress" 코멘트는 리뷰 완료로 보지 않는다.
+- 로컬 Codex 리뷰는 GitHub Codex 리뷰를 대체하지 않는다.
+
+로컬 fallback 허용 조건:
+
+- GitHub Codex 봇이 저장소에 연결되어 있지 않음이 확인된다.
+- GitHub Codex 요청이 실패했다는 명시 응답이 있다.
+- 사용자가 응답 대기 중단과 로컬 fallback 사용을 명시적으로 승인한다.
+
+fallback 기록:
+
+- fallback을 사용한 이유
+- GitHub 리뷰를 얼마나 기다렸는지
+- 어떤 공급자 응답을 확인했는지
+- fallback 결과를 merge gate로 인정할지에 대한 사용자 승인 또는 판단 근거
+
+금지:
+
+- GitHub Codex 리뷰가 진행 중인데 로컬 Codex 리뷰를 중복 실행하는 것
+- GitHub Codex 응답 확인 없이 로컬 Codex 리뷰만으로 merge하는 것
+- CodeRabbit 진행 중 코멘트를 리뷰 완료로 처리하는 것
 
 ## 리뷰 반영 절차
 
 1. GitHub MCP로 PR comment/review timeline을 가져온다.
-2. 리뷰 항목을 `critical`, `important`, `minor`, `question`, `won't fix`로 분류한다.
-3. `critical`과 `important`는 기본적으로 수정한다.
-4. 적용하지 않는 항목은 근거를 남긴다.
-5. 수정이 필요하면 별도 의미 단위 커밋으로 반영한다.
-6. feature 파일의 리뷰 장부에 적용/보류 판단을 기록한다.
-7. PR 코멘트 또는 review reply로 판단 근거를 남긴다.
+2. 요청한 GitHub 리뷰 공급자의 응답이 실제로 도착했는지 확인한다.
+3. 리뷰 항목을 `critical`, `important`, `minor`, `question`, `won't fix`로 분류한다.
+4. `critical`과 `important`는 기본적으로 수정한다.
+5. 적용하지 않는 항목은 근거를 남긴다.
+6. 수정이 필요하면 별도 의미 단위 커밋으로 반영한다.
+7. feature 파일의 리뷰 장부에 적용/보류 판단을 기록한다.
+8. PR 코멘트 또는 review reply로 판단 근거를 남긴다.
+9. 리뷰 반영 커밋을 push한 뒤 필요한 경우 같은 공급자에게 재리뷰를 요청한다.
 
-## draft 해제와 merge
+## ready for review와 merge
 
 다음 조건을 모두 만족해야 draft를 푼다.
 
 - `npm test` 통과
 - `npm run build` 통과
 - feature 파일의 완료 작업과 커밋 장부 최신화
-- 코드리뷰 요청 완료
-- 리뷰 반영/보류 판단 완료
-- 보류한 리뷰가 있다면 PR 코멘트에 근거 작성
 - conflict 없음
 
-조건 충족 후:
+draft 해제 후:
 
 1. GitHub MCP로 draft PR을 ready for review 상태로 바꾼다.
-2. 최종 merge 전에 head SHA를 확인한다.
-3. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
+2. GitHub MCP로 PR 코멘트에 `@codex review`를 남긴다.
+3. GitHub Codex 리뷰 응답을 기다린다.
+4. 리뷰 내용을 적용하거나 보류 판단을 기록한다.
+5. 보류한 리뷰가 있다면 PR 코멘트에 근거를 작성한다.
+6. 최종 검증을 다시 수행한다.
+7. 최종 merge 전에 head SHA를 확인한다.
+8. GitHub MCP merge 기능으로 `merge_method: merge`를 사용해 merge한다.
 
 ## 금지
 
 - feature branch에서 rebase로 커밋 재작성
 - squash commit으로 의미 단위 이력 제거
 - 리뷰 요청 없이 draft 해제
+- GitHub Codex 리뷰 응답 확인 없이 merge
+- GitHub Codex 리뷰 진행 중 로컬 Codex 리뷰 중복 실행
 - 리뷰 근거 없이 의견 무시
 - `.env` 커밋
 - service role key 프론트 노출

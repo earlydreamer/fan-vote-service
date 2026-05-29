@@ -54,9 +54,9 @@
 - 각 feature는 `.md/features/` 안에 독립 작업 상태 파일을 가진다. 예정, 진행 중, 완료, 보류, 커밋 장부, PR/리뷰 상태를 그 파일에서 추적한다.
 - feature 브랜치 안에서는 의미 단위 커밋을 잘게 쌓는다. 최종 merge 전까지 rebase나 squash로 커밋을 합치지 않는다.
 - PR은 초기에 draft로 열고, 커밋이 쌓일 때마다 설명과 작업 상태를 갱신한다.
-- feature 완성 판단 후 draft를 풀기 전에 수동 코드리뷰를 요청한다.
+- feature 완성 판단 후 draft를 ready for review로 전환하고 GitHub PR에서 수동 코드리뷰를 요청한다.
 - 코드리뷰 요청 기본 대상은 `codex`다. `AGENTS.md`의 "코드리뷰 공급자 우선순위"에서 기본값을 `coderabbit`으로 바꿀 수 있다.
-- 리뷰를 받은 뒤 적용/보류 판단과 근거를 PR 코멘트와 feature 작업 상태 파일에 남긴다.
+- GitHub Codex 리뷰를 요청했다면 응답을 기다린 뒤 피드백을 확인하고, 적용/보류 판단과 근거를 PR 코멘트와 feature 작업 상태 파일에 남긴다.
 - 의존성 없는 기능은 subagent 병렬 개발을 허용한다.
 - merge 전에는 충돌, 테스트, 빌드 상태를 확인한다.
 
@@ -74,7 +74,15 @@
 - Codex: `@codex review`
 - CodeRabbit: `@coderabbitai review`
 
-GitHub MCP로 PR 코멘트에 위 명령을 남겨 리뷰를 요청한다. 저장소에 해당 봇이 연결되어 있지 않거나 응답이 없으면, 로컬 Codex 리뷰를 수행하고 그 결과를 PR 코멘트로 남긴다.
+GitHub MCP로 PR 코멘트에 위 명령을 남겨 리뷰를 요청한다. GitHub Codex 리뷰가 기본 차단 리뷰이며, 로컬 Codex 리뷰는 GitHub 리뷰를 대체하지 않는다.
+
+로컬 Codex 리뷰는 다음 예외 상황에서만 보조 수단으로 사용한다.
+
+- GitHub Codex 봇이 저장소에 연결되어 있지 않음이 확인된 경우
+- GitHub Codex 요청이 명시적으로 실패한 경우
+- 사용자가 응답 대기 중단과 로컬 fallback 사용을 명시적으로 승인한 경우
+
+로컬 fallback을 사용한 경우에도 사유, 대기 시간, 판단 근거를 PR 코멘트와 feature 작업 파일에 남긴다. GitHub Codex 리뷰가 진행 중이면 로컬 Codex 리뷰를 중복 실행하지 않는다.
 
 ## 환경 변수와 시크릿
 
