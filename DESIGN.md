@@ -1,34 +1,41 @@
 ---
 version: alpha
 name: RallyRoom-design-system
-description: "Fan Vote Board for a fan-created popularity poll app. The interface should feel like a trendy mobile-first social voting product where users open vote rooms, compare candidates, track rankings, complete light missions, and publish result cards. The temporary service name and old 'cheer room' wording must not drive the design."
+description: "Fan Vote Discovery design brief for a fan-created popularity poll service. This document defines product ingredients, visual tone, content requirements, and interaction principles. It intentionally avoids prescribing a fixed home layout so implementers can compose more creative discovery screens."
+references:
+  structural:
+    - "Korean live/content platforms such as CHZZK and SOOP: content discovery, Featured treatment, category browsing, visual cards, compact status metadata"
+  caution:
+    - "Use references for product feel and information density only. Do not copy logos, brand colors, celebrity imagery, streamer imagery, real broadcasts, or official partnership signals."
 colors:
-  ink: "#111827"
+  ink: "#101318"
   ink-muted: "#4B5563"
   ink-soft: "#6B7280"
-  canvas: "#F5F7FB"
+  canvas: "#F4F6F8"
   surface: "#FFFFFF"
-  surface-glass: "rgba(255, 255, 255, 0.78)"
+  surface-raised: "#F9FAFB"
   surface-tint: "#EEF6FF"
-  panel-dark: "#111827"
-  panel-dark-2: "#1F2937"
-  line: "#DCE3EE"
-  line-soft: "#E8EEF7"
-  primary: "#E11D48"
-  primary-pressed: "#BE123C"
-  primary-soft: "#FFE4EA"
-  focus: "#2563EB"
+  stage: "#111418"
+  stage-soft: "#1A1F27"
+  stage-line: "#2A313C"
+  line: "#DDE3EA"
+  line-soft: "#E8EEF4"
+  primary: "#00D084"
+  primary-pressed: "#00B574"
+  primary-soft: "#DFFBF0"
   vote: "#2563EB"
   vote-soft: "#DBEAFE"
+  live: "#F43F5E"
+  live-soft: "#FFE4EA"
   energy: "#F59E0B"
   energy-soft: "#FEF3C7"
   mission: "#10B981"
   mission-soft: "#D1FAE5"
   reward: "#7C3AED"
   reward-soft: "#EDE9FE"
+  focus: "#2563EB"
   danger: "#DC2626"
   success: "#128A63"
-  warning: "#B77900"
 typography:
   display: "SUIT Variable, SUIT, IBM Plex Sans KR, Noto Sans KR, system-ui, sans-serif"
   body: "SUIT Variable, SUIT, IBM Plex Sans KR, Noto Sans KR, system-ui, sans-serif"
@@ -41,227 +48,508 @@ spacing:
   lg: 16px
   xl: 24px
   xxl: 32px
-  section: 48px
 radii:
   xs: 3px
   sm: 5px
   md: 8px
-  full: 999px
+  pill: 999px
 ---
 
 # RallyRoom Design System
 
-## Product Context
+## Product Frame
 
-RallyRoom is a temporary product name. The product behavior is more important than the name.
+RallyRoom is a temporary name. The interface must be designed around the product behavior: fans create and browse popularity polls, vote on candidates, follow ranking changes, collect lightweight rewards, and share result cards.
 
-The MVP is a fan-created popularity poll service. Users create small vote rooms around fictional or curated targets, choose candidates, watch rankings move, complete light participation missions, leave fan-wall messages, and publish result cards after voting closes.
+The home experience is a **content discovery surface**, not a dashboard. Each vote room should feel like browsable content:
 
-The first usable screen must feel like an app, not a landing page. It should show active vote rooms, ranking signals, expiring polls, user RP, missions, and the command to create a new vote room.
+- it has a visual identity or thumbnail
+- it belongs to a category
+- it has a status such as live, ending soon, new, hot, or result published
+- it exposes popularity metadata
+- it offers one clear next action: vote, open, follow, create, or view result
+
+## Reference Interpretation
+
+Use Korean live/content platforms such as CHZZK and SOOP as inspiration for product feel:
+
+- strong Featured moments
+- category-first browsing
+- visual card density
+- compact live/status metadata
+- a sense that many items are available and changing
+- profile or account state that does not dominate the browsing surface
+
+Do not copy:
+
+- real streamer or celebrity photos
+- real broadcast screenshots
+- official platform branding
+- brand colors as-is
+- ad clutter
+- fixed sidebar structures
+- literal video-player UI when a poll-specific interaction is better
 
 ## Design Direction
 
-**Direction:** Fan Vote Board.
+**Direction:** Fan Vote Discovery.
 
-Use `ui-ux-pro-max` as a starting point, but do not blindly follow the generic `Vibrant & Block-based` recommendation. That direction became too poster-like and too harsh for this product.
+Skill-backed references:
 
-Selected blend:
-
-- `Bento Grids` for modular, content-first vote cards and side panels.
-- `Soft glass` for the app shell, sticky navigation, and lightweight mobile-product polish.
-- `Micro-interactions` for card hover, press feedback, and clear ranking changes.
-- Korean-readable typography over decorative display fonts.
+- `Video Streaming/OTT` for entertainment discovery and visual Featured treatment.
+- `Social Media App` for recurring participation, trends, and lightweight community loops.
+- `Portfolio/Grid discovery` for visual-first browsing and filtering.
+- `Micro-interactions` for active filters, hover/press states, rank movement, and vote selection.
 
 The product should feel like:
 
-- a trendy social voting app
-- a mobile-first feed of fan-made popularity polls
-- a ranking board that is easy to scan
-- a lightweight recurring product where users return to vote, check rank changes, collect RP, and share result cards
+- a fan poll platform with strong Featured content
+- a category browser for poll rooms
+- a place where new vote rooms keep appearing
+- a ranking/voting loop worth revisiting
+- a lightweight entertainment product
 
 The product should not feel like:
 
-- a stadium, rally, campaign, or protest theme derived from the name
-- an official idol or agency app
-- a generic SaaS admin dashboard
-- a one-off landing page
-- a hard-border neo-brutalist board
-- a purple-gradient AI dashboard
-- a celebrity gallery or stock-photo fandom page
+- a SaaS analytics dashboard
+- a fixed two-column admin layout
+- a form-first CRUD app
+- a generic landing page
+- a small list of sample rooms
+- a campaign operations board
 
-## Color Palette And Roles
+## Composition Freedom
 
-### Core Tokens
+This document intentionally does **not** prescribe a single home layout.
 
-| Token | Hex | Role |
-|---|---:|---|
-| `ink` | `#111827` | Primary text, headings, active nav |
-| `ink-muted` | `#4B5563` | Secondary text, card metadata |
-| `ink-soft` | `#6B7280` | Tertiary labels, disabled copy |
-| `canvas` | `#F5F7FB` | App background |
-| `surface` | `#FFFFFF` | Cards, panels, forms |
-| `surface-glass` | `rgba(255, 255, 255, 0.78)` | Sticky shell, soft glass panels |
-| `surface-tint` | `#EEF6FF` | Vote/ranking highlight surfaces |
-| `panel-dark` | `#111827` | Result card preview |
-| `panel-dark-2` | `#1F2937` | Dark nested result surfaces |
-| `line` | `#DCE3EE` | Default borders |
-| `line-soft` | `#E8EEF7` | Subtle separators |
+Implementers may use any combination of:
 
-### Functional Accents
+- asymmetric Featured composition
+- full-width content stage
+- masonry-like grid
+- editorial grid
+- horizontal shelves
+- tabbed category views
+- compact profile drawer
+- modal or popover profile summary
+- dense card gallery
+- split hero/card hybrid
+- mobile-first stacked discovery
 
-| Token | Hex | Role |
-|---|---:|---|
-| `primary` | `#E11D48` | Create vote room, main participation action |
-| `primary-pressed` | `#BE123C` | Pressed/hover primary |
-| `primary-soft` | `#FFE4EA` | Primary tint, officiality guard copy |
-| `focus` | `#2563EB` | Focus ring, selected nav, links |
-| `vote` | `#2563EB` | Ranking, vote count, selected candidate |
-| `vote-soft` | `#DBEAFE` | Vote chips and selected surfaces |
-| `energy` | `#F59E0B` | D-day urgency, Vote Energy |
-| `energy-soft` | `#FEF3C7` | Energy track background |
-| `mission` | `#10B981` | Mission completion and participation nudges |
-| `mission-soft` | `#D1FAE5` | Mission cards |
-| `reward` | `#7C3AED` | RP, icons, premium/reward moments only |
-| `reward-soft` | `#EDE9FE` | Reward chips |
+The layout should be chosen based on content volume, viewport, and the story the screen needs to tell. Do not treat any section order, column count, or sidebar placement as mandatory.
 
-### Color Rules
+### Layout Anti-Constraints
 
-- Keep the page mostly light neutral. Accent colors should mark status, ranking, rewards, or one primary action.
-- Use rose for the strongest action in a viewport, usually `투표방 만들기`.
-- Use blue for vote/ranking signals.
-- Use amber for D-day and Vote Energy.
-- Use mint for mission completion.
-- Use violet only for RP, icons, paid-plan perks, or collectible result-card moments.
-- Do not use giant color blocks, hard black borders, or poster-like primary color fields.
-- Do not make purple/blue gradients the brand identity.
-- Do not let any one hue dominate the whole product.
+Avoid these unless there is a specific product reason:
 
-## Typography
+- permanent `8/4` or two-column home layout
+- right rail that contains the main summary on every screen
+- tall profile or stats panels above content
+- dashboard metric cards as the first visual impression
+- text-only hero that delays content discovery
+- exact replica of CHZZK/SOOP navigation or sidebars
 
-- Primary Korean UI: `SUIT Variable`, `SUIT`, `IBM Plex Sans KR`, `Noto Sans KR`, system fallback.
-- Data and counters: `IBM Plex Mono`, `JetBrains Mono`, `ui-monospace`, `monospace`.
-- Letter spacing is always `0`.
-- Do not use all-caps for Korean labels.
-- Use weight, spacing, and color before increasing font size.
-- Keep button and compact panel text small enough to fit on mobile.
+## Required Ingredients
 
-## Layout Principles
+The home screen should include these ingredients somewhere in the experience. Their order and spatial arrangement are intentionally open.
 
-### App First
+### Featured Vote
 
-The first viewport should show useful product content:
+A Featured vote is a high-priority poll surfaced with stronger visual treatment.
 
-- sticky top app bar
-- create vote room command
-- active vote room feed
-- ranking and vote count signals
-- expiring vote rooms
-- user RP summary
-- participation missions
-- quick templates
+It may include:
 
-### Grid
+- visual thumbnail or abstract media panel
+- title and topic
+- category tags
+- status badge
+- candidate/ranking preview
+- vote count or participant count
+- D-day or result status
+- primary action
+- related or trending mini-items
 
-- Desktop app frame: max width `1280px`.
-- Home: vote feed left, RP/missions/expiring rail right.
-- Detail: room header, vote status, candidates, missions, fan wall.
-- Create: form panel plus live vote-room preview.
-- Crew: aggregate metrics and vote-room performance.
-- Mobile: one-column feed, bottom navigation, no horizontal scroll.
+Featured should feel like an editorial/product decision, not just the first item in a list.
 
-## Components
+### Category Filter
 
-### Buttons
+Categories are first-class discovery controls.
 
-- Primary button: rose background, white text, radius `8px`, min height `44px`.
-- Secondary button: white surface, subtle border, radius `8px`, min height `40px`.
-- Buttons may include lucide icons when the action benefits from fast recognition.
-- Every interactive element needs hover/focus/press feedback.
+Required capabilities:
 
-### Vote Room Card
+- all-category option
+- selected category state
+- multiple visible category chips/tabs/buttons
+- category labels that can filter vote content
+- counts or status markers when useful
 
-Required content:
+Suggested categories:
 
-- vote room title
-- category chip
-- D-day chip
-- topic summary
-- Vote Energy or progress display
+- 무대
+- 작품
+- 게임
+- 스포츠
+- 캐릭터
+- 밈/장면
+- 자유 주제
+
+Category controls should feel like browsing tags in a content platform, not admin filters.
+
+### Vote Card
+
+Vote cards are the core repeated object.
+
+Each card should include:
+
+- title
+- category
+- status
+- visual thumbnail or visual tone
+- leading candidate or ranking preview
+- vote count or participant count
+- deadline/result indicator
+- one primary action or clear detail link
+
+Cards may vary by type. Some can emphasize thumbnails, some rankings, some deadlines, some published results.
+
+### Content Collections
+
+Use collections to create abundance and return value.
+
+Possible collections:
+
+- Featured
+- Hot now
+- Ending soon
+- New vote rooms
+- Category picks
+- Result cards
+- Followed categories
+- Quick polls
+- Bracket votes
+
+Collections may be rendered as shelves, grids, carousels, editorial blocks, tabs, or any other suitable composition.
+
+### Compact User State
+
+User status should support the loop without taking over the page.
+
+Possible content:
+
+- RP
+- streak
+- today votes
+- followed categories
+- pending rewards
+- created vote rooms
+
+Preferred treatments:
+
+- compact strip
+- avatar popover
+- drawer
+- My page
+- small chip cluster
+
+Avoid tall summary panels on the home page.
+
+### Create Entry
+
+Creating a vote room must be easy to find.
+
+The create action can be:
+
+- top navigation button
+- floating action on mobile
+- category-adjacent action
+- empty-state action
+- Featured-side action
+
+The exact placement is not fixed.
+
+## Content Volume Rules
+
+The design requires enough mock content to look real.
+
+Minimum demo content for home:
+
+- 12 or more vote rooms
+- 6 or more categories
+- 3 or more poll formats
+- at least 1 Featured candidate
+- at least 4 ending-soon votes
+- at least 4 result-card items
+- at least 2 category-specific collections
+
+Poll format examples:
+
+- single-choice popularity vote
+- matchup vote
+- bracket vote
+- scene pick
+- line pick
+- quick poll
+
+Each vote room should model:
+
+- title
+- topic
+- category
+- thumbnail tone or image
+- candidates
+- leading candidate
+- vote count
 - participant count
-- candidate count
-- link to detail
+- D-day or status
+- tags
+- poll format
+- result state if published
 
-Style:
+## Visual Language
 
-- white or glass surface
-- subtle border and soft shadow
+### Overall Mood
+
+Use a spacious content-platform mood:
+
+- broad canvas
+- visual thumbnails
+- strong Featured moments
+- content density
+- compact metadata
+- clear category chips
+- energetic but controlled accent colors
+
+Light mode is the default browsing surface. Dark, cinematic, or high-contrast surfaces are allowed for Featured or result-card moments.
+
+### Cards
+
+Vote cards should feel like media/content cards, not admin panels.
+
+Rules:
+
 - radius `8px`
-- no hard offset shadow
-- small accent strip or top status rail is allowed
+- stable thumbnail area
+- readable title
+- compact metadata
+- visible category/status
+- hover/focus state
+- no layout shift when counts or labels change
 
-### Ranking And Candidate Cards
+Avoid:
 
-- Candidate cards should emphasize rank, vote count, and selected/leading state.
-- Do not imply the client calculates trusted vote totals.
-- Ranking color must be paired with text or labels.
+- large empty panels
+- cards that contain only text
+- repeated identical card structures
+- nested card stacks
 
-### Missions And RP
+### Thumbnails
 
-- Missions are secondary participation nudges, not the core identity.
-- RP and icons are site-internal rewards.
-- Avoid copy that claims external impact, delivery, or official recognition.
+The MVP may use:
 
-### Result Card
+- generated abstract thumbnails
+- fictional poster cards
+- category-based visual patterns
+- candidate avatar placeholders
+- graphic ranking previews
 
-- Result cards can use a darker collectible surface.
-- They should show winner, participant count, fan-wall quote, and earned icon.
-- They should route users back into the next vote room loop.
+The MVP must not use:
 
-## Page And Route Structure
+- real celebrity photos
+- real streamer screenshots
+- real sports/team imagery without rights
+- brand/IP logos
+- stock-like cheering imagery
 
-| Route | Page | Purpose |
-|---|---|---|
-| `/` | Home Dashboard | Find vote rooms, see rankings/missions, create room |
-| `/rooms/new` | Room Create | Stepper-style form and live preview |
-| `/rooms/:roomId` | Room Detail | Vote status, candidates, missions, fan wall |
-| `/rooms/:roomId/result` | Result Card | Published summary and next vote loop |
-| `/profile` | Profile | RP, reward icons, joined/created rooms |
-| `/crew` | Crew Dashboard | Aggregate room performance for creators/operators |
-| `/pricing` | Pricing | Plus/Crew/Official expansion plan cards |
-| `*` | Not Found | Safe fallback and route back home |
+### Tags And Badges
+
+Use tags for:
+
+- category
+- poll format
+- live/ending soon/result
+- candidate count
+- reward/RP
+
+Tag rules:
+
+- pills may use `999px` radius
+- selected category chips need clear active styling
+- do not rely on color alone
+- tags should not become messy multi-line blocks inside cards
+
+### Color Roles
+
+- `primary` green: create/vote action, selected category, active state
+- `vote` blue: vote count, ranking state, selected candidate
+- `live` rose: live/now/hot status
+- `energy` amber: D-day and ending-soon urgency
+- `mission` mint: participation missions
+- `reward` violet: RP, badges, paid perks
+- `stage` near-black: high-impact Featured or result surfaces
+
+Keep accent colors functional and contained. Do not let one hue dominate the whole app.
+
+## Page Ingredients
+
+### Home
+
+Home should communicate discovery, abundance, and current activity.
+
+Use these ingredients freely:
+
+- Featured vote
+- category filter
+- vote cards
+- content collections
+- compact user state
+- create entry
+- search or browse affordance
+- result-card previews
+
+### Create Vote Room
+
+Creation remains a workflow page.
+
+Useful ingredients:
+
+- category selection
+- poll format selection
+- candidate setup
+- thumbnail/visual tone selection
+- live preview as a vote card
+- officiality/safety guard copy
+
+### Vote Detail
+
+Detail should feel like opening a content item.
+
+Useful ingredients:
+
+- visual header or thumbnail
+- vote/ranking section
+- candidate cards
+- fan-wall/messages
+- related vote rooms
+- result-card route if published
+
+### Result
+
+Result cards should feel shareable.
+
+Useful ingredients:
+
+- poster-like result visual
+- winning candidate
+- total votes
+- category and poll format
+- top message
+- next vote suggestions
+
+### Profile
+
+Profile contains personal loop state and history.
+
+Useful ingredients:
+
+- RP summary
+- followed categories
+- joined votes
+- created votes
+- result cards
+- earned icons
+
+## Interaction Rules
+
+- Category controls filter visible vote content.
+- Search narrows visible vote rooms.
+- Featured and vote cards link to detail.
+- Vote cards expose one primary action.
+- Profile summary can expand from avatar or route to My page.
+- Browser back/forward navigation must work.
+- Keyboard focus order follows visual order.
+- Hover/press motion stays under 200ms.
+- Respect `prefers-reduced-motion`.
+
+## Responsive Rules
+
+Test at:
+
+- 320
+- 375
+- 414
+- 768
+- 1024
+- 1440
+
+No horizontal scroll is allowed.
+
+Use:
+
+- `aspect-ratio` for thumbnails
+- flexible grids or shelves when useful
+- line clamp for titles
+- reserved thumbnail space
+- compact metadata rows
+
+Avoid:
+
+- fixed-width desktop cards on mobile
+- sidebars that push content below the fold
+- profile summary cards dominating first view
 
 ## Copy Rules
 
-- Prefer `투표방`, `인기투표`, `랭킹`, `후보`, `결과 카드`, `Vote Energy`.
-- Avoid using `응원` as the main product keyword. It may appear only as a secondary emotional context when needed.
-- Do not use real star, team, brand, or work names in demo data.
-- Do not imply official partnership, official vote, agency delivery, or guaranteed external impact.
-- Official/creator expansion must be framed as future or locked-plan capability.
+Preferred terms:
+
+- 투표방
+- 인기투표
+- 후보
+- 랭킹
+- 카테고리
+- Featured
+- 결과 카드
+- 참여 미션
+- RP
+
+Avoid using `응원` as the core UI keyword. It may appear only as secondary emotional context.
+
+Do not imply:
+
+- official vote
+- agency delivery
+- artist endorsement
+- official partnership
+- guaranteed external impact
 
 ## Accessibility
 
-- Use semantic landmarks: `header`, `nav`, `main`, `section`, `aside`.
-- Navigation uses real links.
-- Focus states are visible.
+- Use semantic `header`, `nav`, `main`, `section`, `article`, `aside` only where meaningful.
+- Category filters should be real buttons, tabs, or links.
+- Cards that navigate should expose a clear link name.
+- Thumbnail images need descriptive alt text unless purely decorative.
+- Icon-only buttons need labels.
 - Text contrast must meet WCAG AA.
-- Color is never the only state marker.
-- Touch targets are at least `40px`, primary actions at least `44px`.
-- Respect `prefers-reduced-motion`.
+- Color is never the only state signal.
 
-## Agent Prompt Guide
+## Implementation Prompt
 
 ```text
-Read DESIGN.md first. Build the app as a Fan Vote Board, not a landing page and not a name-driven rally/cheer product.
-The first viewport must show useful app content: active vote rooms, ranking signals, create-room command, user RP, missions, and expiring polls.
-Use bento-style modular surfaces, soft glass navigation, restrained accent colors, Korean-readable typography, and clear mobile-first hierarchy.
-Avoid hard black borders, giant color blocks, purple-gradient AI dashboards, official idol-app language, real celebrity/IP names, and any claim of official partnership.
+Read DESIGN.md first.
+Treat it as an ingredient-based design brief, not a fixed layout spec.
+Create a Fan Vote Discovery experience inspired by Korean content platforms: strong Featured treatment, category browsing, visual vote cards, compact user state, and enough mock content to feel alive.
+You may freely choose the composition: editorial stage, shelves, grid, asymmetric layout, compact top strip, profile popover, category tabs, or another structure that better expresses discovery.
+Do not hard-code a two-column dashboard, permanent right summary rail, text-only hero, or exact CHZZK/SOOP clone.
+Increase mock content volume: 12+ vote rooms, 6+ categories, several poll formats, ending-soon items, and result-card items.
+Vote cards need thumbnails or visual identities, category tags, status badges, ranking/vote metadata, and one clear action.
+Do not use real celebrities, streamers, IP images, official partnership language, or hard dashboard panels.
 ```
 
 ## Decisions Log
 
 | Date | Decision | Rationale |
 |---|---|---|
-| 2026-05-29 | Create `DESIGN.md` before page scaffolding | The initial hero drifted toward generic SaaS landing design. The app needs a durable visual contract before routing work. |
-| 2026-05-29 | Keep demo visuals abstract and fictional | The service has no official partnership with real stars or works, so design must avoid official fandom signals and real-person imagery. |
-| 2026-05-30 | Reframe from Fan Ops/Cheer Board to Fan Vote Board | The actual recurring behavior is closer to fan-created popularity polls and rankings than emotional cheer campaigns. |
-| 2026-05-30 | Select bento + soft glass over vibrant block style | The prior block-style exploration looked too harsh and not trendy enough for a consumer social voting app. |
+| 2026-05-29 | Create `DESIGN.md` before page scaffolding | The initial UI drifted toward generic SaaS and needed a durable visual contract. |
+| 2026-05-30 | Reframe from cheer/campaign language to vote/ranking behavior | The actual recurring user action is closer to fan-created popularity polls than broad emotional cheering. |
+| 2026-05-30 | Replace dashboard-first design with discovery-first direction | The dashboard framing made the product feel like an admin tool and failed to create a content browsing impression. |
+| 2026-05-30 | Use CHZZK/SOOP as structural references only | Korean content platforms show useful patterns for Featured, category browsing, and card density, but their brands and real content must not be copied. |
+| 2026-05-30 | Remove fixed layout prescriptions | The design system should define ingredients and quality bars, so implementers can create more expressive layouts. |
