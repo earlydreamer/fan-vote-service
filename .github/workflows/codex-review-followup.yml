@@ -50,6 +50,7 @@ jobs:
               'chatgpt-codex-connector[bot]',
             ]);
             const TRACKING_LABELS = ['codex-reviewed', 'codex-feedback'];
+            const CODEX_UNAVAILABLE_LABEL = 'codex-unavailable';
             const REVIEW_REQUEST_LABEL_PREFIX = 'codex-review-request-';
             const SELF_CHECK_NAMES = new Set([
               'Codex Review Follow-up',
@@ -184,6 +185,7 @@ jobs:
               await ensureLabel('codex-feedback', 'D93F0B', 'GitHub Codex 리뷰 피드백을 후속 이슈로 이관했습니다.');
               await ensureLabel('codex-reviewed', '0E8A16', 'GitHub Codex가 현재 head에서 주요 문제를 찾지 않았습니다.');
               await ensureLabel('codex-follow-up', '5319E7', 'GitHub Codex 리뷰 피드백에서 생성된 후속 작업 이슈입니다.');
+              await ensureLabel(CODEX_UNAVAILABLE_LABEL, 'BFD4F2', 'GitHub Codex 리뷰를 현재 PR에서 실행할 수 없습니다.');
             }
 
             async function addLabel(issue_number, name) {
@@ -213,6 +215,7 @@ jobs:
 
               for (const label of labels) {
                 const isStateLabel = TRACKING_LABELS.includes(label)
+                  || label === CODEX_UNAVAILABLE_LABEL
                   || label.startsWith(REVIEW_REQUEST_LABEL_PREFIX);
                 if (isStateLabel) {
                   await removeLabelIfExists(issue_number, label);
@@ -422,6 +425,36 @@ jobs:
               return pr.base.ref === pr.base.repo.default_branch;
             }
 
+            function isCodexUnavailableNotice(body) {
+              return /To use Codex here,?\s*(?:\[)?create an environment for this repo/i.test(body)
+                || /create an environment for this repo/i.test(body);
+            }
+
+            async function recordCodexUnavailable(prNumber, feedback) {
+              const labels = await getIssueLabels(prNumber);
+              const alreadyRecorded = labels.has(CODEX_UNAVAILABLE_LABEL);
+              await addLabel(prNumber, CODEX_UNAVAILABLE_LABEL);
+              await removeLabelIfExists(prNumber, 'codex-feedback');
+
+              if (alreadyRecorded) return;
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number: prNumber,
+                body: [
+                  'GitHub Codex 응답을 코드 리뷰 피드백이 아니라 GitHub Codex 환경 설정 오류로 분류했습니다.',
+                  '',
+                  '- 이 메시지는 follow-up issue로 이관하지 않습니다.',
+                  '- 현재 PR의 자동 merge gate로도 사용하지 않습니다.',
+                  '- Codex 환경/연동 복구는 별도 운영 이슈에서 추적합니다.',
+                  '- 필요한 경우 GitHub-hosted fallback 순서에 따라 `/gemini review` 또는 마지막 fallback인 CodeRabbit 리뷰를 요청합니다.',
+                  '',
+                  `원문 링크: ${feedback.url}`,
+                ].join('\n'),
+              });
+            }
+
             async function closeLinkedIssuesAfterMerge(pr) {
               if (!isDefaultBranchMerge(pr)) return;
 
@@ -586,6 +619,11 @@ jobs:
 
               if (!(await isFeedbackForCurrentHead(pr))) {
                 core.info(`Codex 피드백 head가 현재 PR head와 일치하지 않아 자동 처리하지 않습니다. PR head: ${pr.head.sha}`);
+                return;
+              }
+
+              if (isCodexUnavailableNotice(body)) {
+                await recordCodexUnavailable(prRef.number, feedback);
                 return;
               }
 

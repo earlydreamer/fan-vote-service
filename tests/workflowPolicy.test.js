@@ -50,6 +50,30 @@ describe('Codex review automation policy', () => {
     expect(workflow).not.toContain('- [ ] merge 전 관련 PR conversation 또는 review thread resolved 처리');
   });
 
+  it('documents the GitHub-hosted fallback order and short retry window', () => {
+    const docs = [
+      'AGENTS.md',
+      '.md/rallyroom_delivery_workflow_20260529.md',
+      '.md/rallyroom_github_review_workflow_20260529.md',
+    ].map((path) => readProjectFile(path)).join('\n');
+
+    expect(docs).toContain('GitHub Gemini Code Assist');
+    expect(docs).toContain('/gemini review');
+    expect(docs).toContain('3분');
+    expect(docs).toContain('2분');
+    expect(docs).toContain('CodeRabbit');
+  });
+
+  it('does not convert Codex environment setup notices into follow-up issues', () => {
+    const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
+
+    expect(workflow).toContain('CODEX_UNAVAILABLE_LABEL');
+    expect(workflow).toContain('isCodexUnavailableNotice');
+    expect(workflow).toContain('create an environment for this repo');
+    expect(workflow).toContain('GitHub Codex 환경 설정 오류로 분류했습니다');
+    expect(workflow).toContain('return;');
+  });
+
   it('paginates review thread comments before classifying pure Codex threads', () => {
     const workflow = readProjectFile('.github/workflows/codex-review-followup.yml');
 

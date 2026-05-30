@@ -95,14 +95,27 @@ UI와 시각 설계의 최우선 기준은 [DESIGN.md](DESIGN.md) 이다. React/
 우선순위:
 
 1. `codex`
-2. `coderabbit`
+2. `gemini`
+3. `coderabbit`
 
 수동 리뷰 요청 명령:
 
 - Codex: `@codex review`
+- GitHub Gemini Code Assist: `/gemini review`
 - CodeRabbit: `@coderabbitai review`
 
 GitHub MCP로 PR 코멘트에 위 명령을 남겨 리뷰를 요청한다. GitHub Codex 리뷰가 기본 차단 리뷰이며, 로컬 Codex 리뷰는 GitHub 리뷰를 대체하지 않는다.
+
+GitHub-hosted fallback 원칙:
+
+- `@codex review` 요청 후 3분 동안 응답이 없으면 bare `@codex review`를 1회 재요청한다.
+- 재요청 후 2분 동안 응답이 없거나 `To use Codex here, create an environment for this repo`처럼 리뷰가 아니라 환경 설정 오류임이 명확하면 GitHub Codex 지연/누락으로 분류한다.
+- fallback은 로컬 리뷰보다 GitHub 위에서 동작하는 GitHub Gemini Code Assist를 먼저 사용한다.
+- Gemini는 PR conversation에 `/gemini review`를 남겨 호출한다.
+- Gemini가 설치되어 있지 않거나 응답이 없고, 변경 위험이 낮은 문서/카피/테스트 작업이면 CodeRabbit을 마지막 fallback으로 사용할 수 있다.
+- 코드 동작, 데이터, 권한, 결제, 배포 변경은 Codex 누락만으로 자동 merge하지 않고 사람 확인 또는 별도 승인 근거를 남긴다.
+- fallback으로 merge한 뒤 늦게 도착한 Codex 리뷰는 무시하지 않고 후속 이슈로 이관한다.
+- Codex 환경 설정 오류 메시지는 코드 리뷰 피드백이 아니므로 `codex-feedback` follow-up issue로 만들지 않고, `codex-unavailable` 상태와 #139 같은 운영 이슈에서 추적한다.
 
 로컬 Codex 리뷰는 다음 예외 상황에서만 보조 수단으로 사용한다.
 
