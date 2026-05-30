@@ -100,6 +100,36 @@ export const demoReadRepository = {
     return true;
   },
 
+  castVoteDemo(
+    roomId: string,
+    candidateIds: string[],
+    voteTicketCount: number
+  ): { candidateVotes: { candidateId: string; voteCount: number }[]; currentGoalValue: number; participantCount: number } | undefined {
+    const room = rooms.find((r) => r.id === roomId || r.slug === roomId);
+    if (!room) return undefined;
+
+    const selectedIds = new Set(candidateIds);
+    room.candidates.forEach((candidate) => {
+      if (selectedIds.has(candidate.id)) {
+        candidate.voteCount += voteTicketCount;
+      }
+    });
+
+    room.currentGoalValue = Math.min(room.currentGoalValue + voteTicketCount, room.goalValue);
+    room.participantCount += 1;
+
+    return {
+      candidateVotes: room.candidates
+        .filter((c) => c.status === 'approved')
+        .map((c) => ({
+          candidateId: c.id,
+          voteCount: c.voteCount
+        })),
+      currentGoalValue: room.currentGoalValue,
+      participantCount: room.participantCount
+    };
+  },
+
   getCrewStats(): CrewStatsReadModel {
     return crewStats;
   },
