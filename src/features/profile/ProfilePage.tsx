@@ -39,7 +39,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
             <p className="eyebrow">Rewards</p>
             <h2 id="reward-title">관심 카테고리</h2>
           </div>
-          <a className="button button-secondary" href="/profile/categories">
+          <a className="button button-secondary" href="/profile/edit">
             관심 카테고리 수정
           </a>
         </div>

@@ -374,9 +374,18 @@ Codex 리뷰 후속으로 좁은 모바일 폭에서 요금제 충전 패키지 
 초기 코드네임 `RallyRoom`에서 현재 서비스명 `PickRally`로 제품 표기와 HTML title 정책을 정리했다. `rallyroom_*` 문서 파일명과 `RallyRoom` TypeScript 타입명 일부는 이력과 내부 구조 호환을 위해 유지한다.
 
 - `index.html`: 문서 title을 `PickRally`로 유지
-- `tests/documentTitlePolicy.test.ts`: HTML title이 이전 서비스명으로 되돌아가지 않는지 검증
+- `.env.example`: `VITE_APP_NAME=PickRally` placeholder 유지
+- `tests/documentTitlePolicy.test.ts`: HTML title과 env metadata가 이전 서비스명으로 되돌아가지 않는지 검증
 - `README.md`: 현재 구현 상태와 주요 화면을 PickRally 기준으로 재정리
 - `.md/pickrally_current_product_brief_20260531.md`: 현재 제품 브리프 추가
+
+## 2026-05-31 Documentation / Route Hygiene 보완
+
+현재 구현과 문서의 작은 불일치를 정리했다.
+
+- `README.md`, `.md/pickrally_current_product_brief_20260531.md`, `.md/rallyroom_submission_prompts_20260530.md`: PickRally 기준 제품 설명과 제출용 smoke 흐름 최신화
+- `src/features/profile/ProfilePage.tsx`: 관심 카테고리 수정 진입점을 실제 존재하는 `/profile/edit`로 연결
+- `src/features/profile/ProfilePage.test.tsx`: 관심 카테고리 수정 링크의 실제 route 회귀 테스트
 
 ## 2026-05-31 Voting Ticket / RP 보완
 

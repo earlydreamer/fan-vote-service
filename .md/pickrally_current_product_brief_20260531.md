@@ -31,16 +31,16 @@ MVP에서는 한 투표방에 활성 투표 1개만 노출한다. 이후 같은 
 현재 `main` 기준으로 프론트엔드 목업은 다음을 포함한다.
 
 - 홈: Featured 투표방, 카테고리 필터, 투표방 카드 탐색
-- 투표방 만들기: 초기 후보 무료 추가, Enter 후보 추가, IME/Safari 조합 입력 guard, command intent/receipt
+- 투표방 만들기: 초기 후보 무료 추가, Enter 후보 추가, IME/Safari 조합 입력 guard, 서버 요청 미리보기와 접수 예시
 - 방 상세: 현재 투표, 팬월, 미션, 결과/기록 탭
 - 투표: 세로 후보 리스트, 투표권 선택, 반복 투표, Vote Energy 증가와 마감 처리
 - 후보 추가: 활성 투표 중 투표권을 사용한 inline 후보 추가와 자동 투표
 - RP 교환: 100 RP를 투표권 1장으로 교환하는 목업 플로우
-- 팬월: 메시지 작성 command boundary와 보상 receipt
-- 미션: 미션 완료 command boundary와 보상 receipt
+- 팬월: 메시지 작성 경계와 보상 응답 예시
+- 미션: 미션 완료 경계와 보상 응답 예시
 - 결과 카드: 공개 결과 카드와 방장 발행 요청 플로우
 - 프로필: 최근 보상, 참여 중인 투표, 완료된 투표 카드, 프로필 수정 목업과 로그인 guard
-- 요금제: 구독/투표권 패키지/Crew 문의 intent preview
+- 요금제: 구독/투표권 패키지/Crew 문의 요청 preview
 - Crew: raw event가 아닌 aggregate dashboard
 
 ## 비즈니스 방향
@@ -67,6 +67,12 @@ MVP에서는 한 투표방에 활성 투표 1개만 노출한다. 이후 같은 
 - 결제 연동 미구현
 - moderation/reporting의 실제 백엔드 미구현
 - VibeX 도메인 게시와 제출 메일 정리 필요
+
+## 현재 정리된 사소한 구멍
+
+- 서비스명은 UI, HTML title, 문서, `.env.example` 모두 `PickRally`를 기준으로 맞춘다.
+- `RallyRoom`은 초기 코드네임이므로 파일명, 타입명, 역사적 참고 문서에만 남긴다.
+- 관심 카테고리 수정은 별도 `/profile/categories`가 아니라 `/profile/edit` 목업 안에서 처리한다.
 
 ## 제출 포지셔닝
 

@@ -9,6 +9,7 @@
 - 현재 제품 브리프: `pickrally_current_product_brief_20260531.md`
 - 디자인 시스템: `../DESIGN.md`
 - README: `../README.md`
+- 환경 변수 예시: `../.env.example`
 - 백엔드/보안 아키텍처: `rallyroom_v2_backend_architecture_20260529.md`
 - 구현 순서와 범위: `rallyroom_implementation_sequence_and_scope_20260529.md`
 - 기술 스택과 디렉터리 구조: `rallyroom_tech_stack_and_directory_structure_20260529.md`

@@ -11,4 +11,11 @@ describe('Document title policy', () => {
     expect(html).toContain('<title>PickRally</title>');
     expect(html).not.toContain('<title>RallyRoom</title>');
   });
+
+  it('keeps environment metadata aligned with the PickRally service name', () => {
+    const envExample = readProjectFile('.env.example');
+
+    expect(envExample).toContain('VITE_APP_NAME=PickRally');
+    expect(envExample).not.toContain('VITE_APP_NAME=RallyRoom');
+  });
 });
