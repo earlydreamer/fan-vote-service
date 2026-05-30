@@ -1530,7 +1530,7 @@ select:focus-visible {
 
 .inline-option-form {
   display: grid;
-  grid-template-columns: minmax(260px, 1fr) minmax(126px, 0.28fr) auto;
+  grid-template-columns: minmax(0, 1fr) minmax(126px, 160px);
   align-items: end;
   gap: 12px;
   inline-size: 100%;
@@ -1565,6 +1565,8 @@ select:focus-visible {
 }
 
 .inline-option-form button {
+  grid-column: 1 / -1;
+  inline-size: 100%;
   min-block-size: 42px;
   padding: 0 14px;
   border: 0;
