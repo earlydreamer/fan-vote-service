@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { CommandResult } from '../../shared/api/commandClient';
 import type { Candidate } from '../../shared/types/rallyroom';
 import type { CastVoteInput, CastVoteResponse } from './castVoteApi';
@@ -43,6 +43,10 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [myVotedTickets, setMyVotedTickets] = useState(0);
+
+  useEffect(() => {
+    setRemainingVoteTickets(options.voteTickets);
+  }, [options.voteTickets]);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const remainingEnergy = Math.max(options.goalValue - state.currentGoalValue, 0);

@@ -332,7 +332,7 @@ describe('VotePanel', () => {
     expect(await within(votePanel).findByText(/내가 투표한 투표권:/)).toHaveTextContent('내가 투표한 투표권: 3장');
   });
 
-  it('renders RP exchange control and executes exchange update on click', async () => {
+  it('renders RP exchange control, executes exchange update on click, and reflects updated tickets prop', async () => {
     const user = userEvent.setup();
     const exchangeMock = vi.spyOn(demoReadRepository, 'exchangeRpToTickets').mockImplementation(() => {
       const current = demoReadRepository.getProfile();
@@ -343,7 +343,7 @@ describe('VotePanel', () => {
       return true;
     });
 
-    render(
+    const { rerender } = render(
       <VotePanel
         roomId="room-1"
         candidates={[candidate('candidate-1', '후보 1', 10)]}
@@ -351,19 +351,36 @@ describe('VotePanel', () => {
         goalValue={500}
         participantCount={41}
         castVoteCommand={async () => ({ ok: true, data: { roomId: 'room-1', candidateVotes: [], currentGoalValue: 200, participantCount: 41 } })}
-        voteTickets={5}
+        voteTickets={0}
         userRp={250}
       />
     );
 
     const votePanel = screen.getByRole('region', { name: '투표 현황' });
     const exchangeButton = within(votePanel).getByRole('button', { name: 'RP 교환' });
+    const selectBox = within(votePanel).getByLabelText('사용할 투표권');
 
-    expect(exchangeButton).not.toBeDisabled();
+    expect(selectBox).toBeDisabled();
 
     await user.click(exchangeButton);
 
     expect(exchangeMock).toHaveBeenCalledWith(1);
+
+    rerender(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 10)]}
+        currentGoalValue={200}
+        goalValue={500}
+        participantCount={41}
+        castVoteCommand={async () => ({ ok: true, data: { roomId: 'room-1', candidateVotes: [], currentGoalValue: 200, participantCount: 41 } })}
+        voteTickets={1}
+        userRp={150}
+      />
+    );
+
+    expect(selectBox).not.toBeDisabled();
+
     exchangeMock.mockRestore();
   });
 });
