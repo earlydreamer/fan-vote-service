@@ -60,7 +60,7 @@ export function buildProfileRewardHistory(
       }))
       .sort((left, right) => new Date(right.earnedAt).getTime() - new Date(left.earnedAt).getTime()),
     joinedRooms,
-    ongoingJoinedRooms: joinedRooms.filter((room) => room.status !== 'result_published'),
+    ongoingJoinedRooms: joinedRooms.filter((room) => room.status === 'active'),
     completedVoteRooms,
     createdRooms
   };

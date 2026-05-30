@@ -36,4 +36,11 @@ describe('RoomDetailPage', () => {
     expect(screen.queryByRole('button', { name: '방 관리' })).not.toBeInTheDocument();
     expect(screen.getByRole('link', { name: '로그인하고 투표 참여하기' })).toHaveAttribute('href', '/login');
   });
+
+  it('lets authenticated viewers vote in public rooms they have not joined yet', () => {
+    render(<RoomDetailPage roomId="room-synth-mv" />);
+
+    expect(screen.getByRole('region', { name: '투표 현황' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: '로그인하고 투표 참여하기' })).not.toBeInTheDocument();
+  });
 });
