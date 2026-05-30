@@ -87,7 +87,7 @@ npm run dev -- --host 127.0.0.1 --port 5173
 ## 검증 명령
 
 ```bash
-git diff --check
+git diff --check main..HEAD
 npm test
 npm run build
 ```
