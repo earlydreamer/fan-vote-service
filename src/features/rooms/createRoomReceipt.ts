@@ -25,7 +25,7 @@ export function buildCreateRoomReceipt(payload: CreateRoomCommandPayload): Creat
     note: '실제 DB 생성 없이 서버 응답 예시만 보여줘요. 승인 뒤에는 read model이 새 방과 비용 차감 상태를 함께 갱신해요.',
     nextActions: [
       { label: '홈 피드로 돌아가기', href: '/' },
-      { label: '내 활동에서 만든 방 확인', href: '/profile' },
+      { label: '내 활동 보기', href: '/profile' },
       { label: '데모 방 상세 보기', href: '/rooms/room-stage-opening' }
     ]
   };
