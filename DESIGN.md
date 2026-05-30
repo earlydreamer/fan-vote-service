@@ -535,6 +535,17 @@ Avoid:
 
 ## Copy Rules
 
+### Toss UX Writing 참고 원칙
+
+PickRally의 한국어 제품 문구는 Toss 앱인토스 UX Writing 가이드(https://developers-apps-in-toss.toss.im/design/ux-writing.html)를 참고해 더 쉽고 친근하게 쓴다.
+
+- 기본 문장은 해요체로 쓴다.
+- 사용자가 무엇을 할 수 있는지 능동형으로 말한다.
+- 제한이나 에러도 가능한 한 다음 행동을 알려주는 긍정형으로 쓴다.
+- `~시겠어요?`, `~시나요?`, `~께` 같은 과한 경어보다 캐주얼한 경어를 쓴다.
+- `intent`, `command`, `receipt`, `payload` 같은 개발자 용어는 화면 밖으로 숨기고, 필요한 경우 `처리 흐름`, `보낼 내용`, `접수 내용`처럼 풀어쓴다.
+- 공식성 오인 방지, 권한 제한, 마감 상태처럼 사용자가 꼭 알아야 하는 제한은 부드럽게 돌려 말하지 않고 이유와 다음 행동을 함께 안내한다.
+
 Preferred terms:
 
 - 투표방

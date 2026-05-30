@@ -113,7 +113,7 @@ export function RoomCreatePage() {
     <div className="create-studio-page">
       <section className="create-studio-hero" aria-labelledby="room-create-title">
         <div>
-          <p className="eyebrow">Create vote room</p>
+          <p className="eyebrow">투표방 만들기</p>
           <h1 id="room-create-title">새 투표방 열기</h1>
           <p className="guard-copy">
             공식 제휴나 전달 보장을 암시하지 않도록, 투표 주제와 대상은 팬 주도 기록으로만 표현해요.
@@ -209,7 +209,7 @@ export function RoomCreatePage() {
             <div className="candidate-setup-section">
               <div className="collection-heading compact">
                 <div>
-                  <p className="eyebrow">Poll options</p>
+                  <p className="eyebrow">후보 항목</p>
                   <h3 id="candidate-setup-title">투표 항목 구성</h3>
                 </div>
                 <Ticket size={18} aria-hidden="true" />
@@ -267,7 +267,7 @@ export function RoomCreatePage() {
             </div>
 
             <Button type="submit" variant="primary" className="submit-intent-btn">
-              생성 intent 만들기
+              방 만들기 내용 확인
             </Button>
           </form>
         </section>
@@ -279,34 +279,34 @@ export function RoomCreatePage() {
               <span>{formInput.rewardIcon || 'REWARD'}</span>
             </div>
             <div className="preview-card">
-              <p className="eyebrow">Preview</p>
+              <p className="eyebrow">미리보기</p>
               <h2 id="preview-title">방 카드 미리보기</h2>
               <p>{formInput.voteTitle}</p>
               <ul className="check-list">
                 <li>
                   <CheckCircle2 size={18} aria-hidden="true" />
-                  신뢰 필드는 서버 read model에서만 표시
+                  투표수와 RP는 서버에서 계산해요
                 </li>
                 <li>
                   <CheckCircle2 size={18} aria-hidden="true" />
-                  투표/미션/후보 추가는 command API로 확장 예정
+                  투표와 미션도 같은 처리 흐름으로 이어져요
                 </li>
               </ul>
             </div>
           </aside>
 
           {payload && (
-            <section className="content-panel command-preview" aria-label="생성 command preview">
-              <p className="eyebrow">Command payload</p>
-              <h2>create-room</h2>
+            <section className="content-panel command-preview" aria-label="방 만들기 내용 미리보기">
+              <p className="eyebrow">보낼 내용</p>
+              <h2>서버에 보낼 방 정보</h2>
               <pre>{JSON.stringify(payload, null, 2)}</pre>
             </section>
           )}
 
           {receipt && (
-            <section className="content-panel create-receipt" aria-label="생성 요청 receipt">
-              <p className="eyebrow">Mock command response</p>
-              <h2>생성 요청 접수</h2>
+            <section className="content-panel create-receipt" aria-label="방 만들기 접수 내용">
+              <p className="eyebrow">처리 예시</p>
+              <h2>방 만들기 요청을 받았어요</h2>
               <div className="receipt-status-row">
                 <span className="chip chip-format">{receipt.command}</span>
                 <span className="chip chip-mission">{receipt.reviewStatus}</span>

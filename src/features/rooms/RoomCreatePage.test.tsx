@@ -40,7 +40,7 @@ describe('RoomCreatePage', () => {
     expect(newCandidateInput).toBeInTheDocument();
 
     const submitButton = form?.querySelector('button[type="submit"]');
-    expect(submitButton).toHaveTextContent('생성 intent 만들기');
+    expect(submitButton).toHaveTextContent('방 만들기 내용 확인');
   });
 
   it('adds a candidate when Enter is pressed in the candidate input without submitting the form', async () => {
@@ -55,8 +55,8 @@ describe('RoomCreatePage', () => {
     // 후보 목록에 'Enter로 추가된 후보'가 존재하는지 확인
     expect(screen.getByText('Enter로 추가된 후보')).toBeInTheDocument();
 
-    // 폼 제출(command preview)이 발생하지 않았음을 확인
-    expect(screen.queryByRole('region', { name: '생성 command preview' })).not.toBeInTheDocument();
+    // 폼 제출 preview가 발생하지 않았음을 확인
+    expect(screen.queryByRole('region', { name: '방 만들기 내용 미리보기' })).not.toBeInTheDocument();
   });
 
   it('does not add a candidate when Enter is pressed during IME composition', () => {

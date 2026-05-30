@@ -33,7 +33,7 @@ describe('buildCreateRoomReceipt', () => {
       nextActions: [
         { label: '홈 피드로 돌아가기', href: '/' },
         { label: '내 활동 보기', href: '/profile' },
-        { label: '데모 방 상세 보기', href: '/rooms/room-stage-opening' }
+        { label: '데모 방 열어보기', href: '/rooms/room-stage-opening' }
       ]
     });
   });

@@ -21,11 +21,11 @@ describe('PricingPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Plus 시작하기' }));
 
-    const preview = screen.getByRole('region', { name: '결제 intent preview' });
+    const preview = screen.getByRole('region', { name: '결제 준비 내용' });
 
     expect(within(preview).getByText('create-checkout-session')).toBeInTheDocument();
     expect(within(preview).getByText(/plus-monthly/)).toBeInTheDocument();
-    expect(within(preview).getByText(/실제 결제는 실행하지 않았어요/)).toBeInTheDocument();
+    expect(within(preview).getByText(/실제 결제는 아직 실행하지 않아요/)).toBeInTheDocument();
     expect(preview).not.toHaveTextContent('totalRp');
     expect(preview).not.toHaveTextContent('voteTickets');
     expect(preview).not.toHaveTextContent('rewardRp');
@@ -37,10 +37,10 @@ describe('PricingPage', () => {
 
     await user.click(screen.getByRole('button', { name: 'Crew 문의하기' }));
 
-    const preview = screen.getByRole('region', { name: '결제 intent preview' });
+    const preview = screen.getByRole('region', { name: '결제 준비 내용' });
 
     expect(within(preview).getByText('request-crew-partnership')).toBeInTheDocument();
     expect(within(preview).getByText(/official-account-review/)).toBeInTheDocument();
-    expect(within(preview).getByText(/공식성 검증 문의/)).toBeInTheDocument();
+    expect(within(preview).getByText(/공식 계정 검토 문의/)).toBeInTheDocument();
   });
 });

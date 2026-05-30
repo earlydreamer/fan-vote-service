@@ -22,7 +22,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
           ME
         </div>
         <div>
-          <p className="eyebrow">My vote loop</p>
+          <p className="eyebrow">내 투표 루프</p>
           <h1 id="profile-title">내 활동</h1>
           <p>투표권과 RP를 모아 후보 추가, 결과 카드 테마, 반복 참여 루프로 다시 사용하는 상태예요.</p>
         </div>
@@ -36,7 +36,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
       <section className="content-shelf" aria-labelledby="reward-title">
         <div className="collection-heading compact">
           <div>
-            <p className="eyebrow">Rewards</p>
+            <p className="eyebrow">관심 설정</p>
             <h2 id="reward-title">관심 카테고리</h2>
           </div>
           <a className="button button-secondary" href="/profile/edit">
@@ -55,7 +55,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
       <section className="content-collection" aria-labelledby="ongoing-vote-title">
         <div className="collection-heading">
           <div>
-            <p className="eyebrow">In progress</p>
+            <p className="eyebrow">진행 중</p>
             <h2 id="ongoing-vote-title">참여 중인 투표</h2>
           </div>
         </div>
@@ -69,7 +69,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
       <section className="content-collection" aria-labelledby="completed-card-title">
         <div className="collection-heading">
           <div>
-            <p className="eyebrow">Result cards</p>
+            <p className="eyebrow">결과 카드</p>
             <h2 id="completed-card-title">완료된 투표 카드</h2>
           </div>
         </div>
@@ -83,7 +83,7 @@ export function ProfilePage({ profile = demoReadRepository.getProfile() }: Profi
       <section className="content-collection" aria-labelledby="created-title">
         <div className="collection-heading">
           <div>
-            <p className="eyebrow">Created</p>
+            <p className="eyebrow">내가 만든 방</p>
             <h2 id="created-title">내가 만든 투표방</h2>
           </div>
         </div>

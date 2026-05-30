@@ -49,9 +49,9 @@ describe('ResultCardPublishPanel', () => {
 
     renderPublishPanel({ publishResultCardCommand });
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
-    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 만들기' }));
 
     expect(publishResultCardCommand).toHaveBeenCalledWith({
       roomId: 'room-closed'
@@ -63,8 +63,8 @@ describe('ResultCardPublishPanel', () => {
     expect(JSON.stringify(submittedInput)).not.toContain('totalParticipants');
     expect(JSON.stringify(submittedInput)).not.toContain('topMessage');
     expect(JSON.stringify(submittedInput)).not.toContain('voteCount');
-    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
-    expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute(
+    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드를 만들었어요');
+    expect(within(panel).getByRole('link', { name: '결과 카드 보러가기' })).toHaveAttribute(
       'href',
       '/rooms/room-closed/result'
     );
@@ -78,10 +78,10 @@ describe('ResultCardPublishPanel', () => {
       publishResultCardCommand
     });
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
     expect(within(panel).getByText('방장만 결과 카드를 발행할 수 있어요.')).toBeInTheDocument();
-    expect(within(panel).queryByRole('button', { name: '결과 카드 발행' })).not.toBeInTheDocument();
+    expect(within(panel).queryByRole('button', { name: '결과 카드 만들기' })).not.toBeInTheDocument();
     expect(publishResultCardCommand).not.toHaveBeenCalled();
   });
 
@@ -94,8 +94,8 @@ describe('ResultCardPublishPanel', () => {
       publishResultCardCommand
     });
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
-    const publishButton = within(panel).getByRole('button', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
+    const publishButton = within(panel).getByRole('button', { name: '결과 카드 만들기' });
 
     expect(within(panel).getByText('투표가 종료된 뒤 발행할 수 있어요.')).toBeInTheDocument();
     expect(publishButton).toBeDisabled();
@@ -111,18 +111,18 @@ describe('ResultCardPublishPanel', () => {
       ok: false,
       error: {
         code: 'FORBIDDEN',
-        message: '이 작업을 수행할 권한이 없어요.'
+        message: '권한이 있는 계정으로 이용할 수 있어요.'
       }
     }));
 
     renderPublishPanel({ publishResultCardCommand });
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
-    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 만들기' }));
 
-    expect(await within(panel).findByRole('alert')).toHaveTextContent('이 작업을 수행할 권한이 없어요.');
-    expect(within(panel).queryByRole('link', { name: '발행된 결과 카드로 이동' })).not.toBeInTheDocument();
+    expect(await within(panel).findByRole('alert')).toHaveTextContent('권한이 있는 계정으로 이용할 수 있어요.');
+    expect(within(panel).queryByRole('link', { name: '결과 카드 보러가기' })).not.toBeInTheDocument();
   });
 
   it('marks same-route redirects to bypass the SPA router and reload the result page', async () => {
@@ -131,12 +131,12 @@ describe('ResultCardPublishPanel', () => {
 
     renderPublishPanel();
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
-    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 만들기' }));
 
-    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
-    expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute('target', '_self');
+    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드를 만들었어요');
+    expect(within(panel).getByRole('link', { name: '결과 카드 보러가기' })).toHaveAttribute('target', '_self');
   });
 
   it('treats canonical redirects as the same result route even when the current URL has search params', async () => {
@@ -145,11 +145,11 @@ describe('ResultCardPublishPanel', () => {
 
     renderPublishPanel();
 
-    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const panel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
-    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 만들기' }));
 
-    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
-    expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute('target', '_self');
+    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드를 만들었어요');
+    expect(within(panel).getByRole('link', { name: '결과 카드 보러가기' })).toHaveAttribute('target', '_self');
   });
 });

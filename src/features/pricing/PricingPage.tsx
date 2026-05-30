@@ -35,7 +35,7 @@ const addOnPackages = [
     id: 'vote-ticket-pack',
     title: '투표권 팩',
     price: '1,900원',
-    description: '관심 투표방에서 후보 항목 추가와 추가 참여 intent를 만들기 위한 가벼운 패키지',
+    description: '관심 투표방에서 후보 항목을 더하고 추가 참여 흐름을 이어가기 위한 가벼운 패키지',
     action: '투표권 팩 선택'
   }
 ] as const;
@@ -53,10 +53,10 @@ export function PricingPage() {
     <div className="pricing-page">
       <section className="pricing-hero" aria-labelledby="pricing-title">
         <div>
-          <p className="eyebrow">Business loop</p>
+          <p className="eyebrow">참여 루프</p>
           <h1 id="pricing-title">요금제</h1>
           <p>
-            MVP에서는 실제 결제를 실행하지 않고, 투표권과 RP가 후보 추가/결과 카드/반복 참여로 이어지는 구매 intent를
+            MVP에서는 실제 결제를 실행하지 않고, 투표권과 RP가 후보 추가/결과 카드/반복 참여로 이어지는 구매 흐름을
             화면으로 보여줘요.
           </p>
         </div>
@@ -101,7 +101,7 @@ export function PricingPage() {
       <section className="pricing-addons" aria-labelledby="pricing-addons-title">
         <div className="collection-heading compact">
           <div>
-            <p className="eyebrow">Reward spend</p>
+            <p className="eyebrow">보상 사용</p>
             <h2 id="pricing-addons-title">가벼운 충전 패키지</h2>
           </div>
         </div>
@@ -127,8 +127,8 @@ export function PricingPage() {
         <section className="pricing-intent-preview" aria-labelledby="pricing-intent-title">
           <div className="collection-heading compact">
             <div>
-              <p className="eyebrow">Command boundary</p>
-              <h2 id="pricing-intent-title">결제 intent preview</h2>
+              <p className="eyebrow">처리 흐름</p>
+              <h2 id="pricing-intent-title">결제 준비 내용</h2>
             </div>
           </div>
           {intentResult.ok ? (

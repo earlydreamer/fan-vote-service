@@ -29,8 +29,8 @@ export function ResultCardPublishPanel({
     <section className="content-panel result-publish-panel" aria-labelledby={titleId}>
       <div className="collection-heading compact">
         <div>
-          <p className="eyebrow">Owner action</p>
-          <h2 id={titleId}>결과 카드 발행</h2>
+          <p className="eyebrow">방장 작업</p>
+          <h2 id={titleId}>결과 카드 만들기</h2>
         </div>
         <Rocket size={18} aria-hidden="true" />
       </div>
@@ -50,7 +50,7 @@ export function ResultCardPublishPanel({
               void publishState.publishResultCard();
             }}
           >
-            {publishState.isSubmitting ? '발행 요청 중' : '결과 카드 발행'}
+            {publishState.isSubmitting ? '결과 카드 준비 중' : '결과 카드 만들기'}
           </Button>
         </>
       )}
@@ -63,12 +63,12 @@ export function ResultCardPublishPanel({
 
       {publishState.receipt && (
         <div className="result-publish-panel__receipt" role="status">
-          <p>결과 카드 발행 요청 완료</p>
+          <p>결과 카드를 만들었어요</p>
           <a
             href={publishState.receipt.redirectTo}
             target={getRedirectTarget(publishState.receipt.redirectTo)}
           >
-            발행된 결과 카드로 이동
+            결과 카드 보러가기
           </a>
         </div>
       )}

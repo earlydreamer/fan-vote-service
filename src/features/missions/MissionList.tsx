@@ -20,7 +20,7 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
     <section className="content-panel mission-panel" aria-labelledby="mission-panel-title">
       <div className="collection-heading compact">
         <div>
-          <p className="eyebrow">Missions</p>
+          <p className="eyebrow">미션</p>
           <h2 id="mission-panel-title">참여 미션</h2>
         </div>
         <Sparkles size={18} aria-hidden="true" />
@@ -66,12 +66,12 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
                 {isCompleted ? (
                   <>
                     <CheckCircle2 size={16} aria-hidden="true" />
-                    완료됨
+                    완료했어요
                   </>
                 ) : isSubmitting ? (
-                  '처리 중'
+                  '처리하고 있어요'
                 ) : (
-                  '미션 완료'
+                  '미션 완료하기'
                 )}
               </Button>
 

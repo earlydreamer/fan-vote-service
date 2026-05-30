@@ -37,7 +37,7 @@ export function mapCommandErrorMessage(error: { code?: string; message?: string 
     case 'UNAUTHENTICATED':
       return '로그인이 필요해요.';
     case 'FORBIDDEN':
-      return '이 작업을 수행할 권한이 없어요.';
+      return '권한이 있는 계정으로 이용할 수 있어요.';
     case 'VALIDATION_ERROR':
       return '입력값을 다시 확인해 주세요.';
     case 'DUPLICATE_VOTE':
@@ -45,15 +45,15 @@ export function mapCommandErrorMessage(error: { code?: string; message?: string 
     case 'DUPLICATE_MISSION_COMPLETION':
       return '이미 완료한 미션이에요.';
     case 'RATE_LIMITED':
-      return '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.';
+      return '잠시 쉬었다가 다시 시도해 주세요.';
     case 'NOT_FOUND':
-      return '요청한 대상을 찾을 수 없어요.';
+      return '대상을 다시 선택해 주세요.';
     case 'SERVER_ERROR':
       return '서버에서 문제가 발생했어요. 잠시 뒤 다시 시도해 주세요.';
     case 'NETWORK_ERROR':
       return '네트워크 연결을 확인해 주세요.';
     case 'CONFIG_MISSING':
-      return '앱 설정이 아직 완료되지 않았어요.';
+      return '앱 설정을 마치면 이용할 수 있어요.';
     default:
       return error.message?.trim() || '알 수 없는 문제가 발생했어요.';
   }

@@ -22,11 +22,11 @@ export function buildCreateRoomReceipt(payload: CreateRoomCommandPayload): Creat
     roomTitle: payload.room.roomTitle,
     voteTitle: payload.room.voteTitle,
     reviewStatus: 'pending_review',
-    note: '실제 DB 생성 없이 서버 응답 예시만 보여줘요. 승인 뒤에는 read model이 새 방과 비용 차감 상태를 함께 갱신해요.',
+    note: '지금은 데모라서 접수 화면만 보여줘요. 승인이 끝나면 새 방과 비용 차감 상태가 목록에 함께 보여요.',
     nextActions: [
       { label: '홈 피드로 돌아가기', href: '/' },
       { label: '내 활동 보기', href: '/profile' },
-      { label: '데모 방 상세 보기', href: '/rooms/room-stage-opening' }
+      { label: '데모 방 열어보기', href: '/rooms/room-stage-opening' }
     ]
   };
 }
