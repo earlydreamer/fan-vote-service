@@ -83,6 +83,12 @@ export const demoReadRepository = {
     return profile;
   },
 
+  updateProfile(updates: Partial<ProfileReadModel>): ProfileReadModel {
+    Object.assign(profile, updates);
+    window.dispatchEvent(new CustomEvent('profile-updated'));
+    return profile;
+  },
+
   getCrewStats(): CrewStatsReadModel {
     return crewStats;
   },

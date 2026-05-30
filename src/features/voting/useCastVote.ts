@@ -20,6 +20,7 @@ export interface UseCastVoteResult extends VoteReadState {
   maxSpendableTickets: number;
   isSubmitting: boolean;
   hasVoted: boolean;
+  myVotedTickets: number;
   statusMessage: string | null;
   errorMessage: string | null;
   selectCandidate(candidateId: string): void;
@@ -41,6 +42,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
   const [remainingVoteTickets, setRemainingVoteTickets] = useState(options.voteTickets);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
+  const [myVotedTickets, setMyVotedTickets] = useState(0);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const remainingEnergy = Math.max(options.goalValue - state.currentGoalValue, 0);
@@ -48,7 +50,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
 
   const submitVote = async () => {
     const voteTicketCount = clampVoteTicketCount(selectedVoteTicketCount, maxSpendableTickets);
-    if (!selectedCandidateId || voteTicketCount < 1 || isSubmitting || hasVoted) return;
+    if (!selectedCandidateId || voteTicketCount < 1 || isSubmitting) return;
 
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -64,6 +66,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
       const nextState = applyCastVoteResponse(state, result.data);
       setState(nextState);
       setRemainingVoteTickets((current) => Math.max(current - voteTicketCount, 0));
+      setMyVotedTickets((current) => current + voteTicketCount);
       setHasVoted(true);
       setStatusMessage(
         nextState.currentGoalValue >= options.goalValue
@@ -102,6 +105,8 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
       participantCount: current.participantCount + 1
     }));
     setRemainingVoteTickets((current) => Math.max(current - spendCount, 0));
+    setMyVotedTickets((current) => current + spendCount);
+    setHasVoted(true);
     setStatusMessage(`${trimmedTitle} 항목을 추가하고 ${spendCount}표를 자동 반영했어요.`);
     setErrorMessage(null);
     return true;
@@ -119,6 +124,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
     maxSpendableTickets,
     isSubmitting,
     hasVoted,
+    myVotedTickets,
     statusMessage,
     errorMessage,
     selectCandidate: setSelectedCandidateId,

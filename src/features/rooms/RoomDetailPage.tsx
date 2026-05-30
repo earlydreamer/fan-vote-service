@@ -202,6 +202,12 @@ function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
   return async ({ roomId, candidateIds, voteTicketCount }) => {
     const selectedCandidateIds = new Set(candidateIds);
 
+    const currentProfile = demoReadRepository.getProfile();
+    demoReadRepository.updateProfile({
+      voteTickets: Math.max(currentProfile.voteTickets - voteTicketCount, 0),
+      todayVotes: currentProfile.todayVotes + voteTicketCount
+    });
+
     return {
       ok: true,
       data: {
@@ -220,12 +226,20 @@ function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
 function createDemoCompleteMissionCommand(room: RallyRoom): CompleteMissionCommand {
   return async ({ missionId }) => {
     const mission = room.missions.find((item) => item.id === missionId);
+    const rewardRp = mission?.rewardRp ?? 0;
+
+    if (rewardRp > 0) {
+      const currentProfile = demoReadRepository.getProfile();
+      demoReadRepository.updateProfile({
+        totalRp: currentProfile.totalRp + rewardRp
+      });
+    }
 
     return {
       ok: true,
       data: {
         missionId,
-        awardedRp: mission?.rewardRp ?? 0,
+        awardedRp: rewardRp,
         awardedEnergy: mission?.rewardEnergy ?? 0,
         earnedRewards: mission
           ? [
@@ -246,6 +260,12 @@ let demoMessageSequence = 0;
 function createDemoPostRoomMessageCommand(room: RallyRoom): PostRoomMessageCommand {
   return async ({ type, body }) => {
     demoMessageSequence += 1;
+    const rewardRp = 10;
+
+    const currentProfile = demoReadRepository.getProfile();
+    demoReadRepository.updateProfile({
+      totalRp: currentProfile.totalRp + rewardRp
+    });
 
     return {
       ok: true,
@@ -256,7 +276,7 @@ function createDemoPostRoomMessageCommand(room: RallyRoom): PostRoomMessageComma
           body,
           createdAt: '2026-05-30T09:05:00.000Z'
         },
-        awardedRp: 10,
+        awardedRp: rewardRp,
         awardedEnergy: 3
       }
     };

@@ -41,7 +41,18 @@ export function VotePanel({
   });
   const isEnergyClosed = voteState.currentGoalValue >= goalValue;
   const isVoteClosed = !isVotingOpen || isEnergyClosed;
-  const submitLabel = !isVotingOpen ? '투표 종료' : isEnergyClosed ? '투표 마감' : voteState.hasVoted ? '투표 완료' : '투표하기';
+  const hasTickets = voteState.maxSpendableTickets > 0;
+  const submitLabel = !isVotingOpen
+    ? '투표 종료'
+    : isEnergyClosed
+      ? '투표 마감'
+      : !hasTickets && voteState.myVotedTickets > 0
+        ? '투표 완료'
+        : !hasTickets
+          ? '투표권 없음'
+          : voteState.myVotedTickets > 0
+            ? '추가 투표하기'
+            : '투표하기';
   const voteClosedMessage = !isVotingOpen
     ? closedReason
     : isEnergyClosed
@@ -82,7 +93,14 @@ export function VotePanel({
 
       <div className="vote-panel__summary">
         <ProgressMeter label="Vote Energy" value={voteState.currentGoalValue} max={goalValue} />
-        <span>{voteState.participantCount.toLocaleString()}명 참여</span>
+        <div className="vote-panel__user-meta">
+          <span>{voteState.participantCount.toLocaleString()}명 참여</span>
+          {voteState.myVotedTickets > 0 && (
+            <span className="user-tickets-badge">
+              내가 투표한 투표권: <strong>{voteState.myVotedTickets}장</strong>
+            </span>
+          )}
+        </div>
       </div>
       {isVoteClosed && voteClosedMessage && (
         <p className="vote-panel__closed" role="status">
@@ -104,7 +122,7 @@ export function VotePanel({
                   name={`${roomId}-candidate`}
                   value={candidate.id}
                   checked={voteState.selectedCandidateId === candidate.id}
-                  disabled={isVoteClosed || voteState.isSubmitting || voteState.hasVoted}
+                  disabled={isVoteClosed || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                   onChange={() => voteState.selectCandidate(candidate.id)}
                 />
                 <span className="candidate-row__rank">{index + 1}</span>
@@ -176,7 +194,7 @@ export function VotePanel({
             <select
               id={`${roomId}-vote-ticket-count`}
               value={voteState.selectedVoteTicketCount}
-              disabled={isVoteClosed || voteState.maxSpendableTickets < 1 || voteState.hasVoted}
+              disabled={isVoteClosed || voteState.maxSpendableTickets < 1}
               onChange={(event) => voteState.setVoteTicketCount(Number(event.target.value))}
             >
               {ticketOptions.map((ticketCount) => (
@@ -192,11 +210,10 @@ export function VotePanel({
               isVoteClosed ||
               !voteState.selectedCandidateId ||
               voteState.maxSpendableTickets < 1 ||
-              voteState.isSubmitting ||
-              voteState.hasVoted
+              voteState.isSubmitting
             }
           >
-            {voteState.hasVoted && !isVoteClosed ? (
+            {submitLabel === '투표 완료' && !isVoteClosed ? (
               <>
                 <CheckCircle2 size={17} aria-hidden="true" />
                 {submitLabel}
