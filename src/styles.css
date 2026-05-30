@@ -2009,8 +2009,57 @@ select:focus-visible {
 }
 
 .performance-card span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--ink-muted);
   font-weight: 850;
+}
+
+.crew-performance-card {
+  min-block-size: 210px;
+}
+
+.crew-next-action {
+  display: grid;
+  justify-items: start;
+  gap: 10px;
+}
+
+.crew-next-action p {
+  color: var(--ink-muted);
+  line-height: 1.7;
+}
+
+.crew-next-action span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 11px;
+  border-radius: 999px;
+  background: var(--mission-soft);
+  color: #08724d;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.crew-restricted {
+  justify-items: start;
+  gap: 12px;
+  min-block-size: 300px;
+}
+
+.crew-restricted svg {
+  color: var(--primary);
+}
+
+.crew-restricted h2 {
+  font-size: 32px;
+}
+
+.crew-restricted p:not(.eyebrow) {
+  color: var(--ink-muted);
+  line-height: 1.65;
 }
 
 .pricing-hero {
