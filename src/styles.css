@@ -2126,6 +2126,7 @@ select:focus-visible {
   .detail-stage,
   .detail-content-grid,
   .result-showcase,
+  .profile-loop-grid,
   .plan-grid {
     grid-template-columns: 1fr;
   }
@@ -2238,8 +2239,23 @@ select:focus-visible {
   }
 
   .featured-vote-card__stats,
-  .stat-grid {
+  .stat-grid,
+  .profile-micro-stats {
     grid-template-columns: 1fr;
+  }
+
+  .profile-summary__headline {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .reward-history-list li {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .reward-history-list em {
+    grid-column: 2;
+    justify-content: flex-start;
   }
 
   .room-card__stats,
