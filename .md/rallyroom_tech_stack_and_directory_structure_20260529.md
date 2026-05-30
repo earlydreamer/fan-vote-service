@@ -1,7 +1,7 @@
 # PickRally 기술 스택과 디렉터리 구조
 
 작성일: 2026-05-29
-최종 갱신일: 2026-05-30
+최종 갱신일: 2026-05-31
 
 ## 목적
 
@@ -137,6 +137,8 @@ D:\Projects\vibex
 │  │  ├─ profile/
 │  │  │  ├─ ProfilePage.test.tsx
 │  │  │  ├─ ProfilePage.tsx
+│  │  │  ├─ ProfileEditPage.test.tsx
+│  │  │  ├─ ProfileEditPage.tsx
 │  │  │  ├─ ProfileSummary.test.tsx
 │  │  │  ├─ ProfileSummary.tsx
 │  │  │  ├─ rewardHistoryReadModel.test.ts
@@ -189,6 +191,8 @@ D:\Projects\vibex
 │  │  ├─ types/
 │  │  │  └─ rallyroom.ts
 │  │  └─ ui/
+│  │     ├─ Button.test.tsx
+│  │     ├─ Button.tsx
 │  │     ├─ ProgressMeter.tsx
 │  │     ├─ RoomCard.test.tsx
 │  │     ├─ RoomCard.tsx
