@@ -103,6 +103,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
     } else {
       votedTicketsPendingRef.current = Math.max(votedTicketsPendingRef.current - voteTicketCount, 0);
       setErrorMessage(result.error.message);
+      setRemainingVoteTickets(prevVoteTicketsRef.current);
       if (result.error.code === 'DUPLICATE_VOTE') {
         setHasVoted(true);
       }
