@@ -6,6 +6,7 @@ import type { DiscoverySort, RallyRoom } from '../../shared/types/rallyroom';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { RoomCard } from '../../shared/ui/RoomCard';
 import { RoomThumbnail } from '../../shared/ui/RoomThumbnail';
+import { Button } from '../../shared/ui/Button';
 
 const sortOptions: Array<{ id: DiscoverySort; label: string }> = [
   { id: 'popular', label: '인기순' },
@@ -90,14 +91,14 @@ export function HomePage() {
       </section>
 
       <nav className="category-filter" aria-label="카테고리 탐색">
-        <button type="button" aria-pressed={selectedCategoryId === 'all'} onClick={() => setSelectedCategoryId('all')}>
+        <Button variant="unstyled" aria-pressed={selectedCategoryId === 'all'} onClick={() => setSelectedCategoryId('all')}>
           전체
           <span aria-hidden="true">{dashboard.allRooms.length}</span>
-        </button>
+        </Button>
         {dashboard.categories.map((category) => (
-          <button
+          <Button
             key={category.id}
-            type="button"
+            variant="unstyled"
             aria-pressed={selectedCategoryId === category.id}
             onClick={() => setSelectedCategoryId(category.id)}
           >
@@ -105,7 +106,7 @@ export function HomePage() {
             <span aria-hidden="true">
               {dashboard.allRooms.filter((room) => room.categoryId === category.id).length}
             </span>
-          </button>
+          </Button>
         ))}
       </nav>
 
@@ -117,14 +118,14 @@ export function HomePage() {
           </div>
           <div className="sort-tabs" aria-label="투표 정렬">
             {sortOptions.map((option) => (
-              <button
+              <Button
                 key={option.id}
-                type="button"
+                variant="unstyled"
                 aria-pressed={sort === option.id}
                 onClick={() => setSort(option.id)}
               >
                 {option.label}
-              </button>
+              </Button>
             ))}
           </div>
         </div>

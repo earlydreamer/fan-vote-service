@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ArrowRight, BadgeCheck, CreditCard, Sparkles, Ticket } from 'lucide-react';
+import { Button } from '../../shared/ui/Button';
 import { buildPricingIntent, type PricingIntentResult, type PricingItemId } from './pricingIntent';
 
 const plans = [
@@ -82,16 +83,16 @@ export function PricingPage() {
               ))}
             </ul>
             {plan.action ? (
-              <button
-                className="button button-primary plan-card__action"
-                type="button"
+              <Button
+                variant="primary"
+                className="plan-card__action"
                 onClick={() => handleSelect(plan.id)}
               >
                 {plan.name === 'Crew' ? <BadgeCheck size={17} aria-hidden="true" /> : <CreditCard size={17} aria-hidden="true" />}
                 {plan.action}
-              </button>
+              </Button>
             ) : (
-              <span className="plan-card__current">현재 데모 기본 플랜</span>
+              <span className="button plan-card__current">현재 데모 기본 플랜</span>
             )}
           </article>
         ))}
@@ -113,10 +114,10 @@ export function PricingPage() {
                 <p>{item.description}</p>
               </div>
               <strong>{item.price}</strong>
-              <button className="button button-secondary" type="button" onClick={() => handleSelect(item.id)}>
+              <Button variant="secondary" onClick={() => handleSelect(item.id)}>
                 {item.action}
                 <ArrowRight size={17} aria-hidden="true" />
-              </button>
+              </Button>
             </article>
           ))}
         </div>

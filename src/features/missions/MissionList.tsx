@@ -1,5 +1,6 @@
 import { CheckCircle2, Sparkles } from 'lucide-react';
 import type { Mission } from '../../shared/types/rallyroom';
+import { Button } from '../../shared/ui/Button';
 import { type CompleteMissionCommand, useCompleteMission } from './useCompleteMission';
 
 export interface MissionListProps {
@@ -54,8 +55,8 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
                 </label>
               )}
 
-              <button
-                type="button"
+              <Button
+                variant="unstyled"
                 className="mission-card__button"
                 disabled={isCompleted || isAnyMissionSubmitting}
                 onClick={() => {
@@ -72,7 +73,7 @@ export function MissionList({ roomId, missions, completeMissionCommand }: Missio
                 ) : (
                   '미션 완료'
                 )}
-              </button>
+              </Button>
 
               {error && (
                 <p className="error-copy" role="alert">

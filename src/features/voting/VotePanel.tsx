@@ -1,6 +1,7 @@
 import { type FormEvent, useState } from 'react';
 import { CheckCircle2, PlusCircle, Vote } from 'lucide-react';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
+import { Button } from '../../shared/ui/Button';
 import type { Candidate } from '../../shared/types/rallyroom';
 import { type CastVoteCommand, useCastVote } from './useCastVote';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
@@ -142,15 +143,14 @@ export function VotePanel({
           ))}
           <li className="candidate-row candidate-row--add">
             {!isOptionFormOpen ? (
-              <button
-                type="button"
-                className="button button-secondary"
+              <Button
+                variant="secondary"
                 disabled={isVoteClosed || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                 onClick={() => setIsOptionFormOpen(true)}
               >
                 <PlusCircle size={17} aria-hidden="true" />
                 항목 추가
-              </button>
+              </Button>
             ) : (
               <div className="inline-option-form">
                 <div className="inline-option-form__field inline-option-form__field--title">
@@ -178,14 +178,14 @@ export function VotePanel({
                     ))}
                   </select>
                 </div>
-                <button
-                  type="button"
+                <Button
+                  variant="unstyled"
                   className="inline-option-form__submit"
                   disabled={!newOptionTitle.trim() || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                   onClick={handleAddOption}
                 >
                   추가하고 {optionVoteTicketCount}표 자동 투표
-                </button>
+                </Button>
               </div>
             )}
           </li>
@@ -210,18 +210,19 @@ export function VotePanel({
           {userRp !== undefined && (
             <div className="rp-exchange-box">
               <span className="rp-exchange-label">RP로 충전 (100 RP ➔ 1장)</span>
-              <button
-                type="button"
-                className="button button-exchange"
+              <Button
+                variant="unstyled"
+                className="button-exchange"
                 disabled={userRp < 100 || isVoteClosed || voteState.isSubmitting}
                 onClick={() => demoReadRepository.exchangeRpToTickets(1)}
               >
                 RP 교환
-              </button>
+              </Button>
             </div>
           )}
-          <button
+          <Button
             type="submit"
+            variant="primary"
             disabled={
               isVoteClosed ||
               !voteState.selectedCandidateId ||
@@ -237,7 +238,7 @@ export function VotePanel({
             ) : (
               submitLabel
             )}
-          </button>
+          </Button>
           {voteState.statusMessage && voteState.statusMessage !== voteClosedMessage && (
             <p className="success-copy" role="status">
               {voteState.statusMessage}

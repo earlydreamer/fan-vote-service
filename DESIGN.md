@@ -53,7 +53,7 @@ spacing:
 radii:
   xs: 3px
   sm: 5px
-  md: 8px
+  md: 20px
   pill: 999px
 ---
 
@@ -356,7 +356,7 @@ Vote cards should feel like media/content cards, not admin panels.
 
 Rules:
 
-- radius `8px`
+- radius `20px`
 - stable thumbnail area
 - readable title
 - compact metadata

@@ -1,5 +1,6 @@
 import { Rocket } from 'lucide-react';
 import { type PublishResultCardCommand, usePublishResultCard } from './usePublishResultCard';
+import { Button } from '../../shared/ui/Button';
 
 export interface ResultCardPublishPanelProps {
   roomId: string;
@@ -41,8 +42,8 @@ export function ResultCardPublishPanel({
       ) : (
         <>
           {!isPublishable && <p className="guard-copy">{unavailableReason}</p>}
-          <button
-            type="button"
+          <Button
+            variant="unstyled"
             className="result-publish-panel__button"
             disabled={!isPublishable || publishState.isSubmitting}
             onClick={() => {
@@ -50,7 +51,7 @@ export function ResultCardPublishPanel({
             }}
           >
             {publishState.isSubmitting ? '발행 요청 중' : '결과 카드 발행'}
-          </button>
+          </Button>
         </>
       )}
 
