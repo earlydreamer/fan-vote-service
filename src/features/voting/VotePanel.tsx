@@ -60,6 +60,8 @@ export function VotePanel({
   };
 
   const handleAddOption = () => {
+    if (voteState.isSubmitting) return;
+
     const added = voteState.addOptionWithTickets(newOptionTitle, optionVoteTicketCount);
     if (!added) return;
 
@@ -122,7 +124,7 @@ export function VotePanel({
               <button
                 type="button"
                 className="button button-secondary"
-                disabled={isVoteClosed || voteState.maxSpendableTickets < 1}
+                disabled={isVoteClosed || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                 onClick={() => setIsOptionFormOpen(true)}
               >
                 <PlusCircle size={17} aria-hidden="true" />
@@ -134,6 +136,7 @@ export function VotePanel({
                 <input
                   id={`${roomId}-new-option-title`}
                   value={newOptionTitle}
+                  disabled={voteState.isSubmitting}
                   onChange={(event) => setNewOptionTitle(event.target.value)}
                   placeholder="예: 커튼콜 마지막 장면"
                 />
@@ -141,6 +144,7 @@ export function VotePanel({
                 <select
                   id={`${roomId}-option-ticket-count`}
                   value={optionVoteTicketCount}
+                  disabled={voteState.isSubmitting}
                   onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
                 >
                   {optionTicketOptions.map((ticketCount) => (
@@ -151,7 +155,7 @@ export function VotePanel({
                 </select>
                 <button
                   type="button"
-                  disabled={!newOptionTitle.trim() || voteState.maxSpendableTickets < 1}
+                  disabled={!newOptionTitle.trim() || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                   onClick={handleAddOption}
                 >
                   추가하고 {optionVoteTicketCount}표 자동 투표

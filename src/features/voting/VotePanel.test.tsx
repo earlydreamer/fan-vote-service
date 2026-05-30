@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { CommandResult } from '../../shared/api/commandClient';
@@ -178,6 +178,36 @@ describe('VotePanel', () => {
     expect(within(candidateList).getByText('2표')).toBeInTheDocument();
     expect(within(votePanel).getByText('202 / 500')).toBeInTheDocument();
     expect(within(votePanel).getByRole('status')).toHaveTextContent('세 번째 장면 항목을 추가하고 2표를 자동 반영했어요.');
+  });
+
+  it('prevents adding an option while a vote command is pending', async () => {
+    const user = userEvent.setup();
+    let resolveVote: (response: CommandResult<CastVoteResponse>) => void = () => undefined;
+    const castVoteCommand = vi.fn(
+      () =>
+        new Promise<CommandResult<CastVoteResponse>>((resolve) => {
+          resolveVote = resolve;
+        })
+    );
+
+    renderVotePanel({ castVoteCommand });
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ }));
+    await user.click(within(votePanel).getByRole('button', { name: '투표하기' }));
+
+    await waitFor(() => expect(within(votePanel).getByRole('button', { name: '항목 추가' })).toBeDisabled());
+
+    resolveVote({
+      ok: true,
+      data: {
+        roomId: 'room-1',
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 11 }],
+        currentGoalValue: 201,
+        participantCount: 42
+      }
+    });
   });
 
   it('shows duplicate vote errors without optimistic count changes', async () => {
