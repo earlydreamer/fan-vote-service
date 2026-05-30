@@ -124,7 +124,11 @@ D:\Projects\vibex
 │  │  ├─ pricing/
 │  │  │  └─ PricingPage.tsx
 │  │  ├─ profile/
-│  │  │  └─ ProfilePage.tsx
+│  │  │  ├─ ProfilePage.tsx
+│  │  │  ├─ ProfileSummary.test.tsx
+│  │  │  ├─ ProfileSummary.tsx
+│  │  │  ├─ rewardHistoryReadModel.test.ts
+│  │  │  └─ rewardHistoryReadModel.ts
 │  │  ├─ result-cards/
 │  │  │  ├─ publishResultCardApi.ts
 │  │  │  ├─ ResultCardPage.tsx
@@ -273,3 +277,14 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/result-cards/usePublishResultCard.ts`: `publishResultCard` command 호출 상태와 redirect receipt 관리
 - `src/features/result-cards/ResultCardPublishPanel.test.tsx`: 발행 권한, 진행 중 방 guard, command input 계약 테스트
 - `src/shared/data/demo/demoRooms.ts`, `src/shared/data/demo/profile.json`: 종료된 미발행 방과 방장 demo state 추가
+
+## 2026-05-30 Phase 9 Profile Reward History 추가 파일
+
+`features/profile` 아래에 개인 보상 이력과 참여 루프를 표시하는 read model derivation과 UI 컴포넌트를 추가했다.
+
+- `src/features/profile/rewardHistoryReadModel.ts`: profile read model과 room 목록을 joined/created room, 최근 보상 이력, 요약 지표로 파생
+- `src/features/profile/rewardHistoryReadModel.test.ts`: id 매핑, 최신순 보상 이력, profile 없음 상태 테스트
+- `src/features/profile/ProfileSummary.tsx`: 누적 RP, 투표권, 획득 아이콘, 최근 보상 이력, 로그인 안내 상태 UI
+- `src/features/profile/ProfileSummary.test.tsx`: 보상 요약 렌더링과 profile 없음 안내 상태 테스트
+- `src/features/profile/ProfilePage.tsx`: `ProfileSummary`와 joined/created room 목록 연결
+- `src/shared/types/rallyroom.ts`, `src/shared/data/demo/profile.json`: `RewardHistoryEntry`와 demo reward history 추가
