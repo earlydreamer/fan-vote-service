@@ -84,6 +84,15 @@ describe('VotePanel', () => {
     expect(candidateRows[1]).toHaveTextContent('25%');
   });
 
+  it('uses voter-facing candidate helper copy instead of implementation terms', () => {
+    renderVotePanel();
+
+    const candidateList = screen.getByRole('list', { name: '투표 후보 목록' });
+
+    expect(within(candidateList).getAllByText('실시간 집계')).toHaveLength(2);
+    expect(within(candidateList).queryByText(/read model/i)).not.toBeInTheDocument();
+  });
+
   it('submits roomId, candidateIds, and voteTicketCount after a candidate is selected', async () => {
     const user = userEvent.setup();
     const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => ({
@@ -178,6 +187,26 @@ describe('VotePanel', () => {
     expect(within(candidateList).getByText('2표')).toBeInTheDocument();
     expect(within(votePanel).getByText('202 / 500')).toBeInTheDocument();
     expect(within(votePanel).getByRole('status')).toHaveTextContent('세 번째 장면 항목을 추가하고 2표를 자동 반영했어요.');
+  });
+
+  it('groups inline option controls into layout fields', async () => {
+    const user = userEvent.setup();
+
+    renderVotePanel();
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('button', { name: '항목 추가' }));
+
+    expect(within(votePanel).getByLabelText('새 투표 항목').closest('.inline-option-form__field')).toHaveClass(
+      'inline-option-form__field--title'
+    );
+    expect(within(votePanel).getByLabelText('자동 투표권').closest('.inline-option-form__field')).toHaveClass(
+      'inline-option-form__field--ticket'
+    );
+    expect(within(votePanel).getByRole('button', { name: '추가하고 1표 자동 투표' })).toHaveClass(
+      'inline-option-form__submit'
+    );
   });
 
   it('prevents adding an option while a vote command is pending', async () => {
