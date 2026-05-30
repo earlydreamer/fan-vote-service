@@ -44,9 +44,15 @@ html {
 body {
   margin: 0;
   min-block-size: 100vh;
+  overflow-x: clip;
   background:
     linear-gradient(135deg, #f6f1ff 0, #ffffff 44%, #effdfa 1000px),
     var(--canvas);
+}
+
+img,
+svg {
+  max-inline-size: 100%;
 }
 
 button,
@@ -133,6 +139,18 @@ select:focus-visible {
   background: rgb(255 255 255 / 92%);
   box-shadow: 0 16px 40px rgb(108 60 233 / 10%);
   backdrop-filter: blur(18px);
+}
+
+.app-header > *,
+.featured-stage > *,
+.featured-strip > *,
+.create-studio-grid > *,
+.detail-stage > *,
+.detail-content-grid > *,
+.result-showcase > *,
+.profile-loop-grid > *,
+.plan-grid > * {
+  min-inline-size: 0;
 }
 
 .brand-mark {
@@ -297,6 +315,7 @@ select:focus-visible {
   border-radius: 14px;
   font-weight: 900;
   cursor: pointer;
+  max-inline-size: 100%;
 }
 
 .button-primary {
@@ -1072,6 +1091,23 @@ select:focus-visible {
   color: var(--ink-soft);
   font-size: 12px;
   font-weight: 850;
+}
+
+.progress-meter__row > span,
+.progress-meter__row > strong {
+  min-inline-size: 0;
+}
+
+.progress-meter__row > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.progress-meter__row > strong {
+  flex-shrink: 0;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .featured-vote-card .progress-meter__row {
@@ -2269,7 +2305,7 @@ select:focus-visible {
 @media (max-width: 900px) {
   .app-main,
   .app-header {
-    inline-size: min(100% - 28px, 1680px);
+    inline-size: min(1680px, calc(100% - 28px));
   }
 
   .app-header {
@@ -2378,11 +2414,26 @@ select:focus-visible {
   }
 
   .app-header {
+    grid-template-columns: minmax(0, 1fr) auto;
     gap: 8px;
+  }
+
+  .brand-mark {
+    min-inline-size: 0;
+  }
+
+  .brand-mark strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .account-chip {
     padding: 5px;
+  }
+
+  .account-chip + .auth-button {
+    display: none;
   }
 
   .account-chip__wallet {
@@ -2407,6 +2458,13 @@ select:focus-visible {
   .detail-stage,
   .result-showcase {
     padding: 24px 16px;
+  }
+
+  .content-collection,
+  .content-shelf,
+  .content-panel,
+  .result-pending {
+    padding: 20px 16px;
   }
 
   .featured-copy h1,
@@ -2449,8 +2507,21 @@ select:focus-visible {
   .horizontal-card-row,
   .result-strip,
   .mission-card-grid,
-  .performance-grid {
+  .performance-grid,
+  .candidate-grid {
     grid-template-columns: 1fr;
+  }
+
+  .hero-art-card::before {
+    inset: 10px;
+    filter: blur(20px);
+  }
+
+  .detail-stage > .button,
+  .option-form button,
+  .vote-action-row button {
+    inline-size: 100%;
+    white-space: normal;
   }
 
   .plan-card {
