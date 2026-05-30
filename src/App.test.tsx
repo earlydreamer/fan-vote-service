@@ -44,10 +44,14 @@ describe('RallyRoom app shell', () => {
 
     await user.click(within(banner).getByRole('button', { name: '로그아웃' }));
 
-    expect(within(banner).getByRole('button', { name: '로그인' })).toBeInTheDocument();
+    expect(within(banner).getByRole('link', { name: '로그인' })).toBeInTheDocument();
     expect(within(banner).queryByRole('link', { name: '내 프로필' })).not.toBeInTheDocument();
 
-    await user.click(within(banner).getByRole('button', { name: '로그인' }));
+    await user.click(within(banner).getByRole('link', { name: '로그인' }));
+
+    expect(screen.getByRole('heading', { name: '회원가입' })).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: '데모 계정으로 시작하기' }));
 
     expect(within(banner).getByRole('link', { name: '내 프로필' })).toBeInTheDocument();
     expect(within(banner).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
@@ -170,7 +174,7 @@ describe('RallyRoom app shell', () => {
 
     expect(screen.getByRole('heading', { name: '은하 무대 오프닝 투표방' })).toBeInTheDocument();
     expect(screen.getByRole('region', { name: '투표 현황' })).toBeInTheDocument();
-    expect(screen.getByRole('region', { name: '팬월' })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: '팬월' })).toBeInTheDocument();
 
     await user.click(screen.getByRole('link', { name: '결과 카드 보기' }));
 
@@ -204,6 +208,7 @@ describe('RallyRoom app shell', () => {
 
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
     await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
+    await user.click(screen.getByRole('tab', { name: '미션' }));
 
     const missionPanel = screen.getByRole('region', { name: '참여 미션' });
     const missionCard = within(missionPanel).getByRole('article', { name: '오늘의 투표권 사용하기' });
@@ -221,6 +226,7 @@ describe('RallyRoom app shell', () => {
 
     const gallery = screen.getByRole('region', { name: '인기 투표 갤러리' });
     await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
+    await user.click(screen.getByRole('tab', { name: '팬월' }));
 
     const fanWall = screen.getByRole('region', { name: '팬월' });
 

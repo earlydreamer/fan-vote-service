@@ -460,6 +460,8 @@ Useful ingredients:
 - vote/ranking section rendered as a vertical candidate list
 - inline option-add entry at the bottom of the candidate list
 - tabs for current vote, fan-wall/messages, missions, and result/history
+- owner badge and room-management affordance for the room creator
+- guest login/signup CTA instead of pretending an anonymous user can vote
 - related vote rooms
 - result-card route if published
 
@@ -484,10 +486,11 @@ Useful ingredients:
 
 - RP summary
 - followed categories
-- joined votes
+- ongoing joined votes
 - created votes
-- result cards
+- completed result cards
 - earned icons
+- edit entry points for profile and followed categories, while actual saved editing remains out of MVP scope
 
 ## Interaction Rules
 

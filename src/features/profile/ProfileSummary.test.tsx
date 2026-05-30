@@ -29,6 +29,8 @@ const viewModel: ProfileRewardHistoryViewModel = {
     }
   ],
   joinedRooms: [],
+  ongoingJoinedRooms: [],
+  completedVoteRooms: [],
   createdRooms: []
 };
 

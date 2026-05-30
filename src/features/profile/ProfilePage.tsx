@@ -1,14 +1,18 @@
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { RoomCard } from '../../shared/ui/RoomCard';
+import type { ProfileReadModel } from '../../shared/types/rallyroom';
 import { buildProfileRewardHistory } from './rewardHistoryReadModel';
 import { ProfileSummary } from './ProfileSummary';
 
-export function ProfilePage() {
-  const profile = demoReadRepository.getProfile();
+interface ProfilePageProps {
+  profile?: ProfileReadModel | null;
+}
+
+export function ProfilePage({ profile = demoReadRepository.getProfile() }: ProfilePageProps) {
   const dashboard = demoReadRepository.getDashboard();
   const profileHistory = buildProfileRewardHistory(profile, dashboard.allRooms);
   const followedCategories = dashboard.categories.filter((category) =>
-    profile.followedCategoryIds.includes(category.id)
+    profile?.followedCategoryIds.includes(category.id)
   );
 
   return (
@@ -22,6 +26,9 @@ export function ProfilePage() {
           <h1 id="profile-title">내 활동</h1>
           <p>투표권과 RP를 모아 후보 추가, 결과 카드 테마, 반복 참여 루프로 다시 사용하는 상태예요.</p>
         </div>
+        <a className="button button-secondary" href="/profile/edit">
+          프로필 수정
+        </a>
       </section>
 
       <ProfileSummary viewModel={profileHistory} />
@@ -32,6 +39,9 @@ export function ProfilePage() {
             <p className="eyebrow">Rewards</p>
             <h2 id="reward-title">관심 카테고리</h2>
           </div>
+          <a className="button button-secondary" href="/profile/categories">
+            관심 카테고리 수정
+          </a>
         </div>
         <div className="reward-row">
           {followedCategories.map((category) => (
@@ -42,15 +52,29 @@ export function ProfilePage() {
         </div>
       </section>
 
-      <section className="content-collection" aria-labelledby="joined-title">
+      <section className="content-collection" aria-labelledby="ongoing-vote-title">
         <div className="collection-heading">
           <div>
-            <p className="eyebrow">History</p>
-            <h2 id="joined-title">참여 중인 투표방</h2>
+            <p className="eyebrow">In progress</p>
+            <h2 id="ongoing-vote-title">참여 중인 투표</h2>
           </div>
         </div>
         <div className="vote-card-grid compact-grid">
-          {profileHistory?.joinedRooms.map((room) => (
+          {profileHistory?.ongoingJoinedRooms.map((room) => (
+            <RoomCard key={room.id} room={room} category={demoReadRepository.getCategory(room.categoryId)} compact />
+          ))}
+        </div>
+      </section>
+
+      <section className="content-collection" aria-labelledby="completed-card-title">
+        <div className="collection-heading">
+          <div>
+            <p className="eyebrow">Result cards</p>
+            <h2 id="completed-card-title">완료된 투표 카드</h2>
+          </div>
+        </div>
+        <div className="vote-card-grid compact-grid">
+          {profileHistory?.completedVoteRooms.map((room) => (
             <RoomCard key={room.id} room={room} category={demoReadRepository.getCategory(room.categoryId)} compact />
           ))}
         </div>

@@ -4,6 +4,7 @@ export type AppRoute =
   | { name: 'roomDetail'; path: string; roomId: string }
   | { name: 'resultCard'; path: string; roomId: string }
   | { name: 'profile'; path: '/profile' }
+  | { name: 'auth'; path: '/login' }
   | { name: 'crew'; path: '/crew' }
   | { name: 'pricing'; path: '/pricing' }
   | { name: 'notFound'; path: string };
@@ -21,6 +22,7 @@ export function matchRoute(pathname: string): AppRoute {
   if (path === '/') return { name: 'home', path: '/' };
   if (path === '/rooms/new') return { name: 'roomCreate', path: '/rooms/new' };
   if (path === '/profile') return { name: 'profile', path: '/profile' };
+  if (path === '/login') return { name: 'auth', path: '/login' };
   if (path === '/crew') return { name: 'crew', path: '/crew' };
   if (path === '/pricing') return { name: 'pricing', path: '/pricing' };
 

@@ -14,6 +14,8 @@ export interface ProfileRewardHistoryViewModel {
   earnedRewards: string[];
   rewardHistory: ProfileRewardHistoryItem[];
   joinedRooms: RallyRoom[];
+  ongoingJoinedRooms: RallyRoom[];
+  completedVoteRooms: RallyRoom[];
   createdRooms: RallyRoom[];
 }
 
@@ -30,6 +32,14 @@ export function buildProfileRewardHistory(
   const roomById = new Map(rooms.map((room) => [room.id, room]));
   const joinedRooms = mapRooms(profile.joinedRoomIds, roomById);
   const createdRooms = mapRooms(profile.createdRoomIds, roomById);
+  const completedVoteRoomIds = new Set([
+    ...profile.joinedRoomIds,
+    ...profile.createdRoomIds,
+    ...profile.rewardHistory.flatMap((reward) => (reward.roomId ? [reward.roomId] : []))
+  ]);
+  const completedVoteRooms = rooms.filter(
+    (room) => room.status === 'result_published' && completedVoteRoomIds.has(room.id)
+  );
 
   return {
     summary: {
@@ -50,6 +60,8 @@ export function buildProfileRewardHistory(
       }))
       .sort((left, right) => new Date(right.earnedAt).getTime() - new Date(left.earnedAt).getTime()),
     joinedRooms,
+    ongoingJoinedRooms: joinedRooms.filter((room) => room.status !== 'result_published'),
+    completedVoteRooms,
     createdRooms
   };
 }
