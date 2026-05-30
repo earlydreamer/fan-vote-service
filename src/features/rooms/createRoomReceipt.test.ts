@@ -32,7 +32,7 @@ describe('buildCreateRoomReceipt', () => {
       requestId: 'demo-create-room-request',
       nextActions: [
         { label: '홈 피드로 돌아가기', href: '/' },
-        { label: '내 활동에서 만든 방 확인', href: '/profile' },
+        { label: '내 활동 보기', href: '/profile' },
         { label: '데모 방 상세 보기', href: '/rooms/room-stage-opening' }
       ]
     });

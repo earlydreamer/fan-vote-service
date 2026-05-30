@@ -132,7 +132,7 @@ describe('RallyRoom app shell', () => {
     expect(within(receipt).getByText('pending_review')).toBeInTheDocument();
     expect(within(receipt).getByText(/실제 DB 생성 없이 서버 응답 예시만 보여줘요/)).toBeInTheDocument();
     expect(within(receipt).getByRole('link', { name: '홈 피드로 돌아가기' })).toHaveAttribute('href', '/');
-    expect(within(receipt).getByRole('link', { name: '내 활동에서 만든 방 확인' })).toHaveAttribute('href', '/profile');
+    expect(within(receipt).getByRole('link', { name: '내 활동 보기' })).toHaveAttribute('href', '/profile');
     expect(within(receipt).getByRole('link', { name: '데모 방 상세 보기' })).toHaveAttribute(
       'href',
       '/rooms/room-stage-opening'
