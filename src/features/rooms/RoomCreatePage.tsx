@@ -1,4 +1,4 @@
-import { type FormEvent, useState } from 'react';
+import { type FormEvent, useRef, useState } from 'react';
 import { CheckCircle2, ImagePlus, PlusCircle, Ticket, X } from 'lucide-react';
 import { Button } from '../../shared/ui/Button';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
@@ -60,8 +60,25 @@ export function RoomCreatePage() {
     setNewCandidateTitle('');
   };
 
+  // Safari/WebKit에서 compositionend 이후 Enter가 isComposing: false로 도달하는 케이스를 방어하기 위해
+  // composition 상태를 useRef로 직접 추적한다.
+  const isComposingRef = useRef(false);
+
+  const handleCompositionStart = () => {
+    isComposingRef.current = true;
+  };
+
+  const handleCompositionEnd = () => {
+    // Safari/WebKit에서 compositionend 이후 keydown이 같은 마이크로태스크 큐에서 오므로
+    // setTimeout으로 해제를 다음 태스크 큐로 미뤄 그 사이에 오는 Enter를 차단한다.
+    setTimeout(() => {
+      isComposingRef.current = false;
+    }, 0);
+  };
+
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if ((event as any).isComposing || event.nativeEvent?.isComposing) return;
+    // isComposing 속성(표준) 또는 ref(Safari 보완) 중 하나라도 조합 중이면 무시
+    if ((event as any).isComposing || event.nativeEvent?.isComposing || isComposingRef.current) return;
     if (event.key === 'Enter') {
       event.preventDefault();
       handleAddCandidate();
@@ -225,6 +242,8 @@ export function RoomCreatePage() {
                     value={newCandidateTitle}
                     onChange={(event) => setNewCandidateTitle(event.target.value)}
                     onKeyDown={handleKeyDown}
+                    onCompositionStart={handleCompositionStart}
+                    onCompositionEnd={handleCompositionEnd}
                     placeholder="예: 암전 후 첫 조명"
                   />
                   <Button variant="secondary" onClick={handleAddCandidate}>

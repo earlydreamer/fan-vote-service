@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { RoomCreatePage } from './RoomCreatePage';
 
 describe('RoomCreatePage', () => {
@@ -76,6 +76,40 @@ describe('RoomCreatePage', () => {
 
     // 후보 목록에 '조합중인후보'가 없어야 함
     expect(screen.queryByText('조합중인후보')).not.toBeInTheDocument();
+  });
+
+  it('does not add a candidate when Enter arrives after compositionend in Safari (isComposing: false)', () => {
+    // Safari/WebKit에서 compositionend 이후 Enter keydown이 isComposing: false로 오는 시나리오
+    // compositionstart → compositionend → keydown(Enter, isComposing: false) 순서로 발생함
+    // setTimeout(0)을 제어하기 위해 fake timer 사용
+    vi.useFakeTimers();
+
+    render(<RoomCreatePage />);
+
+    const input = screen.getByRole('textbox', { name: '새 후보 항목' });
+
+    fireEvent.change(input, { target: { value: '사파리후보' } });
+    // Safari: IME 조합 시작
+    fireEvent.compositionStart(input);
+    // Safari: IME 조합 완료 (compositionend 이후 Enter가 별도로 도달함)
+    // 이 시점에 setTimeout이 큐에 쌓이지만 아직 실행 안 됨 → isComposingRef.current = true
+    fireEvent.compositionEnd(input, { data: '사파리후보' });
+    // Safari: compositionend 이후 Enter keydown이 isComposing: false로 도달
+    // 아직 setTimeout이 실행 전이므로 isComposingRef.current === true → 가드 동작
+    fireEvent.keyDown(input, {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      isComposing: false,
+      nativeEvent: { isComposing: false }
+    });
+
+    // Safari에서도 IME 확정 Enter로 후보가 추가되면 안 됨
+    expect(screen.queryByText('사파리후보')).not.toBeInTheDocument();
+
+    // 타이머 정리
+    vi.runAllTimers();
+    vi.useRealTimers();
   });
 });
 
