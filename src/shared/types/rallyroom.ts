@@ -122,6 +122,7 @@ export interface RallyRoom {
 }
 
 export interface ProfileReadModel {
+  nickname?: string;
   totalRp: number;
   weeklyRp: number;
   streakDays: number;
