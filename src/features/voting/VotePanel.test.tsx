@@ -456,4 +456,75 @@ describe('VotePanel', () => {
     const optionsList = within(selectBox).getAllByRole('option');
     expect(optionsList).toHaveLength(2);
   });
+
+  it('does not swallow external ticket drops if a vote command returns an error', async () => {
+    const user = userEvent.setup();
+    let rerenderFn: any;
+
+    const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => {
+      // 10ms 뒤에 부모에서 외부 티켓 수량 감소(다른 탭 등에서 소비)를 모사하는 리렌더링 발생
+      setTimeout(() => {
+        if (rerenderFn) {
+          rerenderFn(
+            <VotePanel
+              roomId="room-1"
+              candidates={[candidate('candidate-1', '후보 1', 10)]}
+              currentGoalValue={200}
+              goalValue={500}
+              participantCount={41}
+              castVoteCommand={castVoteCommand}
+              voteTickets={2} // 3장 -> 2장으로 외부 감소 발생
+              userRp={100}
+            />
+          );
+        }
+      }, 10);
+
+      // 에러로 응답 (투표 실패)
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: false,
+            error: {
+              code: 'DUPLICATE_VOTE',
+              message: '투표 요청 오류'
+            }
+          });
+        }, 20);
+      });
+    });
+
+    const { rerender } = render(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 10)]}
+        currentGoalValue={200}
+        goalValue={500}
+        participantCount={41}
+        castVoteCommand={castVoteCommand}
+        voteTickets={3}
+        userRp={100}
+      />
+    );
+    rerenderFn = rerender;
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const optionRadio = within(votePanel).getByRole('radio', { name: /후보 1/ });
+    await user.click(optionRadio);
+
+    const selectBox = within(votePanel).getByLabelText('사용할 투표권');
+    await user.selectOptions(selectBox, '1');
+
+    const submitButton = within(votePanel).getByRole('button', { name: '투표하기' });
+    await user.click(submitButton);
+
+    expect(castVoteCommand).toHaveBeenCalled();
+
+    // 갱신 및 렌더링 대기
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // 투표가 실패했으므로 로컬 1장 소모는 복구되어야 하지만, 외부에서 깎인 1장(3->2)은 반영되어 남은 수량은 2장이어야 함.
+    const optionsList = within(selectBox).getAllByRole('option');
+    expect(optionsList).toHaveLength(2);
+  });
 });
