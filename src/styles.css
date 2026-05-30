@@ -568,7 +568,7 @@ select:focus-visible {
   overflow: hidden;
   min-block-size: 430px;
   border: 1px solid var(--line-soft);
-  border-radius: 20px;
+  border-radius: 8px;
   background: #fff;
 }
 
@@ -648,7 +648,7 @@ select:focus-visible {
   min-block-size: 0;
   padding: 22px;
   border: 1px solid var(--line-soft);
-  border-radius: 20px;
+  border-radius: 8px;
   background: linear-gradient(135deg, #fff 0%, #f6f1ff 58%, #effdfa 100%);
   box-shadow: 0 8px 20px rgb(16 19 24 / 5%);
 }
@@ -715,7 +715,7 @@ select:focus-visible {
 .content-panel,
 .result-pending {
   border: 1px solid var(--line-soft);
-  border-radius: 20px;
+  border-radius: 8px;
   background: var(--surface);
   box-shadow: var(--shadow-sm);
 }
@@ -783,7 +783,7 @@ select:focus-visible {
   display: grid;
   overflow: hidden;
   border: 1px solid var(--line-soft);
-  border-radius: 20px;
+  border-radius: 8px;
   background: #fff;
   transition:
     transform 160ms ease,
@@ -2684,7 +2684,7 @@ select:focus-visible {
   gap: 16px;
   padding: 24px;
   border: 1px solid var(--line-soft);
-  border-radius: 20px;
+  border-radius: 8px;
   background: #fff;
   box-shadow: var(--shadow-sm);
 }
@@ -2799,7 +2799,7 @@ select:focus-visible {
 
   .app-header {
     grid-template-columns: 1fr auto;
-    border-radius: 20px;
+    border-radius: 8px;
   }
 
   .shell-search,
