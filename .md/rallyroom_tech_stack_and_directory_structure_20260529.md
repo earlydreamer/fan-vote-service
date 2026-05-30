@@ -127,7 +127,10 @@ D:\Projects\vibex
 │  │  ├─ not-found/
 │  │  │  └─ NotFoundPage.tsx
 │  │  ├─ pricing/
-│  │  │  └─ PricingPage.tsx
+│  │  │  ├─ PricingPage.test.tsx
+│  │  │  ├─ PricingPage.tsx
+│  │  │  ├─ pricingIntent.test.ts
+│  │  │  └─ pricingIntent.ts
 │  │  ├─ profile/
 │  │  │  ├─ ProfilePage.tsx
 │  │  │  ├─ ProfileSummary.test.tsx
@@ -303,3 +306,12 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/crew/CrewStatsCards.tsx`: Crew 요약 지표, 방별 vote/mission/message count, 다음 미션 추천, 권한 제한 UI
 - `src/features/crew/CrewStatsCards.test.tsx`: aggregate metric 렌더링과 권한 제한 상태 테스트
 - `src/features/crew/CrewDashboardPage.tsx`: demo aggregate read model을 `CrewStatsCards`에 연결
+
+## 2026-05-30 Pricing Purchase Intent 추가 파일
+
+`features/pricing` 아래에 요금제와 투표권/RP 패키지 선택을 command intent preview로 보여주는 mock 비즈니스 플로우를 추가했다.
+
+- `src/features/pricing/pricingIntent.ts`: Plus 구독, 투표권 팩, Crew 문의 선택을 checkout 또는 partnership inquiry command intent로 변환
+- `src/features/pricing/pricingIntent.test.ts`: 신뢰/보상 필드를 클라이언트 payload에 넣지 않는지와 Crew 문의 분기 검증
+- `src/features/pricing/PricingPage.tsx`: 요금제 카드, 충전 패키지, 투표방/내 활동 CTA, 결제 intent preview UI
+- `src/features/pricing/PricingPage.test.tsx`: 요금제 선택, Crew 문의, intent preview 접근성 테스트
