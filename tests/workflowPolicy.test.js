@@ -53,6 +53,7 @@ describe('Codex review automation policy', () => {
   it('documents the GitHub-hosted fallback order and short retry window', () => {
     const docs = [
       'AGENTS.md',
+      '.md/rallyroom_delivery_workflow_20260529.md',
       '.md/rallyroom_github_review_workflow_20260529.md',
     ].map((path) => readProjectFile(path)).join('\n');
 
