@@ -64,11 +64,13 @@ feature 완성 판단 후, 먼저 검증을 통과시킨 뒤 draft PR을 ready f
 기본 공급자:
 
 1. `codex`
-2. `coderabbit`
+2. `gemini`
+3. `coderabbit`
 
 수동 명령:
 
 - Codex: `@codex review`
+- GitHub Gemini Code Assist: `/gemini review`
 - CodeRabbit: `@coderabbitai review`
 
 요청 방식:
@@ -79,8 +81,20 @@ feature 완성 판단 후, 먼저 검증을 통과시킨 뒤 draft PR을 ready f
 - `@codex review`를 요청한 뒤에는 GitHub PR comment/review timeline에서 응답을 확인할 때까지 기다린다.
 - 리뷰 대기 중에는 GitHub MCP로 PR comment, review, review thread를 스캔한다. 자동 trigger가 없다면 수동 또는 heartbeat 방식으로 이 스캔을 반복해야 한다.
 - `chatgpt-codex-connector[bot]`의 review submission 또는 inline review comment가 확인되면 GitHub Codex 리뷰 응답이 도착한 것으로 본다.
+- `To use Codex here, create an environment for this repo` 같은 응답은 코드 리뷰가 아니라 Codex 환경 설정 오류로 본다.
 - CodeRabbit의 release notes 또는 "review in progress" 코멘트는 리뷰 완료로 보지 않는다.
 - 로컬 Codex 리뷰는 GitHub Codex 리뷰를 대체하지 않는다.
+
+GitHub-hosted fallback 허용 조건:
+
+- `@codex review` 요청 후 3분 동안 응답이 없으면 bare `@codex review`를 1회 재요청한다.
+- 재요청 후 2분 동안 응답이 없고, 이전 PR 응답 시간과 비교해 명백히 늦으면 지연 또는 파이프라인 누락으로 볼 수 있다.
+- Codex가 환경 설정 오류를 반환하면 기다림을 반복하지 않고 `codex-unavailable` 상태로 기록한다.
+- fallback은 `GitHub Codex -> GitHub Gemini Code Assist -> CodeRabbit` 순서로 사용한다.
+- Gemini는 PR conversation에 `/gemini review`를 남겨 호출한다.
+- 낮은 위험의 문서/카피/테스트 변경은 GitHub Gemini Code Assist 또는 마지막 fallback인 CodeRabbit 리뷰와 CI 성공을 merge 판단 근거로 사용할 수 있다.
+- 코드 동작, 데이터, 권한, 결제, 배포 변경은 Codex 누락만으로 자동 merge하지 않고 사람 확인 또는 별도 승인 근거를 남긴다.
+- fallback으로 merge한 뒤 늦게 도착한 GitHub Codex 리뷰는 후속 이슈로 이관한다.
 
 로컬 fallback 허용 조건:
 
@@ -94,6 +108,7 @@ fallback 기록:
 - GitHub 리뷰를 얼마나 기다렸는지
 - 어떤 공급자 응답을 확인했는지
 - fallback 결과를 merge gate로 인정할지에 대한 사용자 승인 또는 판단 근거
+- Codex 환경 설정 오류는 코드 피드백 follow-up issue로 만들지 않고, `codex-unavailable` 라벨과 운영 이슈에서 추적한다.
 
 금지:
 

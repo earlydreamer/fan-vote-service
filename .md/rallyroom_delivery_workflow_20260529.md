@@ -73,9 +73,11 @@
 15. draft PR을 ready for review로 전환한다.
 16. GitHub PR에서 `@codex review`를 요청한다.
 17. GitHub Codex 리뷰는 GitHub 이벤트와 follow-up issue를 source of truth로 추적한다.
-18. 현재 PR에서 바로 고치지 않을 리뷰 피드백은 follow-up issue로 이관한다.
-19. follow-up issue는 현재 PR의 merge gate가 아니다.
-20. CI/status/check가 깨끗하고 남은 unresolved review thread가 없으면 자동 merge를 시도한다.
+18. Codex 응답이 3분 동안 없으면 bare `@codex review`를 1회 재요청하고, 재요청 후 2분 동안도 응답이 없으면 GitHub-hosted fallback을 검토한다.
+19. fallback은 `GitHub Codex -> GitHub Gemini Code Assist -> CodeRabbit` 순서로 적용하고, Gemini는 `/gemini review`로 호출한다.
+20. 현재 PR에서 바로 고치지 않을 리뷰 피드백은 follow-up issue로 이관한다.
+21. follow-up issue는 현재 PR의 merge gate가 아니다.
+22. CI/status/check가 깨끗하고 남은 unresolved review thread가 없으면 자동 merge를 시도한다.
 
 ## 커밋 정책
 
@@ -97,6 +99,8 @@
 
 - GitHub Codex 리뷰가 actionable feedback을 남기면 GitHub Actions가 `codex-feedback` label을 붙이고 follow-up issue를 만든다.
 - "major issues 없음" 응답은 follow-up issue를 만들지 않고 `codex-reviewed` label만 붙인다.
+- `To use Codex here, create an environment for this repo` 같은 응답은 코드 리뷰가 아니라 환경 설정 오류로 분류하고 `codex-unavailable` 라벨과 운영 이슈로 추적한다.
+- Codex 환경 설정 오류는 `codex-feedback` follow-up issue로 만들지 않는다.
 - follow-up issue는 한국어 본문으로 리뷰 요약, 원문 링크, PR 번호, head SHA, 현재 PR 처리 원칙을 포함한다.
 - follow-up issue는 현재 PR의 merge gate가 아니다.
 - 자동화는 issue 생성 후 관련 Codex review thread resolve를 시도하고, PR이 draft가 아니며 CI/status/check가 실패 또는 대기 상태가 아니고 남은 unresolved thread가 없으면 자동 merge를 시도한다.
@@ -121,7 +125,8 @@
 - React/TSX 변경 시 `vercel:react-best-practices` 점검 기록 확인
 - GitHub MCP로 PR 코멘트/리뷰 확인
 - GitHub Codex 코드리뷰 요청 및 응답 처리 완료
-- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 또는 `codex-reviewed`/`codex-feedback` label로 확인
+- GitHub Codex 리뷰 응답 도착 여부를 PR comment/review/review thread 또는 `codex-reviewed`/`codex-feedback`/`codex-unavailable` label로 확인
+- `codex-unavailable`이면 GitHub Gemini Code Assist 또는 CodeRabbit fallback 사용 여부와 판단 근거를 PR 코멘트에 남김
 - Codex follow-up issue가 있더라도 현재 PR의 merge gate로 보지 않음
 - 모든 PR conversation/review thread가 resolved 상태인지 확인
 - GitHub MCP가 resolution 상태를 제공하지 못하면 GitHub UI에서 unresolved conversation이 없는지 수동 확인
