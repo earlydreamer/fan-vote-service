@@ -112,7 +112,7 @@ RallyRoom의 핵심 루프는 다음이다.
 
 ```ts
 // 좋음
-castVote({ roomId, candidateIds: [candidateId] })
+castVote({ roomId, candidateIds: [candidateId], voteTicketCount: 3 })
 
 // 나쁨
 updateCandidate({ candidateId, voteCount: candidate.voteCount + 1 })
@@ -374,7 +374,8 @@ Client request:
 ```json
 {
   "roomId": "uuid",
-  "candidateIds": ["uuid"]
+  "candidateIds": ["uuid"],
+  "voteTicketCount": 3
 }
 ```
 
@@ -388,13 +389,14 @@ Server validation:
 - candidate가 해당 room에 속하고 approved 상태인지 확인
 - 한 유저가 같은 room에 이미 ballot을 만들었는지 확인
 - multi_pick이면 선택 개수 제한 확인
+- voteTicketCount가 1 이상이고 사용자의 보유 투표권과 남은 room energy를 초과하지 않는지 확인
 
 DB transaction:
 
 - ballots 생성
 - ballot_items 생성
-- room_candidates.vote_count 증가
-- rooms.current_goal_value 증가
+- room_candidates.vote_count를 voteTicketCount만큼 증가
+- rooms.current_goal_value를 voteTicketCount만큼 증가하고 goal 도달 시 투표 마감 상태로 전환
 - room_members upsert 및 contributed_energy/earned_rp 증가
 - user_stats.vote_count/total_rp/weekly_rp 갱신
 - vote mission 자동 완료, 선택

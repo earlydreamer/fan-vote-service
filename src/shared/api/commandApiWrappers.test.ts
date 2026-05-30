@@ -93,19 +93,21 @@ describe('command API wrappers', () => {
     expect(JSON.stringify(body)).not.toContain('total_rp');
   });
 
-  it('casts a vote with roomId and candidateIds only', async () => {
+  it('casts a vote with user intent fields only', async () => {
     const { client, sentBody } = createRecordingClient();
 
     await castVote(client, {
       roomId: 'room-1',
-      candidateIds: ['candidate-1']
+      candidateIds: ['candidate-1'],
+      voteTicketCount: 3
     });
 
     const body = sentBody();
 
     expect(body).toEqual({
       roomId: 'room-1',
-      candidateIds: ['candidate-1']
+      candidateIds: ['candidate-1'],
+      voteTicketCount: 3
     });
     expect(JSON.stringify(body)).not.toContain('voteCount');
     expect(JSON.stringify(body)).not.toContain('vote_count');

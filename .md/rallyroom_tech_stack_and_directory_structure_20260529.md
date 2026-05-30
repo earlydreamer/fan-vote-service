@@ -150,6 +150,7 @@ D:\Projects\vibex
 │  │  │  ├─ createRoomCommand.ts
 │  │  │  ├─ createRoomReceipt.test.ts
 │  │  │  ├─ createRoomReceipt.ts
+│  │  │  ├─ RoomCreatePage.test.tsx
 │  │  │  ├─ RoomCreatePage.tsx
 │  │  │  └─ RoomDetailPage.tsx
 │  │  └─ voting/
@@ -262,8 +263,8 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 
 `features/voting` 아래에 방 상세 투표 UX를 위한 UI, hook, 응답 매퍼를 추가했다.
 
-- `src/features/voting/VotePanel.tsx`: 후보 선택, 투표 제출, 성공/에러 피드백 UI
-- `src/features/voting/useCastVote.ts`: `castVote` command 호출 상태와 응답 반영 상태 관리
+- `src/features/voting/VotePanel.tsx`: 세로 후보 리스트, 투표권 선택, inline 항목 추가, 성공/에러 피드백 UI
+- `src/features/voting/useCastVote.ts`: `castVote` command 호출 상태, 투표권 소모 의도, Vote Energy 마감, inline 항목 추가 상태 관리
 - `src/features/voting/voteResultMapper.ts`: command 응답 DTO 기반 후보 득표 수, Vote Energy, 참여자 수 갱신
 - `src/features/voting/VotePanel.test.tsx`: 투표 UI와 command input 계약 테스트
 - `src/features/voting/voteResultMapper.test.ts`: 응답 DTO 기반 read state 갱신 테스트

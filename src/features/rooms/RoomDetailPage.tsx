@@ -1,5 +1,3 @@
-import { type FormEvent, useState } from 'react';
-import { PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { createRoomSessionViewModel } from '../../shared/domain/roomSessionViewModel';
 import type { RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
@@ -16,16 +14,9 @@ interface RoomDetailPageProps {
   roomId: string;
 }
 
-interface OptionAddIntent {
-  title: string;
-  costLabel: string;
-}
-
 export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const room = demoReadRepository.getRoomDetail(roomId);
   const profile = demoReadRepository.getProfile();
-  const [newOptionTitle, setNewOptionTitle] = useState('');
-  const [optionAddIntent, setOptionAddIntent] = useState<OptionAddIntent | null>(null);
 
   if (!room) return <NotFoundPage />;
 
@@ -37,20 +28,6 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   const isVotingOpen = room.status === 'active';
   const isMessageOpen = room.status !== 'closed';
   const voteClosedReason = isVotingOpen ? undefined : getVoteClosedReason(room.status);
-  const canSpendTicket = profile.voteTickets >= room.addOptionCost.voteTickets;
-  const canSpendRp = profile.totalRp >= room.addOptionCost.rp;
-  const optionCostLabel = canSpendTicket ? `투표권 ${room.addOptionCost.voteTickets}장` : `${room.addOptionCost.rp} RP`;
-  const canAddOption = newOptionTitle.trim().length > 0 && (canSpendTicket || canSpendRp);
-
-  const handleAddOption = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if (!canAddOption) return;
-
-    const title = newOptionTitle.trim();
-    setOptionAddIntent({ title, costLabel: optionCostLabel });
-    setNewOptionTitle('');
-  };
-
   return (
     <div className="room-detail-page">
       <section className="detail-stage" aria-labelledby="room-title">
@@ -88,46 +65,8 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
           castVoteCommand={castVoteCommand}
           isVotingOpen={isVotingOpen}
           closedReason={voteClosedReason}
+          voteTickets={profile.voteTickets}
         />
-
-        <section className="content-panel option-composer" aria-labelledby="option-composer-title">
-          <div className="collection-heading compact">
-            <div>
-              <p className="eyebrow">Reward spend</p>
-              <h2 id="option-composer-title">투표 항목 추가</h2>
-            </div>
-            <Ticket size={18} aria-hidden="true" />
-          </div>
-          <div className="wallet-strip">
-            <span>보유 투표권 {profile.voteTickets}장</span>
-            <span>{profile.totalRp.toLocaleString()} RP</span>
-          </div>
-          <form className="option-form" onSubmit={handleAddOption}>
-            <label htmlFor="new-option-title">새 투표 항목</label>
-            <div>
-              <input
-                id="new-option-title"
-                value={newOptionTitle}
-                onChange={(event) => setNewOptionTitle(event.target.value)}
-                placeholder="예: 커튼콜 마지막 장면"
-              />
-              <button type="submit" disabled={!canAddOption}>
-                <PlusCircle size={17} aria-hidden="true" />
-                투표 항목 추가 - {optionCostLabel}
-              </button>
-            </div>
-          </form>
-          <p className="guard-copy">
-            지금은 후보 추가 command intent만 만들어요. 실제 투표권/RP 차감과 후보 반영은 서버 승인 후 read model에서 같이 갱신되는 흐름으로
-            이어질 예정이에요.
-          </p>
-          {optionAddIntent && (
-            <p className="success-copy" role="status">
-              후보 추가 요청을 만들었어요. {optionAddIntent.title} 항목은 command API 승인 후 read model에 반영돼요. 예상 비용:{' '}
-              {optionAddIntent.costLabel}
-            </p>
-          )}
-        </section>
 
         <MissionList
           key={`${room.id}-missions`}
@@ -150,7 +89,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
 }
 
 function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
-  return async ({ roomId, candidateIds }) => {
+  return async ({ roomId, candidateIds, voteTicketCount }) => {
     const selectedCandidateIds = new Set(candidateIds);
 
     return {
@@ -159,9 +98,9 @@ function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
         roomId,
         candidateVotes: room.candidates.map((candidate) => ({
           candidateId: candidate.id,
-          voteCount: candidate.voteCount + (selectedCandidateIds.has(candidate.id) ? 1 : 0)
+          voteCount: candidate.voteCount + (selectedCandidateIds.has(candidate.id) ? voteTicketCount : 0)
         })),
-        currentGoalValue: Math.min(room.currentGoalValue + candidateIds.length, room.goalValue),
+        currentGoalValue: Math.min(room.currentGoalValue + voteTicketCount, room.goalValue),
         participantCount: room.participantCount + 1
       }
     };

@@ -18,8 +18,10 @@ function candidate(id: string, title: string, voteCount: number): Candidate {
 
 interface RenderVotePanelOptions {
   castVoteCommand?: (input: CastVoteInput) => Promise<CommandResult<CastVoteResponse>>;
+  candidates?: Candidate[];
   isVotingOpen?: boolean;
   closedReason?: string;
+  voteTickets?: number;
 }
 
 function renderVotePanel({
@@ -32,32 +34,64 @@ function renderVotePanel({
       participantCount: 42
     }
   }),
+  candidates = [candidate('candidate-1', '첫 번째 장면', 10), candidate('candidate-2', '두 번째 장면', 7)],
   isVotingOpen,
-  closedReason
+  closedReason,
+  voteTickets = 5
 }: RenderVotePanelOptions = {}) {
   return render(
     <VotePanel
       roomId="room-1"
-      candidates={[candidate('candidate-1', '첫 번째 장면', 10), candidate('candidate-2', '두 번째 장면', 7)]}
+      candidates={candidates}
       currentGoalValue={200}
       goalValue={500}
       participantCount={41}
       castVoteCommand={castVoteCommand}
       isVotingOpen={isVotingOpen}
       closedReason={closedReason}
+      voteTickets={voteTickets}
     />
   );
 }
 
 describe('VotePanel', () => {
-  it('submits only roomId and candidateIds after a candidate is selected', async () => {
+  it('renders candidates as a vertical list with ticket spending controls', () => {
+    renderVotePanel();
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const candidateList = within(votePanel).getByRole('list', { name: '투표 후보 목록' });
+
+    expect(candidateList).toHaveClass('candidate-list');
+    expect(within(candidateList).getAllByRole('radio')).toHaveLength(2);
+    expect(within(votePanel).getByLabelText('사용할 투표권')).toHaveValue('1');
+  });
+
+  it('sorts candidate rows by vote count and shows vote share percentages', () => {
+    renderVotePanel({
+      candidates: [
+        candidate('candidate-1', '낮은 득표 후보', 5),
+        candidate('candidate-2', '높은 득표 후보', 15)
+      ]
+    });
+
+    const candidateRows = within(screen.getByRole('list', { name: '투표 후보 목록' })).getAllByRole('listitem');
+
+    expect(candidateRows[0]).toHaveTextContent('1');
+    expect(candidateRows[0]).toHaveTextContent('높은 득표 후보');
+    expect(candidateRows[0]).toHaveTextContent('75%');
+    expect(candidateRows[1]).toHaveTextContent('2');
+    expect(candidateRows[1]).toHaveTextContent('낮은 득표 후보');
+    expect(candidateRows[1]).toHaveTextContent('25%');
+  });
+
+  it('submits roomId, candidateIds, and voteTicketCount after a candidate is selected', async () => {
     const user = userEvent.setup();
     const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => ({
       ok: true,
       data: {
         roomId: 'room-1',
-        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 17 }],
-        currentGoalValue: 230,
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 19 }],
+        currentGoalValue: 203,
         participantCount: 42
       }
     }));
@@ -70,11 +104,13 @@ describe('VotePanel', () => {
     expect(submitButton).toBeDisabled();
 
     await user.click(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ }));
+    await user.selectOptions(within(votePanel).getByLabelText('사용할 투표권'), '3');
     await user.click(submitButton);
 
     expect(castVoteCommand).toHaveBeenCalledWith({
       roomId: 'room-1',
-      candidateIds: ['candidate-1']
+      candidateIds: ['candidate-1'],
+      voteTicketCount: 3
     });
     const submittedInputs = castVoteCommand.mock.calls as unknown as Array<[CastVoteInput]>;
     const submittedInput = submittedInputs[0]?.[0];
@@ -99,6 +135,49 @@ describe('VotePanel', () => {
     expect(within(votePanel).getByText('7표')).toBeInTheDocument();
     expect(within(votePanel).getByText('42명 참여')).toBeInTheDocument();
     expect(within(votePanel).getByText('230 / 500')).toBeInTheDocument();
+  });
+
+  it('closes the current vote when Vote Energy reaches the goal', async () => {
+    const user = userEvent.setup();
+    const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => ({
+      ok: true,
+      data: {
+        roomId: 'room-1',
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 310 }],
+        currentGoalValue: 500,
+        participantCount: 42
+      }
+    }));
+
+    renderVotePanel({ castVoteCommand });
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ }));
+    await user.click(within(votePanel).getByRole('button', { name: '투표하기' }));
+
+    expect(await within(votePanel).findByRole('status')).toHaveTextContent('Vote Energy가 가득 차 투표가 마감됐어요.');
+    expect(within(votePanel).getByRole('button', { name: '투표 마감' })).toBeDisabled();
+  });
+
+  it('adds an option inline with automatic votes from spent tickets', async () => {
+    const user = userEvent.setup();
+
+    renderVotePanel();
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('button', { name: '항목 추가' }));
+    await user.type(within(votePanel).getByLabelText('새 투표 항목'), '세 번째 장면');
+    await user.selectOptions(within(votePanel).getByLabelText('자동 투표권'), '2');
+    await user.click(within(votePanel).getByRole('button', { name: '추가하고 2표 자동 투표' }));
+
+    const candidateList = within(votePanel).getByRole('list', { name: '투표 후보 목록' });
+
+    expect(within(candidateList).getByText('세 번째 장면')).toBeInTheDocument();
+    expect(within(candidateList).getByText('2표')).toBeInTheDocument();
+    expect(within(votePanel).getByText('202 / 500')).toBeInTheDocument();
+    expect(within(votePanel).getByRole('status')).toHaveTextContent('세 번째 장면 항목을 추가하고 2표를 자동 반영했어요.');
   });
 
   it('shows duplicate vote errors without optimistic count changes', async () => {

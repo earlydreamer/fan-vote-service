@@ -212,13 +212,13 @@ export function RoomCreatePage() {
               />
               <button type="button" className="button button-secondary" onClick={handleAddCandidate}>
                 <PlusCircle size={17} aria-hidden="true" />
-                후보 항목 추가 - 투표권 1장 또는 120 RP
+                초기 후보 항목 추가
               </button>
             </div>
           </div>
           <p>
-            MVP에서는 팬이 항목을 추가하면 command intent로 먼저 수집하고, 실제 후보 반영과 비용 차감은 서버 승인 후
-            read model로 갱신되는 흐름을 보여줘요.
+            방을 처음 만들 때 구성하는 후보는 무료예요. 이미 시작된 투표에 새 항목을 중간 추가할 때만 투표권을 사용하고,
+            사용한 투표권만큼 새 항목에 자동 투표돼요.
           </p>
           {errors.length > 0 && (
             <div className="guard-copy" role="alert">

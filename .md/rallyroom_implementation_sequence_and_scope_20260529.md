@@ -306,7 +306,8 @@
 
 테스트 범위:
 
-- 후보 선택 시 `roomId`와 `candidateIds`만 보낸다.
+- 후보 선택 시 `roomId`, `candidateIds`, `voteTicketCount`만 보낸다.
+- `voteTicketCount`는 사용자가 소모할 투표권 수를 나타내는 의도값이며, 프론트가 `voteCount`나 `currentGoalValue`를 직접 보내지 않는다.
 - 성공 응답으로 후보 득표 수와 게이지가 갱신된다.
 - `DUPLICATE_VOTE`는 사용자에게 이해 가능한 메시지로 보인다.
 - 프론트가 vote count 증가값을 직접 payload에 넣지 않는다.

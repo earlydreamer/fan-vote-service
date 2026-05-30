@@ -8,18 +8,27 @@ export type CastVoteCommand = (input: CastVoteInput) => Promise<CommandResult<Ca
 
 export interface UseCastVoteOptions extends VoteReadState {
   roomId: string;
+  goalValue: number;
+  voteTickets: number;
   castVoteCommand: CastVoteCommand;
 }
 
 export interface UseCastVoteResult extends VoteReadState {
   selectedCandidateId: string;
+  selectedVoteTicketCount: number;
+  remainingVoteTickets: number;
+  maxSpendableTickets: number;
   isSubmitting: boolean;
   hasVoted: boolean;
   statusMessage: string | null;
   errorMessage: string | null;
   selectCandidate(candidateId: string): void;
+  setVoteTicketCount(voteTicketCount: number): void;
   submitVote(): Promise<void>;
+  addOptionWithTickets(title: string, voteTicketCount: number): boolean;
 }
+
+let localOptionSequence = 0;
 
 export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
   const [state, setState] = useState<VoteReadState>({
@@ -28,13 +37,18 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
     participantCount: options.participantCount
   });
   const [selectedCandidateId, setSelectedCandidateId] = useState('');
+  const [selectedVoteTicketCount, setSelectedVoteTicketCount] = useState(1);
+  const [remainingVoteTickets, setRemainingVoteTickets] = useState(options.voteTickets);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [hasVoted, setHasVoted] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const remainingEnergy = Math.max(options.goalValue - state.currentGoalValue, 0);
+  const maxSpendableTickets = Math.min(remainingVoteTickets, remainingEnergy);
 
   const submitVote = async () => {
-    if (!selectedCandidateId || isSubmitting || hasVoted) return;
+    const voteTicketCount = clampVoteTicketCount(selectedVoteTicketCount, maxSpendableTickets);
+    if (!selectedCandidateId || voteTicketCount < 1 || isSubmitting || hasVoted) return;
 
     setIsSubmitting(true);
     setErrorMessage(null);
@@ -42,13 +56,20 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
 
     const result = await options.castVoteCommand({
       roomId: options.roomId,
-      candidateIds: [selectedCandidateId]
+      candidateIds: [selectedCandidateId],
+      voteTicketCount
     });
 
     if (result.ok) {
-      setState((current) => applyCastVoteResponse(current, result.data));
+      const nextState = applyCastVoteResponse(state, result.data);
+      setState(nextState);
+      setRemainingVoteTickets((current) => Math.max(current - voteTicketCount, 0));
       setHasVoted(true);
-      setStatusMessage('투표가 반영됐어요.');
+      setStatusMessage(
+        nextState.currentGoalValue >= options.goalValue
+          ? 'Vote Energy가 가득 차 투표가 마감됐어요.'
+          : '투표가 반영됐어요.'
+      );
     } else {
       setErrorMessage(result.error.message);
       if (result.error.code === 'DUPLICATE_VOTE') {
@@ -59,14 +80,55 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
     setIsSubmitting(false);
   };
 
+  const addOptionWithTickets = (title: string, voteTicketCount: number): boolean => {
+    const trimmedTitle = title.trim();
+    const spendCount = clampVoteTicketCount(voteTicketCount, maxSpendableTickets);
+
+    if (!trimmedTitle || spendCount < 1) return false;
+
+    localOptionSequence += 1;
+    setState((current) => ({
+      candidates: [
+        ...current.candidates,
+        {
+          id: `${options.roomId}-local-option-${localOptionSequence}`,
+          targetId: `${options.roomId}-local-option-target-${localOptionSequence}`,
+          title: trimmedTitle,
+          status: 'pending',
+          voteCount: spendCount
+        }
+      ],
+      currentGoalValue: Math.min(current.currentGoalValue + spendCount, options.goalValue),
+      participantCount: current.participantCount + 1
+    }));
+    setRemainingVoteTickets((current) => Math.max(current - spendCount, 0));
+    setStatusMessage(`${trimmedTitle} 항목을 추가하고 ${spendCount}표를 자동 반영했어요.`);
+    setErrorMessage(null);
+    return true;
+  };
+
+  const setVoteTicketCount = (voteTicketCount: number) => {
+    setSelectedVoteTicketCount(clampVoteTicketCount(voteTicketCount, Math.max(maxSpendableTickets, 1)));
+  };
+
   return {
     ...state,
     selectedCandidateId,
+    selectedVoteTicketCount: clampVoteTicketCount(selectedVoteTicketCount, Math.max(maxSpendableTickets, 1)),
+    remainingVoteTickets,
+    maxSpendableTickets,
     isSubmitting,
     hasVoted,
     statusMessage,
     errorMessage,
     selectCandidate: setSelectedCandidateId,
-    submitVote
+    setVoteTicketCount,
+    submitVote,
+    addOptionWithTickets
   };
+}
+
+function clampVoteTicketCount(voteTicketCount: number, maxSpendableTickets: number): number {
+  if (!Number.isFinite(voteTicketCount)) return 1;
+  return Math.min(Math.max(Math.trunc(voteTicketCount), 1), Math.max(maxSpendableTickets, 0));
 }

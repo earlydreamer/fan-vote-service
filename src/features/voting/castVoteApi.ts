@@ -3,6 +3,7 @@ import { postCommand, type CommandClient, type CommandResult } from '../../share
 export interface CastVoteInput {
   roomId: string;
   candidateIds: readonly string[];
+  voteTicketCount: number;
 }
 
 export interface CastVoteResponse {
@@ -18,6 +19,7 @@ export interface CastVoteResponse {
 interface CastVoteRequest {
   roomId: string;
   candidateIds: string[];
+  voteTicketCount: number;
 }
 
 export function castVote(client: CommandClient, input: CastVoteInput): Promise<CommandResult<CastVoteResponse>> {
@@ -27,6 +29,7 @@ export function castVote(client: CommandClient, input: CastVoteInput): Promise<C
 function buildCastVotePayload(input: CastVoteInput): CastVoteRequest {
   return {
     roomId: input.roomId,
-    candidateIds: [...input.candidateIds]
+    candidateIds: [...input.candidateIds],
+    voteTicketCount: input.voteTicketCount
   };
 }
