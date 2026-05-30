@@ -76,7 +76,9 @@ export function ResultCardPublishPanel({
 }
 
 function getRedirectTarget(redirectTo: string): '_self' | undefined {
-  const currentRoute = `${window.location.pathname}${window.location.search}`;
+  const redirectUrl = new URL(redirectTo, window.location.origin);
 
-  return redirectTo === currentRoute ? '_self' : undefined;
+  return redirectUrl.origin === window.location.origin && redirectUrl.pathname === window.location.pathname
+    ? '_self'
+    : undefined;
 }
