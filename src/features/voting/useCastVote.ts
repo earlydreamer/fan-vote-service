@@ -101,9 +101,12 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
           : '투표가 반영됐어요.'
       );
     } else {
-      votedTicketsPendingRef.current = Math.max(votedTicketsPendingRef.current - voteTicketCount, 0);
+      const pending = votedTicketsPendingRef.current;
+      const consumedByExternal = Math.max(voteTicketCount - pending, 0);
+
+      votedTicketsPendingRef.current = Math.max(pending - voteTicketCount, 0);
+      setRemainingVoteTickets((current) => Math.max(current - consumedByExternal, 0));
       setErrorMessage(result.error.message);
-      setRemainingVoteTickets(prevVoteTicketsRef.current);
       if (result.error.code === 'DUPLICATE_VOTE') {
         setHasVoted(true);
       }

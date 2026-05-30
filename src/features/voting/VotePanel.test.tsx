@@ -527,4 +527,82 @@ describe('VotePanel', () => {
     const optionsList = within(selectBox).getAllByRole('option');
     expect(optionsList).toHaveLength(2);
   });
+
+  it('restores only the failed submission ticket count and keeps earlier spent tickets from being restored on error', async () => {
+    const user = userEvent.setup();
+
+    const castVoteCommand = vi.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        data: {
+          roomId: 'room-1',
+          candidateVotes: [{ candidateId: 'candidate-1', voteCount: 11 }],
+          currentGoalValue: 201,
+          participantCount: 42
+        }
+      } as CommandResult<CastVoteResponse>)
+      .mockResolvedValueOnce({
+        ok: false,
+        error: {
+          code: 'DUPLICATE_VOTE',
+          message: '투표 요청 오류'
+        }
+      } as CommandResult<CastVoteResponse>);
+
+    const { rerender } = render(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 10)]}
+        currentGoalValue={200}
+        goalValue={500}
+        participantCount={41}
+        castVoteCommand={castVoteCommand}
+        voteTickets={3}
+        userRp={100}
+      />
+    );
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const optionRadio = within(votePanel).getByRole('radio', { name: /후보 1/ });
+    await user.click(optionRadio);
+
+    const selectBox = within(votePanel).getByLabelText('사용할 투표권');
+    const submitButton = within(votePanel).getByRole('button', { name: '투표하기' });
+
+    // 1. 첫 번째 투표 던짐 (1장 사용)
+    await user.selectOptions(selectBox, '1');
+    await user.click(submitButton);
+
+    // 첫 번째 투표 성공 후 로컬 2장 남음 확인
+    await waitFor(() => {
+      const optionsList = within(selectBox).getAllByRole('option');
+      expect(optionsList).toHaveLength(2);
+    });
+
+    // 지연 리프레시 모사 (여전히 props는 3장)
+    rerender(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 11)]}
+        currentGoalValue={201}
+        goalValue={500}
+        participantCount={42}
+        castVoteCommand={castVoteCommand}
+        voteTickets={3}
+        userRp={100}
+      />
+    );
+
+    // 2. 두 번째 투표 던짐 (1장 사용)
+    const nextButton = within(votePanel).getByRole('button', { name: '추가 투표하기' });
+    await user.selectOptions(selectBox, '1');
+    await user.click(nextButton);
+
+    // 두 번째 투표 실패 대기
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // 첫 번째 성공한 1장은 복구되지 않아 2장이어야 함
+    const optionsList = within(selectBox).getAllByRole('option');
+    expect(optionsList).toHaveLength(2);
+  });
 });
