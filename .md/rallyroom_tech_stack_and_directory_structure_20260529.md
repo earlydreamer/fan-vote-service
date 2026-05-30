@@ -186,6 +186,7 @@ D:\Projects\vibex
 │  ├─ styles.css
 │  └─ vite-env.d.ts
 ├─ tests/
+│  ├─ cssLayoutPolicy.test.js
 │  └─ workflowPolicy.test.js
 ├─ .env.example
 ├─ .gitignore
@@ -315,3 +316,10 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/pricing/pricingIntent.test.ts`: 신뢰/보상 필드를 클라이언트 payload에 넣지 않는지와 Crew 문의 분기 검증
 - `src/features/pricing/PricingPage.tsx`: 요금제 카드, 충전 패키지, 투표방/내 활동 CTA, 결제 intent preview UI
 - `src/features/pricing/PricingPage.test.tsx`: 요금제 선택, Crew 문의, intent preview 접근성 테스트
+
+## 2026-05-30 Pricing Mobile Layout Follow-up 추가 파일
+
+Codex 리뷰 후속으로 좁은 모바일 폭에서 요금제 충전 패키지 grid가 수평 overflow를 만들지 않도록 보정했다.
+
+- `tests/cssLayoutPolicy.test.js`: `.addon-grid`가 `minmax(min(100%, 320px), 1fr)` 패턴을 유지하는지 검증
+- `src/styles.css`: `.addon-grid`의 고정 320px minimum track을 responsive minimum track으로 변경
