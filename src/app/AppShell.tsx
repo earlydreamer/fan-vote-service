@@ -1,5 +1,6 @@
 import { type MouseEvent, useEffect, useState } from 'react';
 import { Home, PlusCircle, Ticket, UserRound } from 'lucide-react';
+import { AuthPage } from '../features/auth/AuthPage';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
 import { NotFoundPage } from '../features/not-found/NotFoundPage';
@@ -29,6 +30,11 @@ export function AppShell() {
     if (href === window.location.pathname) return;
     window.history.pushState({}, '', href);
     setRoute(matchRoute(href));
+  };
+
+  const loginWithDemoAccount = () => {
+    setIsAuthenticated(true);
+    navigate('/profile');
   };
 
   const handleShellClick = (event: MouseEvent<HTMLDivElement>) => {
@@ -87,15 +93,18 @@ export function AppShell() {
               </button>
             </>
           ) : (
-            <button className="auth-button auth-button--primary" type="button" onClick={() => setIsAuthenticated(true)}>
+            <a className="auth-button auth-button--primary" href="/login">
               로그인
-            </button>
+            </a>
           )}
         </div>
       </header>
 
       <main id="main-content" className="app-main">
-        {renderRoute(route)}
+        {renderRoute(route, {
+          isAuthenticated,
+          onLogin: loginWithDemoAccount
+        })}
       </main>
 
       <nav className="bottom-nav" aria-label="모바일 주요 화면">
@@ -116,18 +125,27 @@ export function AppShell() {
   );
 }
 
-function renderRoute(route: AppRoute) {
+interface RouteRenderOptions {
+  isAuthenticated: boolean;
+  onLogin: () => void;
+}
+
+function renderRoute(route: AppRoute, options: RouteRenderOptions) {
+  const profile = options.isAuthenticated ? demoReadRepository.getProfile() : null;
+
   switch (route.name) {
     case 'home':
       return <HomePage />;
     case 'roomCreate':
       return <RoomCreatePage />;
     case 'roomDetail':
-      return <RoomDetailPage roomId={route.roomId} />;
+      return <RoomDetailPage roomId={route.roomId} viewerProfile={profile} />;
     case 'resultCard':
       return <ResultCardPage roomId={route.roomId} />;
     case 'profile':
-      return <ProfilePage />;
+      return <ProfilePage profile={profile} />;
+    case 'auth':
+      return <AuthPage onLogin={options.onLogin} />;
     case 'crew':
       return <CrewDashboardPage />;
     case 'pricing':
