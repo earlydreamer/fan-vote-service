@@ -6,6 +6,48 @@
   "todayVotes": 8,
   "followedCategoryIds": ["cat-stage", "cat-game", "cat-character", "cat-meme"],
   "earnedRewards": ["Spotlight Crew", "Story Maker", "Mission Starter", "Meme Curator", "Neon Editor"],
+  "rewardHistory": [
+    {
+      "id": "reward-result-card",
+      "label": "결과 카드 공유 보상",
+      "earnedAt": "2026-05-30T08:40:00Z",
+      "rpDelta": 120,
+      "voteTicketDelta": 1,
+      "icon": "Spotlight Crew",
+      "reason": "result_card",
+      "roomId": "room-closed-finale"
+    },
+    {
+      "id": "reward-fan-message",
+      "label": "팬월 메시지 작성",
+      "earnedAt": "2026-05-30T07:20:00Z",
+      "rpDelta": 10,
+      "voteTicketDelta": 0,
+      "icon": "Story Maker",
+      "reason": "message",
+      "roomId": "room-stage-opening"
+    },
+    {
+      "id": "reward-mission",
+      "label": "오늘의 미션 완료",
+      "earnedAt": "2026-05-29T22:10:00Z",
+      "rpDelta": 30,
+      "voteTicketDelta": 0,
+      "icon": "Mission Starter",
+      "reason": "mission",
+      "roomId": "room-pixel-season"
+    },
+    {
+      "id": "reward-option-add",
+      "label": "후보 항목 제안",
+      "earnedAt": "2026-05-29T18:00:00Z",
+      "rpDelta": 0,
+      "voteTicketDelta": 1,
+      "icon": "Neon Editor",
+      "reason": "option_add",
+      "roomId": "room-neon-character"
+    }
+  ],
   "joinedRoomIds": [
     "room-stage-opening",
     "room-aurora-ending",

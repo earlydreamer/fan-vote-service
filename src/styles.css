@@ -1863,6 +1863,136 @@ select:focus-visible {
   gap: 8px;
 }
 
+.profile-summary {
+  display: grid;
+  gap: 16px;
+}
+
+.profile-summary__headline {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.profile-summary__headline h2,
+.profile-empty-state h2 {
+  margin-block: 6px;
+  font-size: 32px;
+  line-height: 1.15;
+}
+
+.profile-summary__headline p:not(.eyebrow),
+.profile-empty-state p:not(.eyebrow) {
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+.profile-loop-grid {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.82fr) minmax(360px, 1.18fr);
+  gap: 16px;
+}
+
+.profile-reward-wallet,
+.reward-history-panel,
+.profile-empty-state {
+  display: grid;
+  align-content: start;
+  gap: 16px;
+}
+
+.profile-micro-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+
+.profile-micro-stats div {
+  display: grid;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 8px;
+  background: var(--surface-raised);
+}
+
+.profile-micro-stats dt {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.profile-micro-stats dd {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 950;
+}
+
+.reward-history-list {
+  display: grid;
+  gap: 10px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.reward-history-list li {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.reward-history-list__icon {
+  display: grid;
+  place-items: center;
+  inline-size: 38px;
+  block-size: 38px;
+  border-radius: 8px;
+  background: var(--reward-soft);
+  color: var(--reward);
+  font-weight: 950;
+}
+
+.reward-history-list li > div {
+  display: grid;
+  min-inline-size: 0;
+  gap: 4px;
+}
+
+.reward-history-list strong {
+  font-size: 15px;
+}
+
+.reward-history-list li > div span {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.reward-history-list em {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 6px;
+  color: var(--primary);
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 950;
+}
+
+.reward-history-list em span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  white-space: nowrap;
+}
+
 .ops-hero svg {
   color: var(--primary);
 }
