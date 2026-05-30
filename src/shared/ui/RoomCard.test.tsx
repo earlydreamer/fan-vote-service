@@ -51,7 +51,7 @@ describe('RoomCard', () => {
     render(
       <RoomCard
         room={buildRoom({
-          title: '테스트 응원방',
+          title: '테스트 투표방',
           voteTitle: '테스트 대표 투표',
           topic: '테스트 투표 설명'
         })}
@@ -59,8 +59,8 @@ describe('RoomCard', () => {
     );
 
     expect(screen.getByRole('heading', { name: '테스트 대표 투표' })).toBeInTheDocument();
-    expect(screen.getByText('응원방 · 테스트 응원방')).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: '테스트 응원방' })).not.toBeInTheDocument();
+    expect(screen.getByText('투표방 · 테스트 투표방')).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '테스트 투표방' })).not.toBeInTheDocument();
   });
 });
 

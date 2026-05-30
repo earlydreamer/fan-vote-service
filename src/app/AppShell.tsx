@@ -57,12 +57,12 @@ export function AppShell() {
         본문으로 건너뛰기
       </a>
       <header className="app-header">
-        <a className="brand-mark" href="/" aria-label="RallyRoom 홈">
+        <a className="brand-mark" href="/" aria-label="PickRally 홈">
           <span className="brand-sigil" aria-hidden="true">
-            RR
+            PR
           </span>
           <span>
-            <strong>RallyRoom</strong>
+            <strong>PickRally</strong>
             <small>Fan Vote Discovery</small>
           </span>
         </a>

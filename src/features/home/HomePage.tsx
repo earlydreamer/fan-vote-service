@@ -72,7 +72,7 @@ export function HomePage() {
         <div className="hero-art-card">
           <img
             src="https://cdn.vibe-x.app/apps/871a45296be42693e004065f/assets/original/hero-1-55890d0c-0afe-481f-9557-eb2b3b35af2f.png"
-            alt="RallyRoom 팬 투표 커뮤니티"
+            alt="PickRally 팬 투표 커뮤니티"
           />
         </div>
       </section>
@@ -83,7 +83,7 @@ export function HomePage() {
           <a key={room.id} href={`/rooms/${room.id}`} className="featured-mini">
             <span>{room.featuredLabel ?? 'Featured'}</span>
             <strong>{getVoteTitle(room)}</strong>
-            <em>응원방 · {room.title}</em>
+            <em>투표방 · {room.title}</em>
             <small>{room.participantCount.toLocaleString()}명 참여</small>
           </a>
         ))}
@@ -220,7 +220,7 @@ function FeaturedVote({ room }: { room: RallyRoom }) {
           <span className="chip">{category?.name ?? '투표방'}</span>
           <span className="chip chip-energy">{room.candidates.length}개 항목</span>
         </div>
-        <span className="room-card__room-name">응원방 · {room.title}</span>
+        <span className="room-card__room-name">투표방 · {room.title}</span>
         <h2>{voteTitle}</h2>
         <p>{room.topic}</p>
         <ProgressMeter label="Vote Energy" value={room.currentGoalValue} max={room.goalValue} />
