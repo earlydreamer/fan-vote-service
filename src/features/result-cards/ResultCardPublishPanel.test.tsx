@@ -124,4 +124,18 @@ describe('ResultCardPublishPanel', () => {
     expect(await within(panel).findByRole('alert')).toHaveTextContent('이 작업을 수행할 권한이 없어요.');
     expect(within(panel).queryByRole('link', { name: '발행된 결과 카드로 이동' })).not.toBeInTheDocument();
   });
+
+  it('marks same-route redirects to bypass the SPA router and reload the result page', async () => {
+    const user = userEvent.setup();
+    window.history.pushState({}, '', '/rooms/room-closed/result');
+
+    renderPublishPanel();
+
+    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+
+    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
+    expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute('target', '_self');
+  });
 });
