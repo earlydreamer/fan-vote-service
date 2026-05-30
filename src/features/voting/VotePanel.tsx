@@ -1,5 +1,5 @@
-import { type FormEvent } from 'react';
-import { CheckCircle2, Vote } from 'lucide-react';
+import { type FormEvent, useState } from 'react';
+import { CheckCircle2, PlusCircle, Vote } from 'lucide-react';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import type { Candidate } from '../../shared/types/rallyroom';
 import { type CastVoteCommand, useCastVote } from './useCastVote';
@@ -13,6 +13,7 @@ export interface VotePanelProps {
   castVoteCommand: CastVoteCommand;
   isVotingOpen?: boolean;
   closedReason?: string;
+  voteTickets?: number;
 }
 
 export function VotePanel({
@@ -23,23 +24,46 @@ export function VotePanel({
   participantCount,
   castVoteCommand,
   isVotingOpen = true,
-  closedReason
+  closedReason,
+  voteTickets = 0
 }: VotePanelProps) {
+  const [isOptionFormOpen, setIsOptionFormOpen] = useState(false);
+  const [newOptionTitle, setNewOptionTitle] = useState('');
+  const [optionVoteTicketCount, setOptionVoteTicketCount] = useState(1);
   const voteState = useCastVote({
     roomId,
     candidates,
     currentGoalValue,
+    goalValue,
     participantCount,
+    voteTickets,
     castVoteCommand
   });
-  const isVoteClosed = !isVotingOpen;
-  const submitLabel = isVoteClosed ? '투표 종료' : voteState.hasVoted ? '투표 완료' : '투표하기';
+  const isEnergyClosed = voteState.currentGoalValue >= goalValue;
+  const isVoteClosed = !isVotingOpen || isEnergyClosed;
+  const submitLabel = !isVotingOpen ? '투표 종료' : isEnergyClosed ? '투표 마감' : voteState.hasVoted ? '투표 완료' : '투표하기';
+  const voteClosedMessage = !isVotingOpen
+    ? closedReason
+    : isEnergyClosed
+      ? 'Vote Energy가 가득 차 투표가 마감됐어요.'
+      : undefined;
+  const ticketOptions = buildTicketOptions(voteState.maxSpendableTickets);
+  const optionTicketOptions = buildTicketOptions(voteState.maxSpendableTickets);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (isVoteClosed) return;
 
     void voteState.submitVote();
+  };
+
+  const handleAddOption = () => {
+    const added = voteState.addOptionWithTickets(newOptionTitle, optionVoteTicketCount);
+    if (!added) return;
+
+    setNewOptionTitle('');
+    setOptionVoteTicketCount(1);
+    setIsOptionFormOpen(false);
   };
 
   return (
@@ -56,41 +80,107 @@ export function VotePanel({
         <ProgressMeter label="Vote Energy" value={voteState.currentGoalValue} max={goalValue} />
         <span>{voteState.participantCount.toLocaleString()}명 참여</span>
       </div>
-      {isVoteClosed && closedReason && (
+      {isVoteClosed && voteClosedMessage && (
         <p className="vote-panel__closed" role="status">
-          {closedReason}
+          {voteClosedMessage}
         </p>
       )}
 
       <form className="vote-form" onSubmit={handleSubmit}>
-        <div className="candidate-grid" role="radiogroup" aria-label="투표 후보">
+        <ol className="candidate-list" aria-label="투표 후보 목록">
           {voteState.candidates.map((candidate, index) => (
-            <label
-              key={candidate.id}
-              className="candidate-card candidate-card--selectable"
-              data-selected={voteState.selectedCandidateId === candidate.id}
-              data-disabled={isVoteClosed}
-            >
-              <input
-                type="radio"
-                name={`${roomId}-candidate`}
-                value={candidate.id}
-                checked={voteState.selectedCandidateId === candidate.id}
-                disabled={isVoteClosed || voteState.isSubmitting || voteState.hasVoted}
-                onChange={() => voteState.selectCandidate(candidate.id)}
-              />
-              <span>{index + 1}</span>
-              <h3>{candidate.title}</h3>
-              <strong>{candidate.voteCount.toLocaleString()}표</strong>
-              <p>{voteState.selectedCandidateId === candidate.id ? '선택한 후보' : '서버 read model 기준 집계'}</p>
-            </label>
+            <li key={candidate.id} className="candidate-row" data-pending={candidate.status === 'pending'}>
+              <label
+                className="candidate-row__label"
+                data-selected={voteState.selectedCandidateId === candidate.id}
+                data-disabled={isVoteClosed}
+              >
+                <input
+                  type="radio"
+                  name={`${roomId}-candidate`}
+                  value={candidate.id}
+                  checked={voteState.selectedCandidateId === candidate.id}
+                  disabled={isVoteClosed || voteState.isSubmitting || voteState.hasVoted}
+                  onChange={() => voteState.selectCandidate(candidate.id)}
+                />
+                <span className="candidate-row__rank">{index + 1}</span>
+                <span className="candidate-row__main">
+                  <strong>{candidate.title}</strong>
+                  <em>{voteState.selectedCandidateId === candidate.id ? '선택한 후보' : '서버 read model 기준 집계'}</em>
+                </span>
+                <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
+              </label>
+            </li>
           ))}
-        </div>
+          <li className="candidate-row candidate-row--add">
+            {!isOptionFormOpen ? (
+              <button
+                type="button"
+                className="button button-secondary"
+                disabled={isVoteClosed || voteState.maxSpendableTickets < 1}
+                onClick={() => setIsOptionFormOpen(true)}
+              >
+                <PlusCircle size={17} aria-hidden="true" />
+                항목 추가
+              </button>
+            ) : (
+              <div className="inline-option-form">
+                <label htmlFor={`${roomId}-new-option-title`}>새 투표 항목</label>
+                <input
+                  id={`${roomId}-new-option-title`}
+                  value={newOptionTitle}
+                  onChange={(event) => setNewOptionTitle(event.target.value)}
+                  placeholder="예: 커튼콜 마지막 장면"
+                />
+                <label htmlFor={`${roomId}-option-ticket-count`}>자동 투표권</label>
+                <select
+                  id={`${roomId}-option-ticket-count`}
+                  value={optionVoteTicketCount}
+                  onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
+                >
+                  {optionTicketOptions.map((ticketCount) => (
+                    <option key={ticketCount} value={ticketCount}>
+                      {ticketCount}장
+                    </option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  disabled={!newOptionTitle.trim() || voteState.maxSpendableTickets < 1}
+                  onClick={handleAddOption}
+                >
+                  추가하고 {optionVoteTicketCount}표 자동 투표
+                </button>
+              </div>
+            )}
+          </li>
+        </ol>
 
         <div className="vote-action-row">
+          <label className="ticket-select" htmlFor={`${roomId}-vote-ticket-count`}>
+            사용할 투표권
+            <select
+              id={`${roomId}-vote-ticket-count`}
+              value={voteState.selectedVoteTicketCount}
+              disabled={isVoteClosed || voteState.maxSpendableTickets < 1 || voteState.hasVoted}
+              onChange={(event) => voteState.setVoteTicketCount(Number(event.target.value))}
+            >
+              {ticketOptions.map((ticketCount) => (
+                <option key={ticketCount} value={ticketCount}>
+                  {ticketCount}장
+                </option>
+              ))}
+            </select>
+          </label>
           <button
             type="submit"
-            disabled={isVoteClosed || !voteState.selectedCandidateId || voteState.isSubmitting || voteState.hasVoted}
+            disabled={
+              isVoteClosed ||
+              !voteState.selectedCandidateId ||
+              voteState.maxSpendableTickets < 1 ||
+              voteState.isSubmitting ||
+              voteState.hasVoted
+            }
           >
             {voteState.hasVoted && !isVoteClosed ? (
               <>
@@ -101,7 +191,7 @@ export function VotePanel({
               submitLabel
             )}
           </button>
-          {voteState.statusMessage && (
+          {voteState.statusMessage && voteState.statusMessage !== voteClosedMessage && (
             <p className="success-copy" role="status">
               {voteState.statusMessage}
             </p>
@@ -115,4 +205,9 @@ export function VotePanel({
       </form>
     </section>
   );
+}
+
+function buildTicketOptions(maxSpendableTickets: number): number[] {
+  const max = Math.max(Math.min(maxSpendableTickets, 10), 1);
+  return Array.from({ length: max }, (_, index) => index + 1);
 }

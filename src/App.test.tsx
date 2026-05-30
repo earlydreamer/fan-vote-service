@@ -115,7 +115,7 @@ describe('RallyRoom app shell', () => {
 
     await user.click(screen.getByRole('button', { name: '후보 4 삭제' }));
     await user.type(screen.getByRole('textbox', { name: '새 후보 항목' }), '암전 후 첫 조명');
-    await user.click(screen.getByRole('button', { name: '후보 항목 추가 - 투표권 1장 또는 120 RP' }));
+    await user.click(screen.getByRole('button', { name: '초기 후보 항목 추가' }));
     await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
 
     const preview = screen.getByRole('region', { name: '생성 command preview' });
@@ -180,7 +180,7 @@ describe('RallyRoom app shell', () => {
     expect(screen.queryByText('오프닝 장면이 오래 기억될 수 있게 같이 밀어보자.')).not.toBeInTheDocument();
   });
 
-  it('submits a vote option command intent without mutating trusted read model state', async () => {
+  it('adds a vote option inline and spends tickets as automatic votes', async () => {
     const user = userEvent.setup();
     render(<App />);
 
@@ -188,18 +188,14 @@ describe('RallyRoom app shell', () => {
     await user.click(within(gallery).getByRole('link', { name: /은하 무대 오프닝/ }));
 
     const votePanel = screen.getByRole('region', { name: '투표 현황' });
-    const optionComposer = screen.getByRole('region', { name: '투표 항목 추가' });
 
-    expect(within(optionComposer).getByText('보유 투표권 3장')).toBeInTheDocument();
+    await user.click(within(votePanel).getByRole('button', { name: '항목 추가' }));
+    await user.type(within(votePanel).getByRole('textbox', { name: '새 투표 항목' }), '레이저 엔딩 하트');
+    await user.click(within(votePanel).getByRole('button', { name: '추가하고 1표 자동 투표' }));
 
-    await user.type(within(optionComposer).getByRole('textbox', { name: '새 투표 항목' }), '레이저 엔딩 하트');
-    await user.click(within(optionComposer).getByRole('button', { name: '투표 항목 추가 - 투표권 1장' }));
-
-    expect(within(votePanel).queryByText('레이저 엔딩 하트')).not.toBeInTheDocument();
-    expect(within(optionComposer).getByText('보유 투표권 3장')).toBeInTheDocument();
-    expect(screen.getByRole('banner')).toHaveTextContent('투표권 3장');
-    expect(within(optionComposer).getByText(/후보 추가 요청을 만들었어요/)).toBeInTheDocument();
-    expect(within(optionComposer).getByText(/레이저 엔딩 하트/)).toBeInTheDocument();
+    expect(within(votePanel).getByText('레이저 엔딩 하트')).toBeInTheDocument();
+    expect(within(votePanel).getByText('1표')).toBeInTheDocument();
+    expect(within(votePanel).getByRole('status')).toHaveTextContent('레이저 엔딩 하트 항목을 추가하고 1표를 자동 반영했어요.');
   });
 
   it('completes a room mission and shows rewards from the command response', async () => {
