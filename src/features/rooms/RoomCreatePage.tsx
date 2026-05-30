@@ -60,6 +60,13 @@ export function RoomCreatePage() {
     setNewCandidateTitle('');
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      handleAddCandidate();
+    }
+  };
+
   const handleRemoveCandidate = (indexToRemove: number) => {
     updateField(
       'candidates',
@@ -216,6 +223,7 @@ export function RoomCreatePage() {
                     id="new-candidate-title"
                     value={newCandidateTitle}
                     onChange={(event) => setNewCandidateTitle(event.target.value)}
+                    onKeyDown={handleKeyDown}
                     placeholder="예: 암전 후 첫 조명"
                   />
                   <Button variant="secondary" onClick={handleAddCandidate}>
