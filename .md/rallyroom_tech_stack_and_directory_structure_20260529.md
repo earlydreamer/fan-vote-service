@@ -95,6 +95,7 @@ D:\Projects\vibex
 │  ├─ rallyroom_delivery_workflow_20260529.md
 │  ├─ rallyroom_github_review_workflow_20260529.md
 │  ├─ rallyroom_tdd_feature_slicing_20260529.md
+│  ├─ rallyroom_submission_prompts_20260530.md
 │  ├─ rallyroom_tech_stack_and_directory_structure_20260529.md
 │  ├─ rallyroom_v2_backend_architecture_20260529.md
 │  └─ 기타 기획/아이데이션 문서
