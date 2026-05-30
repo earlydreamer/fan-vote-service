@@ -61,6 +61,7 @@ export function RoomCreatePage() {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if ((event as any).isComposing || event.nativeEvent?.isComposing) return;
     if (event.key === 'Enter') {
       event.preventDefault();
       handleAddCandidate();
