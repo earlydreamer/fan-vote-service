@@ -138,4 +138,18 @@ describe('ResultCardPublishPanel', () => {
     expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
     expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute('target', '_self');
   });
+
+  it('treats canonical redirects as the same result route even when the current URL has search params', async () => {
+    const user = userEvent.setup();
+    window.history.pushState({}, '', '/rooms/room-closed/result?from=publish');
+
+    renderPublishPanel();
+
+    const panel = screen.getByRole('region', { name: '결과 카드 발행' });
+
+    await user.click(within(panel).getByRole('button', { name: '결과 카드 발행' }));
+
+    expect(await within(panel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
+    expect(within(panel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute('target', '_self');
+  });
 });
