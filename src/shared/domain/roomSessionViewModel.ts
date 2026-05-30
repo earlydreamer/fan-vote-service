@@ -93,6 +93,5 @@ function createVoteHistory(room: RallyRoom, voteTitle: string): VoteHistorySumma
 function resolveViewerRole(roomId: string, profile?: ProfileReadModel): ViewerRole {
   if (!profile) return 'guest';
   if (profile.createdRoomIds.includes(roomId)) return 'owner';
-  if (profile.joinedRoomIds.includes(roomId)) return 'participant';
-  return 'guest';
+  return 'participant';
 }

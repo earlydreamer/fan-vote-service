@@ -37,6 +37,18 @@ describe('room session view model', () => {
 
     expect(createRoomSessionViewModel(buildRoom(), undefined).viewerRole).toBe('guest');
   });
+
+  it('keeps authenticated viewers as participants when they open a new public room', () => {
+    const viewModel = createRoomSessionViewModel(
+      buildRoom({ id: 'room-new-to-viewer' }),
+      buildProfile({
+        joinedRoomIds: [],
+        createdRoomIds: []
+      })
+    );
+
+    expect(viewModel.viewerRole).toBe('participant');
+  });
 });
 
 function buildRoom(overrides: Partial<RallyRoom> = {}): RallyRoom {

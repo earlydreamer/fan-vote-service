@@ -20,6 +20,12 @@ const rooms = [
     title: '완료된 투표 카드',
     slug: 'completed-room',
     status: 'result_published'
+  },
+  {
+    id: 'closed-room',
+    title: '마감됐지만 결과 카드 없는 투표',
+    slug: 'closed-room',
+    status: 'closed'
   }
 ] as RallyRoom[];
 
@@ -31,7 +37,7 @@ const profile: ProfileReadModel = {
   todayVotes: 8,
   followedCategoryIds: ['cat-stage'],
   earnedRewards: ['Spotlight Crew', 'Mission Starter'],
-  joinedRoomIds: ['joined-room', 'completed-room'],
+  joinedRoomIds: ['joined-room', 'completed-room', 'closed-room'],
   createdRoomIds: ['created-room'],
   rewardHistory: [
     {
@@ -68,11 +74,15 @@ describe('buildProfileRewardHistory', () => {
       voteTickets: 3,
       streakDays: 5,
       todayVotes: 8,
-      joinedRoomCount: 2,
+      joinedRoomCount: 3,
       createdRoomCount: 1,
       earnedRewardCount: 2
     });
-    expect(viewModel?.joinedRooms.map((room) => room.title)).toEqual(['참여한 투표방', '완료된 투표 카드']);
+    expect(viewModel?.joinedRooms.map((room) => room.title)).toEqual([
+      '참여한 투표방',
+      '완료된 투표 카드',
+      '마감됐지만 결과 카드 없는 투표'
+    ]);
     expect(viewModel?.createdRooms.map((room) => room.title)).toEqual(['내가 만든 투표방']);
   });
 
