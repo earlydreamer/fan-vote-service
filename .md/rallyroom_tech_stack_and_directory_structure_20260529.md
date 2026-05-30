@@ -148,6 +148,8 @@ D:\Projects\vibex
 │  │  │  ├─ createRoomApi.ts
 │  │  │  ├─ createRoomCommand.test.ts
 │  │  │  ├─ createRoomCommand.ts
+│  │  │  ├─ createRoomReceipt.test.ts
+│  │  │  ├─ createRoomReceipt.ts
 │  │  │  ├─ RoomCreatePage.tsx
 │  │  │  └─ RoomDetailPage.tsx
 │  │  └─ voting/
@@ -323,3 +325,12 @@ Codex 리뷰 후속으로 좁은 모바일 폭에서 요금제 충전 패키지 
 
 - `tests/cssLayoutPolicy.test.js`: `.addon-grid`가 `minmax(min(100%, 320px), 1fr)` 패턴을 유지하는지 검증
 - `src/styles.css`: `.addon-grid`의 고정 320px minimum track을 responsive minimum track으로 변경
+
+## 2026-05-30 Create Room Receipt Flow 추가 파일
+
+`/rooms/new`의 방 만들기 흐름이 payload preview에서 끝나지 않도록 mock accepted response와 다음 행동 CTA를 추가했다.
+
+- `src/features/rooms/createRoomReceipt.ts`: `create-room` command payload를 `pending_review` receipt view model로 변환
+- `src/features/rooms/createRoomReceipt.test.ts`: receipt next action과 신뢰 필드 미포함 계약 검증
+- `src/features/rooms/RoomCreatePage.tsx`: 유효한 제출 후 생성 요청 접수 receipt와 홈/내 활동/데모 방 상세 CTA 표시
+- `src/App.test.tsx`: 방 만들기 통합 플로우에서 receipt 표시와 검증 실패 시 receipt 미표시를 검증
