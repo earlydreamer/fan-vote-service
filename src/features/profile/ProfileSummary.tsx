@@ -29,7 +29,7 @@ export function ProfileSummary({ viewModel }: ProfileSummaryProps) {
           <h2 id="profile-summary-title">내 보상 루프</h2>
           <p>모은 보상은 후보 추가, 반복 투표, 결과 카드 공유 흐름에서 다시 사용할 수 있어요.</p>
         </div>
-        <a className="button button-secondary" href="/create">
+        <a className="button button-secondary" href="/rooms/new">
           투표방 만들기
         </a>
       </div>

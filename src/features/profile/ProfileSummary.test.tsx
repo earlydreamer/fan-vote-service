@@ -42,6 +42,7 @@ describe('ProfileSummary', () => {
     expect(screen.getByText('Spotlight Crew')).toBeInTheDocument();
     expect(screen.getByText('결과 카드 공유 보상')).toBeInTheDocument();
     expect(screen.getByText('내가 만든 투표방')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: '투표방 만들기' })).toHaveAttribute('href', '/rooms/new');
   });
 
   it('shows a login guidance state when profile data is missing', () => {
