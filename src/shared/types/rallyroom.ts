@@ -20,6 +20,7 @@ export type MessageType = 'cheer' | 'question';
 export type MessageStatus = 'visible' | 'hidden' | 'pending';
 export type PollFormat = 'single' | 'matchup' | 'bracket' | 'scene' | 'line' | 'quick' | 'multi_pick';
 export type DiscoverySort = 'popular' | 'endingSoon' | 'newest' | 'results';
+export type RewardHistoryReason = 'vote' | 'mission' | 'message' | 'result_card' | 'option_add';
 
 export interface Category {
   id: string;
@@ -82,6 +83,17 @@ export interface ResultCard {
   publishedAt?: string;
 }
 
+export interface RewardHistoryEntry {
+  id: string;
+  label: string;
+  earnedAt: string;
+  rpDelta: number;
+  voteTicketDelta: number;
+  icon?: string;
+  reason: RewardHistoryReason;
+  roomId?: string;
+}
+
 export interface RallyRoom {
   id: string;
   slug: string;
@@ -119,6 +131,7 @@ export interface ProfileReadModel {
   earnedRewards: string[];
   joinedRoomIds: string[];
   createdRoomIds: string[];
+  rewardHistory: RewardHistoryEntry[];
 }
 
 export interface CrewRoomStat {

@@ -6,13 +6,13 @@ RallyRoom은 팬이 직접 작은 응원방을 만들고, 투표와 미션으로
 
 ## 현재 상태
 
-초기 프로젝트 세팅 단계입니다.
+VibeX 제출용 프론트엔드 MVP 목업을 feature 단위로 구현 중입니다.
 
-- React + Vite + TypeScript
-- Vitest + Testing Library
-- Supabase 기반 아키텍처 예정
-- TDD 기반 feature 개발 예정
-- `DESIGN.md` 기반 RallyRoom 디자인 시스템 적용 예정
+- React + Vite + TypeScript 기반 SPA
+- Vitest + Testing Library 기반 TDD
+- 홈 탐색, 방 만들기 intent, 투표, 미션, 팬월, 결과 카드, 프로필 보상 이력 UX 구현
+- Supabase command/read architecture는 문서 기준으로 설계하고, 현재 프론트엔드는 demo read model과 command wrapper shell을 사용
+- `DESIGN.md` 기반 RallyRoom 디자인 시스템 적용
 
 ## 로컬 실행
 
