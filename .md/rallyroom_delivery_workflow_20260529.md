@@ -1,14 +1,18 @@
-# RallyRoom Delivery Workflow
+# PickRally Delivery Workflow
 
 작성일: 2026-05-29
+최종 갱신일: 2026-05-31
+
+> 파일명은 초기 코드네임 `RallyRoom` 이력을 유지한다. 현재 서비스명과 UI 표기는 `PickRally`를 우선한다.
 
 ## 목적
 
-이 문서는 RallyRoom 프로젝트의 로컬 작업, GitHub issue, pull request, merge 절차를 정의한다. 초기 세팅 이후 모든 구현은 이 문서를 따른다.
+이 문서는 PickRally 프로젝트의 로컬 작업, GitHub issue, pull request, merge 절차를 정의한다. 초기 세팅 이후 모든 구현은 이 문서를 따른다.
 
 ## 현재 기준
 
-- 최신 기획: `.md/rallyroom_v2_backend_architecture_20260529.md`
+- 최신 제품 요약: `.md/pickrally_current_product_brief_20260531.md`
+- 백엔드/보안 기획: `.md/rallyroom_v2_backend_architecture_20260529.md`
 - remote: `https://github.com/earlydreamer/fan-vote-service.git`
 - 기본 브랜치 후보: `main`
 - 작업 단위 기록 위치: GitHub Issues와 Pull Requests
@@ -26,9 +30,20 @@
 
 ## main 브랜치 예외
 
-현재 `main`에 직접 쌓인 초기 커밋은 remote가 비어 있는 상태에서 저장소 bootstrap을 구성하기 위한 예외로 본다.
+`main` 직접 커밋은 원칙적으로 금지한다. 다만 다음 경우는 예외로 본다.
 
-이 예외는 초기 init commit 범위에만 적용한다. 이후 모든 기능, 문서 변경, 설정 변경은 다음 절차를 따른다.
+- remote가 비어 있는 상태에서 저장소 bootstrap을 구성하는 초기 init commit
+- 사용자가 명시적으로 main 직접 수정을 허용한 문서/메타 정리 작업
+
+예외 작업도 다음 조건을 지킨다.
+
+- 기능 구현과 섞지 않는다.
+- status-only commit을 만들지 않는다.
+- 변경 범위를 문서/메타 정리에 한정한다.
+- 커밋 전 `git diff --check`, `npm test`, `npm run build`를 실행한다.
+- 커밋 메시지와 완료 보고에 검증 결과를 남긴다.
+
+그 외 모든 기능, 문서 변경, 설정 변경은 다음 절차를 따른다.
 
 1. GitHub issue 생성
 2. feature branch 생성

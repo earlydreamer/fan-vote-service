@@ -1,6 +1,9 @@
-# RallyRoom 2차 개발 기획서 보강 — 프론트엔드/백엔드 분리와 Supabase 보안 구조
+# PickRally 2차 개발 기획서 보강 — 프론트엔드/백엔드 분리와 Supabase 보안 구조
 
 작성일: 2026-05-29
+최종 갱신일: 2026-05-31
+
+> 파일명은 초기 코드네임 `RallyRoom` 이력을 유지한다. 현재 서비스명과 UI 표기는 `PickRally`를 우선한다. 이 문서 안의 과거 `RallyRoom`, `응원방`, `Room Energy` 표현은 각각 현재의 `PickRally`, `투표방`, `Vote Energy` 개념으로 읽는다.
 
 작성 목적: 기존 `rallyroom_v2_supabase_planning_20260529.md`에서 모호했던 프론트엔드/백엔드 분리 방식을 구체화한다. 특히 React 클라이언트가 Supabase 테이블에 직접 신뢰 기반 insert/update를 수행하는 얇은 구현을 피하고, 투표·미션·포인트·결과 카드처럼 조작되면 서비스 신뢰가 무너지는 기능을 서버 측 명령 API와 DB 트랜잭션으로 통제하는 구조를 정의한다.
 
@@ -35,14 +38,35 @@ Supabase Postgres + RLS + constraints
 - 실제 데이터 일관성은 Postgres RPC 함수와 DB 제약 조건으로 다시 한 번 보장한다.
 - RLS는 최종 방어선이다. RLS만으로 모든 비즈니스 규칙을 해결하려고 하지 않는다.
 
+## 1.1 2026-05-31 현재 프론트엔드 반영 상태
+
+현재 저장소의 프론트엔드 MVP는 실제 Supabase write를 연결하지 않고, demo read model과 command wrapper shell로 이 아키텍처의 경계를 보여준다.
+
+반영된 UX/구조:
+
+- 서비스명 `PickRally`
+- 팬이 직접 만드는 `투표방`과 방 안의 `현재 투표` 세션 구분
+- 세로 후보 리스트, 반복 투표, 투표권 사용, Vote Energy 마감
+- 활성 투표 중 후보 추가 시 투표권 사용과 자동 투표
+- RP를 투표권으로 교환하는 참여 루프
+- 미션, 팬월, 결과 카드 발행 요청의 command boundary
+- 프로필/내 활동, Crew aggregate dashboard, 요금제 intent
+
+아직 남은 백엔드 작업:
+
+- Supabase schema, RLS, constraint, index migration
+- `create-room`, `cast-vote`, `complete-mission`, `post-room-message`, `publish-result-card` Edge Function 구현
+- Postgres RPC 트랜잭션 구현
+- 실제 인증 세션과 프로필 저장
+
 ---
 
 ## 2. 왜 React 단독 + Supabase 직접 쓰기는 위험한가
 
-RallyRoom의 핵심 루프는 다음이다.
+PickRally의 핵심 루프는 다음이다.
 
 ```text
-응원방 생성 → 투표/미션/팬월 참여 → RP/Room Energy 증가 → 결과 카드 생성 → 마이페이지/Crew 대시보드 반영
+투표방 생성 → 투표/미션/팬월 참여 → RP/Vote Energy 증가 → 결과 카드 생성 → 마이페이지/Crew 대시보드 반영
 ```
 
 이 루프는 단순 CRUD가 아니다.
@@ -101,7 +125,7 @@ RallyRoom의 핵심 루프는 다음이다.
 
 - 투표 수 직접 증가
 - 포인트 직접 증가
-- Room Energy 직접 증가
+- Vote Energy 직접 증가
 - 결과 카드 직접 생성
 - 관리자 권한 판단을 프론트 조건문에만 의존
 - service role key 보유
@@ -169,7 +193,7 @@ public.post_room_message(...)
 public.publish_result_card(...)
 ```
 
-RPC는 단순히 “테이블 insert 편의 함수”가 아니라, RallyRoom의 실제 백엔드 비즈니스 로직이다.
+RPC는 단순히 “테이블 insert 편의 함수”가 아니라, PickRally의 실제 백엔드 비즈니스 로직이다.
 
 ---
 
@@ -248,11 +272,11 @@ activity_events
 
 ## 4.3 왜 room_messages도 직접 insert하지 않는가
 
-팬월 메시지는 단순 댓글처럼 보이지만, RallyRoom에서는 다음과 연결된다.
+팬월 메시지는 단순 댓글처럼 보이지만, PickRally에서는 다음과 연결된다.
 
 - 응원 메시지 작성 미션 완료
 - RP 지급
-- Room Energy 증가
+- Vote Energy 증가
 - 결과 카드 top message 후보
 - 신고/숨김/채택 정책
 
@@ -879,7 +903,7 @@ complete-mission
 
 ## P2. post-room-message / publish-result-card 추가
 
-팬월과 결과 카드가 RallyRoom의 정체성을 만든다. 두 번째로 추가한다.
+팬월과 결과 카드가 PickRally의 정체성을 만든다. 두 번째로 추가한다.
 
 ## P3. Crew 대시보드 집계 view
 
@@ -896,7 +920,7 @@ Crew 대시보드는 직접 row 조회가 아니라 aggregate view로 만든다.
 ## 11.1 아키텍처 수정 프롬프트
 
 ```text
-현재 RallyRoom 2차 개발 기획은 Supabase를 사용하지만, React 클라이언트가 DB 테이블에 직접 insert/update하는 구조가 되면 투표/포인트/미션 보상 조작 위험이 있다.
+현재 PickRally 2차 개발 기획은 Supabase를 사용하지만, React 클라이언트가 DB 테이블에 직접 insert/update하는 구조가 되면 투표/포인트/미션 보상 조작 위험이 있다.
 
 프로젝트 아키텍처를 다음 원칙으로 수정해줘.
 
@@ -904,7 +928,7 @@ Crew 대시보드는 직접 row 조회가 아니라 aggregate view로 만든다.
 2. 방 생성, 투표, 미션 완료, 팬월 메시지 작성, 결과 카드 생성은 직접 테이블 insert/update를 하지 않는다.
 3. 위 핵심 mutation은 Supabase Edge Functions를 통해 command API로 호출한다.
 4. Edge Function은 JWT를 확인하고 payload를 검증한 뒤 Postgres RPC를 호출한다.
-5. Postgres RPC는 실제 DB 트랜잭션을 처리하고, RP/Room Energy/vote_count/result_card를 서버 측에서 계산한다.
+5. Postgres RPC는 실제 DB 트랜잭션을 처리하고, RP/Vote Energy/vote_count/result_card를 서버 측에서 계산한다.
 6. service_role key는 프론트에 절대 노출하지 않는다.
 7. 모든 테이블에는 RLS를 켜고, 핵심 쓰기 테이블에는 직접 INSERT/UPDATE policy를 만들지 않는다.
 8. 프론트는 vote_count, reward_rp, current_goal_value, total_rp 같은 신뢰 필드를 직접 보내지 않는다.
@@ -915,7 +939,7 @@ Crew 대시보드는 직접 row 조회가 아니라 aggregate view로 만든다.
 ## 11.2 스키마/RLS 프롬프트
 
 ```text
-RallyRoom의 Supabase schema를 RLS와 command API 전제에 맞춰 작성해줘.
+PickRally의 Supabase schema를 RLS와 command API 전제에 맞춰 작성해줘.
 
 요구사항:
 1. 모든 public table에 RLS enable.
@@ -930,7 +954,7 @@ RallyRoom의 Supabase schema를 RLS와 command API 전제에 맞춰 작성해줘
 ## 11.3 Edge Function 프롬프트
 
 ```text
-Supabase Edge Functions로 RallyRoom command API를 구현해줘.
+Supabase Edge Functions로 PickRally command API를 구현해줘.
 
 함수:
 - create-room
@@ -954,13 +978,13 @@ Supabase Edge Functions로 RallyRoom command API를 구현해줘.
 
 2차 개발 기획서에는 다음 문장을 추가한다.
 
-> 2차본은 React 단독 구현이 아니라 Supabase를 백엔드 플랫폼으로 사용하는 구조다. 단, 클라이언트가 Supabase 테이블을 직접 신뢰 기반으로 조작하지 않도록, 공개 읽기와 사용자 소유 데이터 조회만 직접 허용하고, 방 생성·투표·미션 완료·메시지 작성·결과 카드 생성은 Supabase Edge Functions와 Postgres RPC를 통해 처리한다. RLS는 접근 제어의 최종 방어선이며, RallyRoom의 핵심 비즈니스 규칙은 서버 측 명령 API와 DB 트랜잭션에서 검증한다.
+> 2차본은 React 단독 구현이 아니라 Supabase를 백엔드 플랫폼으로 사용하는 구조다. 단, 클라이언트가 Supabase 테이블을 직접 신뢰 기반으로 조작하지 않도록, 공개 읽기와 사용자 소유 데이터 조회만 직접 허용하고, 방 생성·투표·미션 완료·메시지 작성·결과 카드 생성은 Supabase Edge Functions와 Postgres RPC를 통해 처리한다. RLS는 접근 제어의 최종 방어선이며, PickRally의 핵심 비즈니스 규칙은 서버 측 명령 API와 DB 트랜잭션에서 검증한다.
 
 ---
 
 ## 13. 최종 판단
 
-이 구조라면 RallyRoom 2차본은 “React 단독 + Supabase DB 붙인 얇은 데모”가 아니라, 다음에 가까워진다.
+이 구조라면 PickRally 2차본은 “React 단독 + Supabase DB 붙인 얇은 데모”가 아니라, 다음에 가까워진다.
 
 ```text
 프론트엔드: React/Vite/TypeScript SPA
@@ -970,4 +994,4 @@ Supabase Edge Functions로 RallyRoom command API를 구현해줘.
 배포: Vercel 또는 Cloudflare Pages + Supabase
 ```
 
-과제 기간을 고려하면 모든 기능을 완벽하게 만들 필요는 없다. 하지만 최소한 `create-room`, `cast-vote`, `complete-mission` 세 명령은 프론트 직접 DB 쓰기가 아니라 서버 측 명령으로 처리해야 한다. 그래야 RallyRoom의 핵심인 투표, 미션, 포인트, 방 에너지가 조작 가능한 로컬 장난감처럼 보이지 않는다.
+과제 기간을 고려하면 모든 기능을 완벽하게 만들 필요는 없다. 하지만 최소한 `create-room`, `cast-vote`, `complete-mission` 세 명령은 프론트 직접 DB 쓰기가 아니라 서버 측 명령으로 처리해야 한다. 그래야 PickRally의 핵심인 투표, 미션, 포인트, Vote Energy가 조작 가능한 로컬 장난감처럼 보이지 않는다.

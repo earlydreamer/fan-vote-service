@@ -1,5 +1,7 @@
 # RallyRoom 2차 개발 기획서 — Supabase/Vercel/Cloudflare 전환안
 
+> 역사적 참고 문서다. 현재 서비스명은 `PickRally`이며, 최신 백엔드/보안 기준은 `.md/rallyroom_v2_backend_architecture_20260529.md`, 최신 제품 요약은 `.md/pickrally_current_product_brief_20260531.md`를 우선한다. 이 문서는 초기 코드네임과 전환안 이력을 보존하기 위해 원문을 크게 고치지 않는다.
+
 작성일: 2026-05-29  
 작성 목적: VibeX 무료 토큰 소진 이후, VibeX 1차 산출물은 과제 요건 대응용 프로토타입으로 보존하고, Codex/Claude 기반으로 RallyRoom 2차 완성본을 독립 앱으로 재구축하기 위한 기획·구현 지침을 정의한다.
 

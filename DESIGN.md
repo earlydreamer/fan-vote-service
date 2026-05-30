@@ -410,7 +410,7 @@ Tag rules:
 
 ### Color Roles
 
-- `primary` green: create/vote action, selected category, active state
+- `primary` Very Peri: create/vote action, selected category, active state
 - `vote` blue: vote count, ranking state, selected candidate
 - `live` rose: live/now/hot status
 - `energy` amber: D-day and ending-soon urgency

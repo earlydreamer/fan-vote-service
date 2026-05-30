@@ -1,10 +1,13 @@
-# RallyRoom GitHub MCP Review Workflow
+# PickRally GitHub MCP Review Workflow
 
 작성일: 2026-05-29
+최종 갱신일: 2026-05-31
+
+> 파일명은 초기 코드네임 `RallyRoom` 이력을 유지한다. 현재 서비스명과 UI 표기는 `PickRally`를 우선한다.
 
 ## 목적
 
-이 문서는 RallyRoom 프로젝트에서 GitHub issue, draft PR, 코드리뷰 요청, 리뷰 반영, draft 해제, merge를 어떻게 운영할지 정의한다.
+이 문서는 PickRally 프로젝트에서 GitHub issue, draft PR, 코드리뷰 요청, 리뷰 반영, draft 해제, merge를 어떻게 운영할지 정의한다.
 
 ## 원칙
 
@@ -14,7 +17,7 @@
 - PR은 feature 시작 시 draft로 연다.
 - feature branch의 커밋은 rebase/squash하지 않고 의미 단위로 쌓는다.
 - merge method는 `merge`를 기본으로 한다. squash/rebase merge는 사용하지 않는다.
-- 빈 remote 초기 bootstrap commit만 main 직접 커밋 예외로 허용한다. 이후 모든 작업은 feature branch와 draft PR을 거친다.
+- 빈 remote 초기 bootstrap commit과 사용자가 명시적으로 허용한 문서/메타 정리 작업만 main 직접 커밋 예외로 허용한다. 그 외 모든 작업은 feature branch와 draft PR을 거친다.
 
 ## 저장소
 

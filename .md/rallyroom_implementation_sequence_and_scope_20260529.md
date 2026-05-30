@@ -1,26 +1,54 @@
-# RallyRoom 구현 순서와 범위
+# PickRally 구현 순서와 범위
 
 작성일: 2026-05-29
-최종 갱신일: 2026-05-30
+최종 갱신일: 2026-05-31
+
+> 파일명은 초기 코드네임 `RallyRoom` 이력을 유지한다. 현재 서비스명과 UI 표기는 `PickRally`를 우선한다.
 
 ## 목적
 
-이 문서는 RallyRoom 구현을 어떤 순서로, 어디까지, 어떤 기준으로 진행할지 정의한다. 각 단계는 독립 feature로 진행하며, issue, feature branch, draft PR, TDD, 리뷰, merge 절차를 따른다.
+이 문서는 PickRally 구현을 어떤 순서로, 어디까지, 어떤 기준으로 진행할지 정의한다. 각 단계는 독립 feature로 진행하며, issue, feature branch, draft PR, TDD, 리뷰, merge 절차를 따른다.
 
 ## 전제
 
-- 최신 기획 기준: `.md/rallyroom_v2_backend_architecture_20260529.md`
+- 최신 제품 요약: `.md/pickrally_current_product_brief_20260531.md`
+- 백엔드/보안 기획 기준: `.md/rallyroom_v2_backend_architecture_20260529.md`
 - 디자인 시스템 기준: `DESIGN.md`
 - 기술 스택 기준: `.md/rallyroom_tech_stack_and_directory_structure_20260529.md`
 - TDD 기준: `.md/rallyroom_tdd_feature_slicing_20260529.md`
 - GitHub 운영 기준: `.md/rallyroom_github_review_workflow_20260529.md`
+
+## 2026-05-31 현재 저장소 상태
+
+현재 `main` 기준으로 Phase 0부터 Phase 10까지의 프론트엔드 MVP와 Phase 13 제출 준비 일부가 구현되어 있다.
+
+추가로 완료된 보완 작업:
+
+- 서비스명 `PickRally` 반영과 HTML title 정책 테스트
+- 홈/상세의 투표방/투표 위계 정리
+- 투표 후보 세로 리스트와 반복 투표 UX
+- 활성 투표 중 후보 추가 시 투표권 사용 및 자동 투표
+- RP를 투표권으로 교환하는 목업 플로우
+- 투표권 차감/복구 경합 버그 보완
+- 투표방 만들기 화면 재구성, Enter 후보 추가, IME/Safari 조합 입력 guard
+- 공통 `Button` 컴포넌트와 버튼 스타일 통일
+- 프로필 수정 페이지와 로그인 guard
+- 문서/워크플로우 정책 테스트
+
+남은 큰 작업:
+
+- 실제 Supabase schema/RLS/RPC migration
+- Supabase Edge Function command API 구현
+- 실제 인증/프로필 저장
+- 결제 연동
+- VibeX 도메인 게시와 제출 메일 정리
 
 ## 전체 구현 원칙
 
 - 프론트엔드는 신뢰 데이터를 직접 계산하거나 DB에 쓰지 않는다.
 - 핵심 mutation은 command API 경계로만 표현한다.
 - MVP라도 클라이언트 직접 Supabase insert/update 구조를 만들지 않는다.
-- UI 구현 전 `DESIGN.md`를 읽고, 첫 화면을 랜딩 페이지가 아니라 앱 대시보드로 만든다.
+- UI 구현 전 `DESIGN.md`를 읽고, 첫 화면을 랜딩 페이지가 아니라 투표방 탐색이 바로 보이는 앱 화면으로 만든다.
 - UI 구현은 React Best Practice 점검을 거친다.
 - 모든 기능은 feature 단위로 쪼개고, GitHub issue와 PR에서 상태와 완료 기준을 관리한다.
 - 브랜치 내부 임시 메모가 필요하면 `.md/local/`에 untracked 파일로 둔다.
@@ -75,7 +103,7 @@
 
 목표:
 
-- `awesome-design-md`와 Google Stitch DESIGN.md 개념을 참고해 RallyRoom 전용 디자인 계약을 만든다.
+- `awesome-design-md`와 Google Stitch DESIGN.md 개념을 참고해 PickRally 전용 디자인 계약을 만든다.
 - Phase 1 이후 UI가 랜딩 페이지, 일반 SaaS 히어로, 공식 아이돌 앱 톤으로 흐르지 않도록 시각 기준을 고정한다.
 
 포함 범위:
@@ -94,7 +122,7 @@
 완료 기준:
 
 - `DESIGN.md`가 루트에 존재한다.
-- `Fan Ops Board` 방향과 앱 대시보드 우선 원칙이 명시된다.
+- `Fan Vote Discovery` 방향과 탐색 화면 우선 원칙이 명시된다.
 - `npm test` 통과
 - `npm run build` 통과
 
@@ -102,9 +130,9 @@
 
 목표:
 
-- RallyRoom MVP의 화면 이동 골격을 만든다.
+- PickRally MVP의 화면 이동 골격을 만든다.
 - 아직 서버 데이터 없이도 홈, 방 만들기, 방 상세, 마이페이지, Crew 대시보드, 요금제 화면으로 이동할 수 있게 한다.
-- `DESIGN.md` 기준으로 첫 화면을 홈/탐색 대시보드로 구성한다.
+- `DESIGN.md` 기준으로 첫 화면을 홈/탐색 피드로 구성한다.
 - 페이지 단위 렌더링은 하드코딩 배열이 아니라 Supabase read model로 바꾸기 쉬운 최소 demo JSON/repository를 사용한다.
 
 포함 범위:
@@ -149,7 +177,7 @@
 - 홈에서 주요 CTA가 보인다.
 - CTA 클릭 또는 라우팅 동작으로 방 만들기 화면에 접근할 수 있다.
 - 존재하지 않는 경로는 안전한 fallback을 보여준다.
-- 첫 화면이 full-viewport 랜딩 히어로가 아니라, 응원방 피드/미션/RP 요약을 포함한 앱 대시보드 구조임을 확인한다.
+- 첫 화면이 full-viewport 랜딩 히어로가 아니라, 투표방 피드/미션/RP 요약을 포함한 앱 화면 구조임을 확인한다.
 
 완료 기준:
 
@@ -202,7 +230,7 @@
 
 목표:
 
-- 사용자가 응원방 생성 의도를 입력하고, command API payload 형태로 안전하게 변환한다.
+- 사용자가 투표방 생성 의도를 입력하고, command API payload 형태로 안전하게 변환한다.
 
 포함 범위:
 
@@ -685,27 +713,27 @@
 - Profile 상세 이력
 - Official 계정/관리자 기능
 
-## 첫 번째 다음 작업
+## 다음 작업 후보
 
-다음 feature는 Phase 1로 시작한다. 단, Phase 1은 반드시 `DESIGN.md` 기준으로 구현한다.
+프론트엔드 MVP 화면 구조는 제출 가능한 수준까지 연결되어 있으므로, 다음 작업은 목적에 따라 선택한다.
 
-권장 issue 제목:
+### 제출 마감 우선
 
-```text
-feat: 앱 셸과 라우팅 골격 구현
-```
+- VibeX 도메인 게시
+- 게시 URL smoke test
+- 제출 메일 문안과 주요 프롬프트 요약 정리
+- README와 제출 문서의 URL 반영
 
-권장 브랜치:
+### 제품 완성도 우선
 
-```text
-feature/<issue-number>-app-shell-routing
-```
+- 실제 Supabase schema/RLS/RPC migration 초안 작성
+- Edge Function command API skeleton 구현
+- 실제 인증/프로필 저장 경계 연결
+- moderation/reporting 최소 흐름 추가
 
-첫 feature 완료 기준:
+### 프론트 polish 우선
 
-- 주요 페이지 placeholder 라우팅
-- 홈 CTA 동작
-- fallback route
-- TDD 기록
-- React Best Practice 점검 기록
-- draft PR에서 `@codex review` 요청 전까지 누적 커밋 유지
+- 모바일 주요 화면 시각 QA
+- 결과 카드 공유 화면 polish
+- 투표방 카드 데이터 다양성 추가
+- 프로필/요금제 연결 문구 정리

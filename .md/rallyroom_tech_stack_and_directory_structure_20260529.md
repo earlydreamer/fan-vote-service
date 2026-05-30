@@ -92,6 +92,8 @@ D:\Projects\vibex
 │     └─ codex-review-followup.yml
 ├─ .md/
 │  ├─ local/                 # gitignore 대상, 브랜치별 임시 작업 메모
+│  ├─ README.md
+│  ├─ pickrally_current_product_brief_20260531.md
 │  ├─ rallyroom_delivery_workflow_20260529.md
 │  ├─ rallyroom_github_review_workflow_20260529.md
 │  ├─ rallyroom_tdd_feature_slicing_20260529.md
@@ -207,6 +209,7 @@ D:\Projects\vibex
 │  └─ vite-env.d.ts
 ├─ tests/
 │  ├─ cssLayoutPolicy.test.js
+│  ├─ documentTitlePolicy.test.ts
 │  └─ workflowPolicy.test.js
 ├─ .env.example
 ├─ .gitignore
@@ -365,3 +368,38 @@ Codex 리뷰 후속으로 좁은 모바일 폭에서 요금제 충전 패키지 
 - `src/features/profile/rewardHistoryReadModel.ts`: 참여 중인 투표와 완료된 투표 카드를 분리하는 profile view model 필드 추가
 - `src/features/profile/ProfilePage.tsx`: 프로필/관심 카테고리 수정 진입점과 참여 중/완료 섹션 분리
 - `src/features/profile/ProfilePage.test.tsx`: 내 활동 섹션 분리와 편집 진입점 테스트
+
+## 2026-05-31 Service Name / Document Title 정리
+
+초기 코드네임 `RallyRoom`에서 현재 서비스명 `PickRally`로 제품 표기와 HTML title 정책을 정리했다. `rallyroom_*` 문서 파일명과 `RallyRoom` TypeScript 타입명 일부는 이력과 내부 구조 호환을 위해 유지한다.
+
+- `index.html`: 문서 title을 `PickRally`로 유지
+- `tests/documentTitlePolicy.test.ts`: HTML title이 이전 서비스명으로 되돌아가지 않는지 검증
+- `README.md`: 현재 구현 상태와 주요 화면을 PickRally 기준으로 재정리
+- `.md/pickrally_current_product_brief_20260531.md`: 현재 제품 브리프 추가
+
+## 2026-05-31 Voting Ticket / RP 보완
+
+반복 투표, 투표권 차감, 실패 복구, RP 교환의 상태 경합을 보완했다.
+
+- `src/features/voting/useCastVote.ts`: 반복 투표, 후보 추가 자동 투표, pending 상태와 실패 복구 관리
+- `src/features/voting/VotePanel.tsx`: 세로 후보 리스트, 투표권 선택, inline 후보 추가, RP 교환 진입 UI
+- `src/features/rooms/RoomDetailPage.tsx`: RP/투표권 교환과 방 상세 투표 상태 연결
+- `src/features/voting/VotePanel.test.tsx`: 반복 투표, 후보 추가 잠금, ticket state regression 테스트
+
+## 2026-05-31 Create Room Studio / IME Guard 보완
+
+투표방 만들기 화면을 후보 목록 중심으로 재정리하고, 키보드 후보 추가와 IME 조합 입력 오작동을 보완했다.
+
+- `src/features/rooms/RoomCreatePage.tsx`: 후보 입력 Enter 처리, 조합 입력 guard, Safari/WebKit fallback
+- `src/features/rooms/RoomCreatePage.test.tsx`: Enter 후보 추가, 조합 입력 중 Enter 무시, receipt 플로우 테스트
+
+## 2026-05-31 Profile Edit / Button / Policy 테스트 보완
+
+프로필 수정 목업과 공통 버튼 컴포넌트를 추가하고, UI/워크플로우 정책을 테스트로 고정했다.
+
+- `src/features/profile/ProfileEditPage.tsx`: 프로필 수정 목업과 로그인 guard
+- `src/shared/ui/Button.tsx`: 주요 action 버튼 공통 컴포넌트
+- `src/shared/ui/Button.test.tsx`: Button variant, size, loading, disabled 상태 테스트
+- `tests/cssLayoutPolicy.test.js`: 레이아웃 overflow와 버튼 스타일 정책
+- `tests/workflowPolicy.test.js`: GitHub workflow 정책 회귀 테스트
