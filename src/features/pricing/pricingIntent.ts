@@ -58,7 +58,7 @@ export function buildPricingIntent({ itemId, userId }: PricingIntentInput): Pric
           followUp: 'official-account-review'
         }
       },
-      note: '공식성 검증 문의 intent만 만들고 실제 제휴 상태는 서버 승인 뒤 반영돼요.'
+      note: '공식 계정 검토 문의만 먼저 보내요. 제휴 상태는 심사가 끝난 뒤에 바뀌어요.'
     };
   }
 
@@ -74,7 +74,7 @@ export function buildPricingIntent({ itemId, userId }: PricingIntentInput): Pric
           returnTo: '/profile'
         }
       },
-      note: '실제 결제는 실행하지 않았어요. 결제 완료 후 보상은 서버 응답과 read model에서만 갱신돼요.'
+      note: '실제 결제는 아직 실행하지 않아요. 결제가 끝나면 보상이 반영돼요.'
     };
   }
 

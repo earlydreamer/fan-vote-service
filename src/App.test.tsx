@@ -120,24 +120,25 @@ describe('PickRally app shell', () => {
     await user.click(screen.getByRole('button', { name: '후보 4 삭제' }));
     await user.type(screen.getByRole('textbox', { name: '새 후보 항목' }), '암전 후 첫 조명');
     await user.click(screen.getByRole('button', { name: '초기 후보 항목 추가' }));
-    await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
+    await user.click(screen.getByRole('button', { name: '방 만들기 내용 확인' }));
 
-    const preview = screen.getByRole('region', { name: '생성 command preview' });
-    const receipt = screen.getByRole('region', { name: '생성 요청 receipt' });
+    const preview = screen.getByRole('region', { name: '방 만들기 내용 미리보기' });
+    const receipt = screen.getByRole('region', { name: '방 만들기 접수 내용' });
 
-    expect(within(preview).getByText('create-room')).toBeInTheDocument();
+    expect(within(preview).getByRole('heading', { name: '서버에 보낼 방 정보' })).toBeInTheDocument();
+    expect(within(preview).getByText(/create-room/)).toBeInTheDocument();
     expect(within(preview).getByText(/팬이 고르는 오프닝 명장면/)).toBeInTheDocument();
     expect(within(preview).getByText(/암전 후 첫 조명/)).toBeInTheDocument();
     expect(within(preview).queryByText(/vote_count/)).not.toBeInTheDocument();
     expect(within(preview).queryByText(/current_goal_value/)).not.toBeInTheDocument();
     expect(within(preview).queryByText(/reward_rp/)).not.toBeInTheDocument();
     expect(within(preview).queryByText(/total_rp/)).not.toBeInTheDocument();
-    expect(within(receipt).getByText('생성 요청 접수')).toBeInTheDocument();
+    expect(within(receipt).getByText('방 만들기 요청을 받았어요')).toBeInTheDocument();
     expect(within(receipt).getByText('pending_review')).toBeInTheDocument();
-    expect(within(receipt).getByText(/실제 DB 생성 없이 서버 응답 예시만 보여줘요/)).toBeInTheDocument();
+    expect(within(receipt).getByText(/지금은 데모라서 접수 화면만 보여줘요/)).toBeInTheDocument();
     expect(within(receipt).getByRole('link', { name: '홈 피드로 돌아가기' })).toHaveAttribute('href', '/');
     expect(within(receipt).getByRole('link', { name: '내 활동 보기' })).toHaveAttribute('href', '/profile');
-    expect(within(receipt).getByRole('link', { name: '데모 방 상세 보기' })).toHaveAttribute(
+    expect(within(receipt).getByRole('link', { name: '데모 방 열어보기' })).toHaveAttribute(
       'href',
       '/rooms/room-stage-opening'
     );
@@ -156,12 +157,12 @@ describe('PickRally app shell', () => {
     await user.click(screen.getByRole('button', { name: '후보 4 삭제' }));
     await user.click(screen.getByRole('button', { name: '후보 3 삭제' }));
     await user.click(screen.getByRole('button', { name: '후보 2 삭제' }));
-    await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
+    await user.click(screen.getByRole('button', { name: '방 만들기 내용 확인' }));
 
     expect(screen.getByRole('alert')).toHaveTextContent('공식');
     expect(screen.getByRole('alert')).toHaveTextContent('전달 보장');
     expect(screen.getByRole('alert')).toHaveTextContent('투표 항목은 최소 2개 이상 필요해요.');
-    expect(screen.queryByRole('region', { name: '생성 요청 receipt' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('region', { name: '방 만들기 접수 내용' })).not.toBeInTheDocument();
   });
 
   it('opens a room detail page and gates an unpublished result card route', async () => {
@@ -213,11 +214,11 @@ describe('PickRally app shell', () => {
     const missionPanel = screen.getByRole('region', { name: '참여 미션' });
     const missionCard = within(missionPanel).getByRole('article', { name: '오늘의 투표권 사용하기' });
 
-    await user.click(within(missionCard).getByRole('button', { name: '미션 완료' }));
+    await user.click(within(missionCard).getByRole('button', { name: '미션 완료하기' }));
 
     expect(await within(missionCard).findByRole('status')).toHaveTextContent('+30 RP');
     expect(within(missionCard).getByRole('status')).toHaveTextContent('Energy +25');
-    expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
+    expect(within(missionCard).getByRole('button', { name: '완료했어요' })).toBeDisabled();
   });
 
   it('posts a fan wall message from room detail and shows command rewards', async () => {
@@ -267,15 +268,15 @@ describe('PickRally app shell', () => {
 
     render(<App />);
 
-    const publishPanel = screen.getByRole('region', { name: '결과 카드 발행' });
+    const publishPanel = screen.getByRole('region', { name: '결과 카드 만들기' });
 
     expect(screen.getByRole('heading', { name: '결과 카드 준비 중' })).toBeInTheDocument();
     expect(within(publishPanel).getByText('종료된 결승 장면 투표')).toBeInTheDocument();
 
-    await user.click(within(publishPanel).getByRole('button', { name: '결과 카드 발행' }));
+    await user.click(within(publishPanel).getByRole('button', { name: '결과 카드 만들기' }));
 
-    expect(await within(publishPanel).findByRole('status')).toHaveTextContent('결과 카드 발행 요청 완료');
-    expect(within(publishPanel).getByRole('link', { name: '발행된 결과 카드로 이동' })).toHaveAttribute(
+    expect(await within(publishPanel).findByRole('status')).toHaveTextContent('결과 카드를 만들었어요');
+    expect(within(publishPanel).getByRole('link', { name: '결과 카드 보러가기' })).toHaveAttribute(
       'href',
       '/rooms/room-closed-finale/result'
     );

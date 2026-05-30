@@ -49,7 +49,7 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
       <section className="detail-stage" aria-labelledby="room-title">
         <RoomThumbnail room={room} categoryName={category?.name} className="detail-stage__visual" />
         <div className="detail-stage__copy">
-          <p className="eyebrow">Vote detail</p>
+          <p className="eyebrow">투표 상세</p>
           <h1 id="room-title">{session.room.title}</h1>
           <div className="detail-vote-title">
             <span>투표 제목</span>
@@ -104,7 +104,7 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
         >
           {session.viewerRole === 'guest' ? (
             <section className="content-panel guest-vote-cta" aria-labelledby="guest-vote-title">
-              <p className="eyebrow">Guest</p>
+              <p className="eyebrow">로그인 안내</p>
               <h2 id="guest-vote-title">투표 참여는 로그인 후 가능해요</h2>
               <p>데모 계정으로 들어오면 투표권을 사용하고 새 후보를 중간 추가하는 흐름까지 확인할 수 있어요.</p>
               <a className="button button-primary" href="/login">
@@ -174,7 +174,7 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
           <section className="content-panel result-history-panel" aria-labelledby="result-history-title">
             <div className="collection-heading compact">
               <div>
-                <p className="eyebrow">History</p>
+                <p className="eyebrow">기록</p>
                 <h2 id="result-history-title">결과/기록</h2>
               </div>
               <a className="button button-secondary" href={`/rooms/${room.id}/result`}>

@@ -128,7 +128,7 @@ describe('RoomMessagePanel', () => {
       ok: false,
       error: {
         code: 'RATE_LIMITED',
-        message: '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.'
+        message: '잠시 쉬었다가 다시 시도해 주세요.'
       }
     }));
 
@@ -140,7 +140,7 @@ describe('RoomMessagePanel', () => {
     await user.click(within(fanWall).getByRole('button', { name: '메시지 남기기' }));
 
     expect(await within(fanWall).findByRole('alert')).toHaveTextContent(
-      '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.'
+      '잠시 쉬었다가 다시 시도해 주세요.'
     );
     expect(within(fanWall).queryByRole('article', { name: /속도 제한 테스트 메시지/ })).not.toBeInTheDocument();
   });

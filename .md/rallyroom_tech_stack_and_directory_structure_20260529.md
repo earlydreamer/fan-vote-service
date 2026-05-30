@@ -338,8 +338,8 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 
 - `src/features/pricing/pricingIntent.ts`: Plus 구독, 투표권 팩, Crew 문의 선택을 checkout 또는 partnership inquiry command intent로 변환
 - `src/features/pricing/pricingIntent.test.ts`: 신뢰/보상 필드를 클라이언트 payload에 넣지 않는지와 Crew 문의 분기 검증
-- `src/features/pricing/PricingPage.tsx`: 요금제 카드, 충전 패키지, 투표방/내 활동 CTA, 결제 intent preview UI
-- `src/features/pricing/PricingPage.test.tsx`: 요금제 선택, Crew 문의, intent preview 접근성 테스트
+- `src/features/pricing/PricingPage.tsx`: 요금제 카드, 충전 패키지, 투표방/내 활동 CTA, 결제 준비 내용 UI
+- `src/features/pricing/PricingPage.test.tsx`: 요금제 선택, Crew 문의, 결제 준비 내용 접근성 테스트
 
 ## 2026-05-30 Pricing Mobile Layout Follow-up 추가 파일
 
@@ -354,8 +354,8 @@ Codex 리뷰 후속으로 좁은 모바일 폭에서 요금제 충전 패키지 
 
 - `src/features/rooms/createRoomReceipt.ts`: `create-room` command payload를 `pending_review` receipt view model로 변환
 - `src/features/rooms/createRoomReceipt.test.ts`: receipt next action과 신뢰 필드 미포함 계약 검증
-- `src/features/rooms/RoomCreatePage.tsx`: 유효한 제출 후 생성 요청 접수 receipt와 홈/내 활동/데모 방 상세 CTA 표시
-- `src/App.test.tsx`: 방 만들기 통합 플로우에서 receipt 표시와 검증 실패 시 receipt 미표시를 검증
+- `src/features/rooms/RoomCreatePage.tsx`: 유효한 제출 후 방 만들기 접수 내용과 홈/내 활동/데모 방 CTA 표시
+- `src/App.test.tsx`: 방 만들기 통합 플로우에서 접수 내용 표시와 검증 실패 시 접수 내용 미표시를 검증
 
 ## 2026-05-30 Detail Tabs/Auth/Profile UX 추가 파일
 

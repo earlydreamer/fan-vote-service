@@ -68,7 +68,7 @@ describe('command client boundary', () => {
     expect(mapCommandErrorMessage({ code: 'DUPLICATE_VOTE' })).toBe('이미 이 투표에 참여했어요.');
     expect(mapCommandErrorMessage({ code: 'DUPLICATE_MISSION_COMPLETION' })).toBe('이미 완료한 미션이에요.');
     expect(mapCommandErrorMessage({ code: 'VALIDATION_ERROR' })).toBe('입력값을 다시 확인해 주세요.');
-    expect(mapCommandErrorMessage({ code: 'CONFIG_MISSING' })).toBe('앱 설정이 아직 완료되지 않았어요.');
+    expect(mapCommandErrorMessage({ code: 'CONFIG_MISSING' })).toBe('앱 설정을 마치면 이용할 수 있어요.');
   });
 
   it('returns a command error when the edge function rejects the request', async () => {
@@ -106,9 +106,9 @@ describe('command client boundary', () => {
   it('maps platform status-only errors to standard command error codes', async () => {
     const cases = [
       { status: 401, code: 'UNAUTHENTICATED', message: '로그인이 필요해요.' },
-      { status: 403, code: 'FORBIDDEN', message: '이 작업을 수행할 권한이 없어요.' },
-      { status: 429, code: 'RATE_LIMITED', message: '요청이 너무 많아요. 잠시 뒤 다시 시도해 주세요.' },
-      { status: 404, code: 'NOT_FOUND', message: '요청한 대상을 찾을 수 없어요.' }
+      { status: 403, code: 'FORBIDDEN', message: '권한이 있는 계정으로 이용할 수 있어요.' },
+      { status: 429, code: 'RATE_LIMITED', message: '잠시 쉬었다가 다시 시도해 주세요.' },
+      { status: 404, code: 'NOT_FOUND', message: '대상을 다시 선택해 주세요.' }
     ] as const;
 
     for (const testCase of cases) {
@@ -145,7 +145,7 @@ describe('command client boundary', () => {
       ok: false,
       error: {
         code: 'CONFIG_MISSING',
-        message: '앱 설정이 아직 완료되지 않았어요.',
+        message: '앱 설정을 마치면 이용할 수 있어요.',
         missingKeys: ['VITE_SUPABASE_FUNCTIONS_URL']
       }
     });

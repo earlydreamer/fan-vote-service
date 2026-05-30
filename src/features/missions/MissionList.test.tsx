@@ -51,7 +51,7 @@ describe('MissionList', () => {
     const missionCard = screen.getByRole('article', { name: '선택 이유를 팬월에 남기기' });
 
     await user.type(within(missionCard).getByRole('textbox', { name: '선택 이유를 팬월에 남기기 입력' }), '짧아');
-    await user.click(within(missionCard).getByRole('button', { name: '미션 완료' }));
+    await user.click(within(missionCard).getByRole('button', { name: '미션 완료하기' }));
 
     expect(await within(missionCard).findByRole('alert')).toHaveTextContent('10자 이상');
     expect(completeMissionCommand).not.toHaveBeenCalled();
@@ -77,7 +77,7 @@ describe('MissionList', () => {
       within(missionCard).getByRole('textbox', { name: '선택 이유를 팬월에 남기기 입력' }),
       '이 장면을 다시 보고 싶어서 남겨요'
     );
-    await user.click(within(missionCard).getByRole('button', { name: '미션 완료' }));
+    await user.click(within(missionCard).getByRole('button', { name: '미션 완료하기' }));
 
     expect(completeMissionCommand).toHaveBeenCalledWith({
       roomId: 'room-1',
@@ -96,7 +96,7 @@ describe('MissionList', () => {
     expect(within(missionCard).getByRole('status')).toHaveTextContent('Energy +33');
     expect(within(missionCard).getByRole('status')).toHaveTextContent('✨');
     expect(within(missionCard).getByRole('status')).toHaveTextContent('응원 배지');
-    expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
+    expect(within(missionCard).getByRole('button', { name: '완료했어요' })).toBeDisabled();
   });
 
   it('locks the mission when the command reports duplicate completion', async () => {
@@ -113,12 +113,12 @@ describe('MissionList', () => {
 
     const missionCard = screen.getByRole('article', { name: '오늘의 투표권 사용하기' });
 
-    await user.click(within(missionCard).getByRole('button', { name: '미션 완료' }));
+    await user.click(within(missionCard).getByRole('button', { name: '미션 완료하기' }));
 
     expect(await within(missionCard).findByRole('alert')).toHaveTextContent('이미 완료한 미션이에요.');
-    expect(within(missionCard).getByRole('button', { name: '완료됨' })).toBeDisabled();
+    expect(within(missionCard).getByRole('button', { name: '완료했어요' })).toBeDisabled();
 
-    await user.click(within(missionCard).getByRole('button', { name: '완료됨' }));
+    await user.click(within(missionCard).getByRole('button', { name: '완료했어요' }));
 
     expect(completeMissionCommand).toHaveBeenCalledTimes(1);
   });
@@ -130,7 +130,7 @@ describe('MissionList', () => {
     renderMissionList(completeMissionCommand);
 
     const missionCard = screen.getByRole('article', { name: '이미 완료한 미션' });
-    const completeButton = within(missionCard).getByRole('button', { name: '완료됨' });
+    const completeButton = within(missionCard).getByRole('button', { name: '완료했어요' });
 
     expect(completeButton).toBeDisabled();
 

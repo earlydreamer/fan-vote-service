@@ -37,7 +37,7 @@ export function ProfileEditPage() {
           <UserRound size={24} />
         </div>
         <div>
-          <p className="eyebrow">Settings</p>
+          <p className="eyebrow">프로필 설정</p>
           <h1 id="profile-edit-title">프로필 수정</h1>
           <p>닉네임과 관심 카테고리를 수정해 나만의 투표 루프를 완성해보세요.</p>
         </div>
