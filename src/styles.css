@@ -2064,7 +2064,17 @@ select:focus-visible {
 
 .pricing-hero {
   display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 24px;
   justify-items: start;
+}
+
+.pricing-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
 }
 
 .plan-grid {
@@ -2085,6 +2095,24 @@ select:focus-visible {
   box-shadow: var(--shadow-sm);
 }
 
+.plan-card__action,
+.plan-card__current {
+  align-self: end;
+  margin-block-start: auto;
+}
+
+.plan-card__current {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 42px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--surface-raised);
+  color: var(--ink-muted);
+  font-weight: 900;
+}
+
 .plan-card h2 {
   font-size: 34px;
 }
@@ -2101,6 +2129,72 @@ select:focus-visible {
   margin: 0;
   color: var(--ink-muted);
   line-height: 1.5;
+}
+
+.pricing-addons,
+.pricing-intent-preview {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--line-soft);
+  border-radius: 20px;
+  background: #fff;
+  box-shadow: var(--shadow-sm);
+}
+
+.addon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.addon-card {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  background: var(--surface-raised);
+}
+
+.addon-card svg {
+  color: var(--primary);
+}
+
+.addon-card h3 {
+  font-size: 18px;
+}
+
+.addon-card p {
+  margin-block-start: 4px;
+  color: var(--ink-muted);
+  line-height: 1.55;
+}
+
+.addon-card strong {
+  white-space: nowrap;
+}
+
+.pricing-intent-preview {
+  background: linear-gradient(135deg, #fff, var(--surface-tint));
+}
+
+.pricing-intent-preview p {
+  color: var(--ink-muted);
+  line-height: 1.6;
+}
+
+.pricing-intent-preview pre {
+  overflow-x: auto;
+  padding: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 14px;
+  background: #101318;
+  color: #f8fafc;
+  font-size: 13px;
+  line-height: 1.65;
 }
 
 .not-found {
@@ -2176,8 +2270,23 @@ select:focus-visible {
   .detail-content-grid,
   .result-showcase,
   .profile-loop-grid,
+  .pricing-hero,
   .plan-grid {
     grid-template-columns: 1fr;
+  }
+
+  .pricing-hero__actions {
+    justify-content: flex-start;
+  }
+
+  .addon-card {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .addon-card strong,
+  .addon-card button {
+    grid-column: 2;
+    justify-self: start;
   }
 
   .featured-copy {
