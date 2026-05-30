@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { CommandResult } from '../../shared/api/commandClient';
@@ -18,6 +18,7 @@ function candidate(id: string, title: string, voteCount: number): Candidate {
 
 interface RenderVotePanelOptions {
   castVoteCommand?: (input: CastVoteInput) => Promise<CommandResult<CastVoteResponse>>;
+  candidates?: Candidate[];
   isVotingOpen?: boolean;
   closedReason?: string;
   voteTickets?: number;
@@ -33,6 +34,7 @@ function renderVotePanel({
       participantCount: 42
     }
   }),
+  candidates = [candidate('candidate-1', '첫 번째 장면', 10), candidate('candidate-2', '두 번째 장면', 7)],
   isVotingOpen,
   closedReason,
   voteTickets = 5
@@ -40,7 +42,7 @@ function renderVotePanel({
   return render(
     <VotePanel
       roomId="room-1"
-      candidates={[candidate('candidate-1', '첫 번째 장면', 10), candidate('candidate-2', '두 번째 장면', 7)]}
+      candidates={candidates}
       currentGoalValue={200}
       goalValue={500}
       participantCount={41}
@@ -62,6 +64,33 @@ describe('VotePanel', () => {
     expect(candidateList).toHaveClass('candidate-list');
     expect(within(candidateList).getAllByRole('radio')).toHaveLength(2);
     expect(within(votePanel).getByLabelText('사용할 투표권')).toHaveValue('1');
+  });
+
+  it('sorts candidate rows by vote count and shows vote share percentages', () => {
+    renderVotePanel({
+      candidates: [
+        candidate('candidate-1', '낮은 득표 후보', 5),
+        candidate('candidate-2', '높은 득표 후보', 15)
+      ]
+    });
+
+    const candidateRows = within(screen.getByRole('list', { name: '투표 후보 목록' })).getAllByRole('listitem');
+
+    expect(candidateRows[0]).toHaveTextContent('1');
+    expect(candidateRows[0]).toHaveTextContent('높은 득표 후보');
+    expect(candidateRows[0]).toHaveTextContent('75%');
+    expect(candidateRows[1]).toHaveTextContent('2');
+    expect(candidateRows[1]).toHaveTextContent('낮은 득표 후보');
+    expect(candidateRows[1]).toHaveTextContent('25%');
+  });
+
+  it('uses voter-facing candidate helper copy instead of implementation terms', () => {
+    renderVotePanel();
+
+    const candidateList = screen.getByRole('list', { name: '투표 후보 목록' });
+
+    expect(within(candidateList).getAllByText('실시간 집계')).toHaveLength(2);
+    expect(within(candidateList).queryByText(/read model/i)).not.toBeInTheDocument();
   });
 
   it('submits roomId, candidateIds, and voteTicketCount after a candidate is selected', async () => {
@@ -158,6 +187,56 @@ describe('VotePanel', () => {
     expect(within(candidateList).getByText('2표')).toBeInTheDocument();
     expect(within(votePanel).getByText('202 / 500')).toBeInTheDocument();
     expect(within(votePanel).getByRole('status')).toHaveTextContent('세 번째 장면 항목을 추가하고 2표를 자동 반영했어요.');
+  });
+
+  it('groups inline option controls into layout fields', async () => {
+    const user = userEvent.setup();
+
+    renderVotePanel();
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('button', { name: '항목 추가' }));
+
+    expect(within(votePanel).getByLabelText('새 투표 항목').closest('.inline-option-form__field')).toHaveClass(
+      'inline-option-form__field--title'
+    );
+    expect(within(votePanel).getByLabelText('자동 투표권').closest('.inline-option-form__field')).toHaveClass(
+      'inline-option-form__field--ticket'
+    );
+    expect(within(votePanel).getByRole('button', { name: '추가하고 1표 자동 투표' })).toHaveClass(
+      'inline-option-form__submit'
+    );
+  });
+
+  it('prevents adding an option while a vote command is pending', async () => {
+    const user = userEvent.setup();
+    let resolveVote: (response: CommandResult<CastVoteResponse>) => void = () => undefined;
+    const castVoteCommand = vi.fn(
+      () =>
+        new Promise<CommandResult<CastVoteResponse>>((resolve) => {
+          resolveVote = resolve;
+        })
+    );
+
+    renderVotePanel({ castVoteCommand });
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+
+    await user.click(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ }));
+    await user.click(within(votePanel).getByRole('button', { name: '투표하기' }));
+
+    await waitFor(() => expect(within(votePanel).getByRole('button', { name: '항목 추가' })).toBeDisabled());
+
+    resolveVote({
+      ok: true,
+      data: {
+        roomId: 'room-1',
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 11 }],
+        currentGoalValue: 201,
+        participantCount: 42
+      }
+    });
   });
 
   it('shows duplicate vote errors without optimistic count changes', async () => {

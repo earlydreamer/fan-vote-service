@@ -47,6 +47,8 @@ export function VotePanel({
     : isEnergyClosed
       ? 'Vote Energy가 가득 차 투표가 마감됐어요.'
       : undefined;
+  const rankedCandidates = rankCandidatesByVotes(voteState.candidates);
+  const totalVoteCount = rankedCandidates.reduce((sum, candidate) => sum + candidate.voteCount, 0);
   const ticketOptions = buildTicketOptions(voteState.maxSpendableTickets);
   const optionTicketOptions = buildTicketOptions(voteState.maxSpendableTickets);
 
@@ -58,6 +60,8 @@ export function VotePanel({
   };
 
   const handleAddOption = () => {
+    if (voteState.isSubmitting) return;
+
     const added = voteState.addOptionWithTickets(newOptionTitle, optionVoteTicketCount);
     if (!added) return;
 
@@ -88,7 +92,7 @@ export function VotePanel({
 
       <form className="vote-form" onSubmit={handleSubmit}>
         <ol className="candidate-list" aria-label="투표 후보 목록">
-          {voteState.candidates.map((candidate, index) => (
+          {rankedCandidates.map((candidate, index) => (
             <li key={candidate.id} className="candidate-row" data-pending={candidate.status === 'pending'}>
               <label
                 className="candidate-row__label"
@@ -106,9 +110,12 @@ export function VotePanel({
                 <span className="candidate-row__rank">{index + 1}</span>
                 <span className="candidate-row__main">
                   <strong>{candidate.title}</strong>
-                  <em>{voteState.selectedCandidateId === candidate.id ? '선택한 후보' : '서버 read model 기준 집계'}</em>
+                  <em>{getCandidateHelperText(candidate, voteState.selectedCandidateId)}</em>
                 </span>
-                <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
+                <span className="candidate-row__metrics">
+                  <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
+                  <span className="candidate-row__share">{formatVoteShare(candidate.voteCount, totalVoteCount)}%</span>
+                </span>
               </label>
             </li>
           ))}
@@ -117,7 +124,7 @@ export function VotePanel({
               <button
                 type="button"
                 className="button button-secondary"
-                disabled={isVoteClosed || voteState.maxSpendableTickets < 1}
+                disabled={isVoteClosed || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                 onClick={() => setIsOptionFormOpen(true)}
               >
                 <PlusCircle size={17} aria-hidden="true" />
@@ -125,28 +132,35 @@ export function VotePanel({
               </button>
             ) : (
               <div className="inline-option-form">
-                <label htmlFor={`${roomId}-new-option-title`}>새 투표 항목</label>
-                <input
-                  id={`${roomId}-new-option-title`}
-                  value={newOptionTitle}
-                  onChange={(event) => setNewOptionTitle(event.target.value)}
-                  placeholder="예: 커튼콜 마지막 장면"
-                />
-                <label htmlFor={`${roomId}-option-ticket-count`}>자동 투표권</label>
-                <select
-                  id={`${roomId}-option-ticket-count`}
-                  value={optionVoteTicketCount}
-                  onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
-                >
-                  {optionTicketOptions.map((ticketCount) => (
-                    <option key={ticketCount} value={ticketCount}>
-                      {ticketCount}장
-                    </option>
-                  ))}
-                </select>
+                <div className="inline-option-form__field inline-option-form__field--title">
+                  <label htmlFor={`${roomId}-new-option-title`}>새 투표 항목</label>
+                  <input
+                    id={`${roomId}-new-option-title`}
+                    value={newOptionTitle}
+                    disabled={voteState.isSubmitting}
+                    onChange={(event) => setNewOptionTitle(event.target.value)}
+                    placeholder="예: 커튼콜 마지막 장면"
+                  />
+                </div>
+                <div className="inline-option-form__field inline-option-form__field--ticket">
+                  <label htmlFor={`${roomId}-option-ticket-count`}>자동 투표권</label>
+                  <select
+                    id={`${roomId}-option-ticket-count`}
+                    value={optionVoteTicketCount}
+                    disabled={voteState.isSubmitting}
+                    onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
+                  >
+                    {optionTicketOptions.map((ticketCount) => (
+                      <option key={ticketCount} value={ticketCount}>
+                        {ticketCount}장
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   type="button"
-                  disabled={!newOptionTitle.trim() || voteState.maxSpendableTickets < 1}
+                  className="inline-option-form__submit"
+                  disabled={!newOptionTitle.trim() || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                   onClick={handleAddOption}
                 >
                   추가하고 {optionVoteTicketCount}표 자동 투표
@@ -210,4 +224,21 @@ export function VotePanel({
 function buildTicketOptions(maxSpendableTickets: number): number[] {
   const max = Math.max(Math.min(maxSpendableTickets, 10), 1);
   return Array.from({ length: max }, (_, index) => index + 1);
+}
+
+function rankCandidatesByVotes(candidates: Candidate[]): Candidate[] {
+  return [...candidates].sort(
+    (left, right) => right.voteCount - left.voteCount || left.title.localeCompare(right.title, 'ko')
+  );
+}
+
+function formatVoteShare(voteCount: number, totalVoteCount: number): number {
+  if (totalVoteCount < 1) return 0;
+  return Math.round((voteCount / totalVoteCount) * 100);
+}
+
+function getCandidateHelperText(candidate: Candidate, selectedCandidateId?: string): string {
+  if (selectedCandidateId === candidate.id) return '선택한 후보';
+  if (candidate.status === 'pending') return '새로 추가한 후보';
+  return '실시간 집계';
 }
