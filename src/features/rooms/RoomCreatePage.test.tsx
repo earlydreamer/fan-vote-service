@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { RoomCreatePage } from './RoomCreatePage';
@@ -57,6 +57,25 @@ describe('RoomCreatePage', () => {
 
     // 폼 제출(command preview)이 발생하지 않았음을 확인
     expect(screen.queryByRole('region', { name: '생성 command preview' })).not.toBeInTheDocument();
+  });
+
+  it('does not add a candidate when Enter is pressed during IME composition', () => {
+    render(<RoomCreatePage />);
+
+    const input = screen.getByRole('textbox', { name: '새 후보 항목' });
+
+    // 새 후보 입력하고, isComposing: true 상태의 Enter keydown 이벤트를 직접 트리거
+    fireEvent.change(input, { target: { value: '조합중인후보' } });
+    fireEvent.keyDown(input, {
+      key: 'Enter',
+      code: 'Enter',
+      keyCode: 13,
+      isComposing: true,
+      nativeEvent: { isComposing: true }
+    });
+
+    // 후보 목록에 '조합중인후보'가 없어야 함
+    expect(screen.queryByText('조합중인후보')).not.toBeInTheDocument();
   });
 });
 
