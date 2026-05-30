@@ -1837,7 +1837,7 @@ select:focus-visible {
 .vote-action-row {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
+  align-items: flex-end;
   gap: 12px;
 }
 
@@ -1846,7 +1846,7 @@ select:focus-visible {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  min-block-size: 44px;
+  min-block-size: 42px;
   padding: 0 18px;
   border: 0;
   border-radius: 8px;
@@ -2538,14 +2538,15 @@ select:focus-visible {
 .plan-card__current {
   align-self: end;
   margin-block-start: auto;
+  min-block-size: 44px;
 }
 
 .plan-card__current {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-block-size: 42px;
   padding: 10px 14px;
+  border: 1px solid transparent;
   border-radius: 14px;
   background: var(--surface-raised);
   color: var(--ink-muted);
