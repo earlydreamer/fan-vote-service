@@ -106,7 +106,11 @@ D:\Projects\vibex
 │  │  └─ routes.ts
 │  ├─ features/
 │  │  ├─ crew/
-│  │  │  └─ CrewDashboardPage.tsx
+│  │  │  ├─ CrewDashboardPage.tsx
+│  │  │  ├─ CrewStatsCards.test.tsx
+│  │  │  ├─ CrewStatsCards.tsx
+│  │  │  ├─ crewStatsReadModel.test.ts
+│  │  │  └─ crewStatsReadModel.ts
 │  │  ├─ home/
 │  │  │  └─ HomePage.tsx
 │  │  ├─ messages/
@@ -288,3 +292,13 @@ React/TSX 파일을 여러 개 수정하거나 컴포넌트 구조를 바꾸는 
 - `src/features/profile/ProfileSummary.test.tsx`: 보상 요약 렌더링과 profile 없음 안내 상태 테스트
 - `src/features/profile/ProfilePage.tsx`: `ProfileSummary`와 joined/created room 목록 연결
 - `src/shared/types/rallyroom.ts`, `src/shared/data/demo/profile.json`: `RewardHistoryEntry`와 demo reward history 추가
+
+## 2026-05-30 Phase 10 Crew Aggregate Dashboard 추가 파일
+
+`features/crew` 아래에 운영자용 aggregate dashboard view model과 UI 컴포넌트를 추가했다.
+
+- `src/features/crew/crewStatsReadModel.ts`: `CrewStatsReadModel`과 category 목록을 운영자용 summary, room performance cards, 권한 상태로 변환
+- `src/features/crew/crewStatsReadModel.test.ts`: aggregate 필드 매핑, strongest category label 매핑, 권한 없음 상태 테스트
+- `src/features/crew/CrewStatsCards.tsx`: Crew 요약 지표, 방별 vote/mission/message count, 다음 미션 추천, 권한 제한 UI
+- `src/features/crew/CrewStatsCards.test.tsx`: aggregate metric 렌더링과 권한 제한 상태 테스트
+- `src/features/crew/CrewDashboardPage.tsx`: demo aggregate read model을 `CrewStatsCards`에 연결
