@@ -10,7 +10,7 @@ VibeX 제출용 프론트엔드 MVP 목업을 feature 단위로 구현 중입니
 
 - React + Vite + TypeScript 기반 SPA
 - Vitest + Testing Library 기반 TDD
-- 홈 탐색, 방 만들기 intent, 투표, 미션, 팬월, 결과 카드, 프로필 보상 이력, Crew aggregate dashboard UX 구현
+- 홈 탐색, 방 만들기 intent, 투표, 미션, 팬월, 결과 카드, 프로필 보상 이력, Crew aggregate dashboard, 요금제 구매 intent UX 구현
 - Supabase command/read architecture는 문서 기준으로 설계하고, 현재 프론트엔드는 demo read model과 command wrapper shell을 사용
 - `DESIGN.md` 기반 RallyRoom 디자인 시스템 적용
 
@@ -37,7 +37,7 @@ npm run build
 - `/rooms/room-closed-finale/result`: 결과 카드 발행 요청
 - `/profile`: 보상 이력과 참여/생성 투표방
 - `/crew`: 운영자용 aggregate dashboard
-- `/pricing`: 요금제와 확장 방향
+- `/pricing`: 요금제, 투표권/RP 패키지, Crew 문의 intent
 
 제출용 주요 프롬프트와 smoke 체크는 `.md/rallyroom_submission_prompts_20260530.md`에 정리합니다.
 
