@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import type { CommandResult } from '../../shared/api/commandClient';
@@ -71,7 +71,8 @@ describe('RoomMessagePanel', () => {
 
     const fanWall = screen.getByRole('region', { name: '팬월' });
 
-    await user.type(within(fanWall).getByRole('textbox', { name: '메시지 내용' }), '가'.repeat(281));
+    const messageInput = within(fanWall).getByRole('textbox', { name: '메시지 내용' });
+    fireEvent.change(messageInput, { target: { value: '가'.repeat(281) } });
     await user.click(within(fanWall).getByRole('button', { name: '메시지 남기기' }));
 
     expect(await within(fanWall).findByRole('alert')).toHaveTextContent('280자 이하');
