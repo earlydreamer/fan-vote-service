@@ -2695,6 +2695,11 @@ select:focus-visible {
     flex-direction: column;
   }
 
+  .collection-heading.compact {
+    align-items: center;
+    flex-direction: row;
+  }
+
   .sort-tabs {
     justify-content: flex-start;
   }
