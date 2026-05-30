@@ -47,6 +47,8 @@ export function VotePanel({
     : isEnergyClosed
       ? 'Vote Energy가 가득 차 투표가 마감됐어요.'
       : undefined;
+  const rankedCandidates = rankCandidatesByVotes(voteState.candidates);
+  const totalVoteCount = rankedCandidates.reduce((sum, candidate) => sum + candidate.voteCount, 0);
   const ticketOptions = buildTicketOptions(voteState.maxSpendableTickets);
   const optionTicketOptions = buildTicketOptions(voteState.maxSpendableTickets);
 
@@ -88,7 +90,7 @@ export function VotePanel({
 
       <form className="vote-form" onSubmit={handleSubmit}>
         <ol className="candidate-list" aria-label="투표 후보 목록">
-          {voteState.candidates.map((candidate, index) => (
+          {rankedCandidates.map((candidate, index) => (
             <li key={candidate.id} className="candidate-row" data-pending={candidate.status === 'pending'}>
               <label
                 className="candidate-row__label"
@@ -108,7 +110,10 @@ export function VotePanel({
                   <strong>{candidate.title}</strong>
                   <em>{voteState.selectedCandidateId === candidate.id ? '선택한 후보' : '서버 read model 기준 집계'}</em>
                 </span>
-                <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
+                <span className="candidate-row__metrics">
+                  <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
+                  <span className="candidate-row__share">{formatVoteShare(candidate.voteCount, totalVoteCount)}%</span>
+                </span>
               </label>
             </li>
           ))}
@@ -210,4 +215,15 @@ export function VotePanel({
 function buildTicketOptions(maxSpendableTickets: number): number[] {
   const max = Math.max(Math.min(maxSpendableTickets, 10), 1);
   return Array.from({ length: max }, (_, index) => index + 1);
+}
+
+function rankCandidatesByVotes(candidates: Candidate[]): Candidate[] {
+  return [...candidates].sort(
+    (left, right) => right.voteCount - left.voteCount || left.title.localeCompare(right.title, 'ko')
+  );
+}
+
+function formatVoteShare(voteCount: number, totalVoteCount: number): number {
+  if (totalVoteCount < 1) return 0;
+  return Math.round((voteCount / totalVoteCount) * 100);
 }
