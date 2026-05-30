@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { RoomCreatePage } from './RoomCreatePage';
 
@@ -40,6 +41,22 @@ describe('RoomCreatePage', () => {
 
     const submitButton = form?.querySelector('button[type="submit"]');
     expect(submitButton).toHaveTextContent('생성 intent 만들기');
+  });
+
+  it('adds a candidate when Enter is pressed in the candidate input without submitting the form', async () => {
+    const user = userEvent.setup();
+    render(<RoomCreatePage />);
+
+    const input = screen.getByRole('textbox', { name: '새 후보 항목' });
+
+    // 새 후보 입력하고 Enter 입력
+    await user.type(input, 'Enter로 추가된 후보{Enter}');
+
+    // 후보 목록에 'Enter로 추가된 후보'가 존재하는지 확인
+    expect(screen.getByText('Enter로 추가된 후보')).toBeInTheDocument();
+
+    // 폼 제출(command preview)이 발생하지 않았음을 확인
+    expect(screen.queryByRole('region', { name: '생성 command preview' })).not.toBeInTheDocument();
   });
 });
 
