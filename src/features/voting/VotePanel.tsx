@@ -3,6 +3,7 @@ import { CheckCircle2, PlusCircle, Vote } from 'lucide-react';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import type { Candidate } from '../../shared/types/rallyroom';
 import { type CastVoteCommand, useCastVote } from './useCastVote';
+import { demoReadRepository } from '../../shared/api/demoReadRepository';
 
 export interface VotePanelProps {
   roomId: string;
@@ -14,6 +15,7 @@ export interface VotePanelProps {
   isVotingOpen?: boolean;
   closedReason?: string;
   voteTickets?: number;
+  userRp?: number;
 }
 
 export function VotePanel({
@@ -25,7 +27,8 @@ export function VotePanel({
   castVoteCommand,
   isVotingOpen = true,
   closedReason,
-  voteTickets = 0
+  voteTickets = 0,
+  userRp
 }: VotePanelProps) {
   const [isOptionFormOpen, setIsOptionFormOpen] = useState(false);
   const [newOptionTitle, setNewOptionTitle] = useState('');
@@ -204,6 +207,19 @@ export function VotePanel({
               ))}
             </select>
           </label>
+          {userRp !== undefined && (
+            <div className="rp-exchange-box">
+              <span className="rp-exchange-label">RP로 충전 (100 RP ➔ 1장)</span>
+              <button
+                type="button"
+                className="button button-exchange"
+                disabled={userRp < 100 || isVoteClosed || voteState.isSubmitting}
+                onClick={() => demoReadRepository.exchangeRpToTickets(1)}
+              >
+                RP 교환
+              </button>
+            </div>
+          )}
           <button
             type="submit"
             disabled={

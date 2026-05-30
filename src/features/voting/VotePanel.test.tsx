@@ -5,6 +5,7 @@ import type { CommandResult } from '../../shared/api/commandClient';
 import type { Candidate } from '../../shared/types/rallyroom';
 import type { CastVoteInput, CastVoteResponse } from './castVoteApi';
 import { VotePanel } from './VotePanel';
+import { demoReadRepository } from '../../shared/api/demoReadRepository';
 
 function candidate(id: string, title: string, voteCount: number): Candidate {
   return {
@@ -329,5 +330,40 @@ describe('VotePanel', () => {
     await user.click(nextButton);
 
     expect(await within(votePanel).findByText(/내가 투표한 투표권:/)).toHaveTextContent('내가 투표한 투표권: 3장');
+  });
+
+  it('renders RP exchange control and executes exchange update on click', async () => {
+    const user = userEvent.setup();
+    const exchangeMock = vi.spyOn(demoReadRepository, 'exchangeRpToTickets').mockImplementation(() => {
+      const current = demoReadRepository.getProfile();
+      demoReadRepository.updateProfile({
+        totalRp: current.totalRp - 100,
+        voteTickets: current.voteTickets + 1
+      });
+      return true;
+    });
+
+    render(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 10)]}
+        currentGoalValue={200}
+        goalValue={500}
+        participantCount={41}
+        castVoteCommand={async () => ({ ok: true, data: { roomId: 'room-1', candidateVotes: [], currentGoalValue: 200, participantCount: 41 } })}
+        voteTickets={5}
+        userRp={250}
+      />
+    );
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const exchangeButton = within(votePanel).getByRole('button', { name: 'RP 교환' });
+
+    expect(exchangeButton).not.toBeDisabled();
+
+    await user.click(exchangeButton);
+
+    expect(exchangeMock).toHaveBeenCalledWith(1);
+    exchangeMock.mockRestore();
   });
 });

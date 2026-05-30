@@ -89,6 +89,17 @@ export const demoReadRepository = {
     return profile;
   },
 
+  exchangeRpToTickets(amount: number): boolean {
+    const cost = amount * 100;
+    if (profile.totalRp < cost) return false;
+
+    this.updateProfile({
+      totalRp: Math.max(profile.totalRp - cost, 0),
+      voteTickets: profile.voteTickets + amount
+    });
+    return true;
+  },
+
   getCrewStats(): CrewStatsReadModel {
     return crewStats;
   },

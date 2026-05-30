@@ -122,6 +122,7 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
               isVotingOpen={isVotingOpen}
               closedReason={voteClosedReason}
               voteTickets={voteTickets}
+              userRp={profile?.totalRp ?? 0}
             />
           )}
         </div>

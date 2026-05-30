@@ -22,7 +22,7 @@ describe('PickRally app shell', () => {
     expect(primaryNav).toBeInTheDocument();
     expect(within(banner).getByRole('link', { name: '내 프로필' })).toBeInTheDocument();
     expect(within(banner).getByRole('button', { name: '로그아웃' })).toBeInTheDocument();
-    expect(banner).toHaveTextContent('투표권 3장');
+    expect(banner).toHaveTextContent('투표권 20장');
     expect(within(banner).queryByRole('link', { name: '투표방 만들기' })).not.toBeInTheDocument();
     expect(screen.getByRole('region', { name: 'Featured 투표' })).toBeInTheDocument();
     expect(screen.getByRole('navigation', { name: '카테고리 탐색' })).toBeInTheDocument();
