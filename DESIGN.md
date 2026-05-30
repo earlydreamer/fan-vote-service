@@ -1,6 +1,6 @@
 ---
 version: alpha
-name: RallyRoom-design-system
+name: PickRally-design-system
 description: "Fan Vote Discovery design brief for a fan-created popularity poll service. This document defines product ingredients, visual tone, content requirements, and interaction principles. It intentionally avoids prescribing a fixed home layout so implementers can compose more creative discovery screens."
 references:
   structural:
@@ -20,9 +20,11 @@ colors:
   hero-lavender: "#F5F3FF"
   line: "#DDE3EA"
   line-soft: "#E8EEF4"
-  primary: "#00D084"
-  primary-pressed: "#00B574"
-  primary-soft: "#DFFBF0"
+  primary: "#6667AB"
+  primary-pressed: "#52538E"
+  primary-soft: "#ECECFA"
+  mint: "#00D084"
+  mint-soft: "#DFFBF0"
   vote: "#2563EB"
   vote-soft: "#DBEAFE"
   live: "#F43F5E"
@@ -55,11 +57,11 @@ radii:
   pill: 999px
 ---
 
-# RallyRoom Design System
+# PickRally Design System
 
 ## Product Frame
 
-RallyRoom is a temporary name. The interface must be designed around the product behavior: fans create and browse popularity polls, vote on candidates, follow ranking changes, collect lightweight rewards, and share result cards.
+PickRally is the official name of the service. The interface is designed around the product behavior: fans create and browse popularity polls, vote on candidates, follow ranking changes, collect lightweight rewards, and share result cards.
 
 The core hierarchy is:
 
@@ -589,3 +591,5 @@ Do not use real celebrities, streamers, IP images, official partnership language
 | 2026-05-30 | Use CHZZK/SOOP as structural references only | Korean content platforms show useful patterns for Featured, category browsing, and card density, but their brands and real content must not be copied. |
 | 2026-05-30 | Remove fixed layout prescriptions | The design system should define ingredients and quality bars, so implementers can create more expressive layouts. |
 | 2026-05-30 | Define room as persistent space and vote as current session | This resolves room/vote hierarchy ambiguity while preserving a simple MVP with one active vote per room. |
+| 2026-05-30 | 서비스명을 PickRally로 최종 확정하고 주조색을 Very Peri로 전환 | 유저 피드백과 서비스 성격에 맞는 이름으로 최종 브랜딩을 확립하고, 선호도 높은 푸른 보라색(Very Peri) 톤을 주조색으로 설정. |
+

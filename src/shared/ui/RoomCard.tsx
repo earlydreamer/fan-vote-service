@@ -47,7 +47,7 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
           {!compact && <span className="chip chip-energy">{room.candidates.length}개 항목</span>}
         </div>
 
-        <span className="room-card__room-name">응원방 · {room.title}</span>
+        <span className="room-card__room-name">투표방 · {room.title}</span>
         <h3>
           <a href={`/rooms/${room.id}`}>{voteTitle}</a>
         </h3>

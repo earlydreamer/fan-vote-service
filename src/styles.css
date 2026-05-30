@@ -2,8 +2,8 @@
   color-scheme: light;
   font-family: "SUIT Variable", SUIT, "IBM Plex Sans KR", "Noto Sans KR", system-ui, sans-serif;
   color: #101318;
-  background: #fbfcff;
-  --canvas: #fbfcff;
+  background: #F4F6F8;
+  --canvas: #F4F6F8;
   --surface: #ffffff;
   --surface-raised: #f9fafb;
   --ink: #101318;
@@ -13,11 +13,11 @@
   --line-soft: #e8eef4;
   --stage: #1e1b4b;
   --stage-soft: #ede9fe;
-  --primary: #6c3ce9;
-  --primary-pressed: #5b2fd5;
-  --primary-soft: #f0e9ff;
-  --mint: #00d4aa;
-  --mint-soft: #e2fbf5;
+  --primary: #6667AB; /* Very Peri */
+  --primary-pressed: #52538E;
+  --primary-soft: #ECECFA;
+  --mint: #00D084; /* 포인트 초록색 */
+  --mint-soft: #DFFBF0;
   --vote: #2563eb;
   --vote-soft: #dbeafe;
   --live: #f43f5e;
@@ -45,9 +45,7 @@ body {
   margin: 0;
   min-block-size: 100vh;
   overflow-x: clip;
-  background:
-    linear-gradient(135deg, #f6f1ff 0, #ffffff 44%, #effdfa 1000px),
-    var(--canvas);
+  background: var(--canvas);
 }
 
 img,

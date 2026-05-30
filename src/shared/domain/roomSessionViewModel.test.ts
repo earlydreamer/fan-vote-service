@@ -6,7 +6,7 @@ describe('room session view model', () => {
   it('maps a RallyRoom into a persistent room and current vote hierarchy', () => {
     const viewModel = createRoomSessionViewModel(buildRoom(), buildProfile());
 
-    expect(viewModel.room.title).toBe('스텔라 무대 응원방');
+    expect(viewModel.room.title).toBe('스텔라 무대 투표방');
     expect(viewModel.currentVote.title).toBe('최고의 오프닝 장면');
     expect(viewModel.currentVote.energy).toEqual({
       current: 40,
@@ -55,7 +55,7 @@ function buildRoom(overrides: Partial<RallyRoom> = {}): RallyRoom {
   return {
     id: 'room-stage-opening',
     slug: 'room-stage-opening',
-    title: '스텔라 무대 응원방',
+    title: '스텔라 무대 투표방',
     voteTitle: '최고의 오프닝 장면',
     topic: '팬들이 다시 보고 싶은 오프닝 무대를 고르는 현재 투표',
     categoryId: 'cat-stage',

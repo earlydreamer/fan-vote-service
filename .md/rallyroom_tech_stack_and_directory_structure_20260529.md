@@ -1,11 +1,11 @@
-# RallyRoom 기술 스택과 디렉터리 구조
+# PickRally 기술 스택과 디렉터리 구조
 
 작성일: 2026-05-29
 최종 갱신일: 2026-05-30
 
 ## 목적
 
-이 문서는 RallyRoom 프로젝트의 기술 스택과 디렉터리 구조를 명시한다. 의존성, 빌드 도구, 테스트 도구, 백엔드 플랫폼, 주요 디렉터리가 바뀌면 이 파일을 같은 feature PR 안에서 갱신한다.
+이 문서는 PickRally 프로젝트의 기술 스택과 디렉터리 구조를 명시한다. 의존성, 빌드 도구, 테스트 도구, 백엔드 플랫폼, 주요 디렉터리가 바뀌면 이 파일을 같은 feature PR 안에서 갱신한다.
 
 ## 갱신 규칙
 
@@ -75,7 +75,7 @@ Postgres RPC / transaction functions
 
 ## 디자인 시스템 원칙
 
-루트 `DESIGN.md`는 RallyRoom UI의 시각 source of truth다. UI 구현 전 반드시 읽는다.
+루트 `DESIGN.md`는 PickRally UI의 시각 source of truth다. UI 구현 전 반드시 읽는다.
 
 - 방향: `Fan Vote Discovery`, 팬이 직접 여는 인기투표/랭킹 콘텐츠 탐색 서비스
 - 첫 화면: 랜딩 히어로가 아니라 홈/탐색 피드
