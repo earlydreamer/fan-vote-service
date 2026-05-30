@@ -2428,16 +2428,23 @@ select:focus-visible {
     white-space: nowrap;
   }
 
-  .account-chip {
-    padding: 5px;
+  .account-area {
+    gap: 6px;
   }
 
-  .account-chip + .auth-button {
-    display: none;
+  .account-chip {
+    min-block-size: 34px;
+    padding: 3px;
   }
 
   .account-chip__wallet {
     display: none;
+  }
+
+  .account-avatar {
+    inline-size: 28px;
+    block-size: 28px;
+    font-size: 12px;
   }
 
   .auth-button {
