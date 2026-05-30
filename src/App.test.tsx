@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it } from 'vitest';
 import App from './App';
@@ -304,5 +304,25 @@ describe('PickRally app shell', () => {
 
     expect(screen.getByRole('heading', { name: '페이지를 찾을 수 없어요' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: '홈으로 돌아가기' })).toHaveAttribute('href', '/');
+  });
+
+  it('gates the profile edit page when unauthenticated', async () => {
+    const user = userEvent.setup();
+    render(<App />);
+
+    const banner = screen.getByRole('banner');
+
+    // 로그아웃 클릭하여 비인증 상태로 만듦
+    await user.click(within(banner).getByRole('button', { name: '로그아웃' }));
+
+    // 비인증 상태에서 /profile/edit으로 직접 이동 (act로 감쌈)
+    act(() => {
+      window.history.pushState({}, '', '/profile/edit');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+
+    // AuthPage가 랜더링되어야 함
+    expect(screen.getByRole('heading', { name: '회원가입' })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: '프로필 수정' })).not.toBeInTheDocument();
   });
 });
