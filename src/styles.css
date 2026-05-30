@@ -1841,7 +1841,7 @@ select:focus-visible {
   gap: 12px;
 }
 
-.vote-action-row button {
+.vote-action-row button:not(.button-exchange) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1856,10 +1856,51 @@ select:focus-visible {
   cursor: pointer;
 }
 
-.vote-action-row button:disabled {
+.vote-action-row button:not(.button-exchange):disabled {
   cursor: not-allowed;
   background: var(--surface-muted);
   color: var(--ink-soft);
+}
+
+.rp-exchange-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-inline-size: 0;
+}
+
+.rp-exchange-label {
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.button-exchange {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-block-size: 42px;
+  padding: 0 14px;
+  border: 1px solid rgb(102 103 171 / 28%);
+  border-radius: 8px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 950;
+  cursor: pointer;
+  transition: background 120ms ease, color 120ms ease;
+}
+
+.button-exchange:hover:not(:disabled) {
+  background: var(--primary);
+  color: #fff;
+  border-color: var(--primary);
+}
+
+.button-exchange:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
 }
 
 .option-composer,
