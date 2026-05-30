@@ -2035,7 +2035,7 @@ select:focus-visible {
   gap: 8px;
 }
 
-.option-form button {
+.option-form button:not(.button) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -2630,7 +2630,7 @@ select:focus-visible {
 
 .plan-card {
   display: grid;
-  align-content: start;
+  grid-template-rows: auto auto auto 1fr auto;
   gap: 16px;
   min-block-size: 360px;
   padding: 22px;
