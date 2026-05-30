@@ -110,13 +110,7 @@ export function VotePanel({
                 <span className="candidate-row__rank">{index + 1}</span>
                 <span className="candidate-row__main">
                   <strong>{candidate.title}</strong>
-                  <em>
-                    {voteState.selectedCandidateId === candidate.id
-                      ? '선택한 후보'
-                      : candidate.status === 'pending'
-                        ? '새로 추가한 후보'
-                        : '실시간 집계'}
-                  </em>
+                  <em>{getCandidateHelperText(candidate, voteState.selectedCandidateId)}</em>
                 </span>
                 <span className="candidate-row__metrics">
                   <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
@@ -241,4 +235,10 @@ function rankCandidatesByVotes(candidates: Candidate[]): Candidate[] {
 function formatVoteShare(voteCount: number, totalVoteCount: number): number {
   if (totalVoteCount < 1) return 0;
   return Math.round((voteCount / totalVoteCount) * 100);
+}
+
+function getCandidateHelperText(candidate: Candidate, selectedCandidateId?: string): string {
+  if (selectedCandidateId === candidate.id) return '선택한 후보';
+  if (candidate.status === 'pending') return '새로 추가한 후보';
+  return '실시간 집계';
 }
