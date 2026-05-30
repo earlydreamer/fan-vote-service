@@ -292,4 +292,42 @@ describe('VotePanel', () => {
     expect(within(votePanel).getByText('10표')).toBeInTheDocument();
     expect(within(votePanel).getByText('41명 참여')).toBeInTheDocument();
   });
+
+  it('allows multiple votes when tickets are remaining and displays cumulative ticket count', async () => {
+    const user = userEvent.setup();
+    const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => ({
+      ok: true,
+      data: {
+        roomId: 'room-1',
+        candidateVotes: [{ candidateId: 'candidate-1', voteCount: 12 }],
+        currentGoalValue: 202,
+        participantCount: 42
+      }
+    }));
+
+    renderVotePanel({
+      castVoteCommand,
+      voteTickets: 5
+    });
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    
+    expect(within(votePanel).queryByText(/내가 투표한 투표권:/)).not.toBeInTheDocument();
+
+    await user.click(within(votePanel).getByRole('radio', { name: /첫 번째 장면/ }));
+    await user.selectOptions(within(votePanel).getByLabelText('사용할 투표권'), '2');
+    
+    const submitButton = within(votePanel).getByRole('button', { name: '투표하기' });
+    await user.click(submitButton);
+
+    expect(await within(votePanel).findByText(/내가 투표한 투표권:/)).toHaveTextContent('내가 투표한 투표권: 2장');
+    
+    const nextButton = within(votePanel).getByRole('button', { name: '추가 투표하기' });
+    expect(nextButton).not.toBeDisabled();
+
+    await user.selectOptions(within(votePanel).getByLabelText('사용할 투표권'), '1');
+    await user.click(nextButton);
+
+    expect(await within(votePanel).findByText(/내가 투표한 투표권:/)).toHaveTextContent('내가 투표한 투표권: 3장');
+  });
 });

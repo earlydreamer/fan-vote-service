@@ -1792,6 +1792,32 @@ select:focus-visible {
   font-weight: 850;
 }
 
+.vote-panel__user-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 850;
+  color: var(--ink-muted);
+}
+
+.user-tickets-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 12px;
+}
+
+.user-tickets-badge strong {
+  font-weight: 950;
+}
+
 .vote-panel__closed {
   margin: 12px 0 0;
   padding: 10px 12px;

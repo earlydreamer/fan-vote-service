@@ -15,15 +15,23 @@ import { type AppRoute, matchRoute, primaryNavItems } from './routes';
 export function AppShell() {
   const [route, setRoute] = useState<AppRoute>(() => matchRoute(window.location.pathname));
   const [isAuthenticated, setIsAuthenticated] = useState(true);
-  const profile = demoReadRepository.getProfile();
+  const [profile, setProfile] = useState(() => demoReadRepository.getProfile());
 
   useEffect(() => {
     const handlePopState = () => {
       setRoute(matchRoute(window.location.pathname));
     };
 
+    const handleProfileUpdate = () => {
+      setProfile({ ...demoReadRepository.getProfile() });
+    };
+
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('profile-updated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('profile-updated', handleProfileUpdate);
+    };
   }, []);
 
   const navigate = (href: string) => {
