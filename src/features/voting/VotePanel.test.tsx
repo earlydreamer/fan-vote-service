@@ -383,4 +383,77 @@ describe('VotePanel', () => {
 
     exchangeMock.mockRestore();
   });
+
+  it('prevents double-decrementing of tickets when prop updates after a successful vote', async () => {
+    const user = userEvent.setup();
+    let rerenderFn: any;
+
+    const castVoteCommand = vi.fn(async (): Promise<CommandResult<CastVoteResponse>> => {
+      // 실제 런타임처럼 투표 중 프로필 갱신 이벤트로 인해 부모가 먼저 리렌더링되는 시나리오 모사 (10ms 뒤 실행)
+      setTimeout(() => {
+        if (rerenderFn) {
+          rerenderFn(
+            <VotePanel
+              roomId="room-1"
+              candidates={[candidate('candidate-1', '후보 1', 11)]}
+              currentGoalValue={201}
+              goalValue={500}
+              participantCount={42}
+              castVoteCommand={castVoteCommand}
+              voteTickets={2}
+              userRp={100}
+            />
+          );
+        }
+      }, 10);
+
+      // 투표 커맨드 응답은 20ms 뒤에 리졸브하여 타이밍 꼬임 유도
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve({
+            ok: true,
+            data: {
+              roomId: 'room-1',
+              candidateVotes: [{ candidateId: 'candidate-1', voteCount: 11 }],
+              currentGoalValue: 201,
+              participantCount: 42
+            }
+          });
+        }, 20);
+      });
+    });
+
+    const { rerender } = render(
+      <VotePanel
+        roomId="room-1"
+        candidates={[candidate('candidate-1', '후보 1', 10)]}
+        currentGoalValue={200}
+        goalValue={500}
+        participantCount={41}
+        castVoteCommand={castVoteCommand}
+        voteTickets={3}
+        userRp={100}
+      />
+    );
+    rerenderFn = rerender;
+
+    const votePanel = screen.getByRole('region', { name: '투표 현황' });
+    const optionRadio = within(votePanel).getByRole('radio', { name: /후보 1/ });
+    await user.click(optionRadio);
+
+    const selectBox = within(votePanel).getByLabelText('사용할 투표권');
+    await user.selectOptions(selectBox, '1');
+
+    const submitButton = within(votePanel).getByRole('button', { name: '투표하기' });
+    await user.click(submitButton);
+
+    expect(castVoteCommand).toHaveBeenCalled();
+
+    // 모든 비동기 상태 갱신 및 렌더링이 가라앉을 때까지 대기
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // 잔여 투표권이 2장이므로 option 갯수가 2개인지 검증 (버그 발생 시 1개로 깎여있을 것임)
+    const optionsList = within(selectBox).getAllByRole('option');
+    expect(optionsList).toHaveLength(2);
+  });
 });
