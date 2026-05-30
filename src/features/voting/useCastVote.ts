@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import type { CommandResult } from '../../shared/api/commandClient';
 import type { Candidate } from '../../shared/types/rallyroom';
 import type { CastVoteInput, CastVoteResponse } from './castVoteApi';
@@ -44,9 +44,30 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
   const [hasVoted, setHasVoted] = useState(false);
   const [myVotedTickets, setMyVotedTickets] = useState(0);
 
+  const votedTicketsPendingRef = useRef(0);
+  const prevVoteTicketsRef = useRef(options.voteTickets);
+
   useEffect(() => {
-    setRemainingVoteTickets(options.voteTickets);
+    const prev = prevVoteTicketsRef.current;
+    prevVoteTicketsRef.current = options.voteTickets;
+
+    if (options.voteTickets > prev) {
+      const diff = options.voteTickets - prev;
+      setRemainingVoteTickets((current) => current + diff);
+    } else if (options.voteTickets < prev) {
+      const diff = prev - options.voteTickets;
+      const pending = votedTicketsPendingRef.current;
+
+      if (diff <= pending) {
+        votedTicketsPendingRef.current = pending - diff;
+      } else {
+        const extraDiff = diff - pending;
+        votedTicketsPendingRef.current = 0;
+        setRemainingVoteTickets((current) => Math.max(current - extraDiff, 0));
+      }
+    }
   }, [options.voteTickets]);
+
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const remainingEnergy = Math.max(options.goalValue - state.currentGoalValue, 0);
@@ -59,6 +80,8 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
     setIsSubmitting(true);
     setErrorMessage(null);
     setStatusMessage(null);
+
+    votedTicketsPendingRef.current += voteTicketCount;
 
     const result = await options.castVoteCommand({
       roomId: options.roomId,
@@ -78,6 +101,7 @@ export function useCastVote(options: UseCastVoteOptions): UseCastVoteResult {
           : '투표가 반영됐어요.'
       );
     } else {
+      votedTicketsPendingRef.current = Math.max(votedTicketsPendingRef.current - voteTicketCount, 0);
       setErrorMessage(result.error.message);
       if (result.error.code === 'DUPLICATE_VOTE') {
         setHasVoted(true);
