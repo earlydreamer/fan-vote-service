@@ -6,12 +6,20 @@ const rooms = [
   {
     id: 'joined-room',
     title: '참여한 투표방',
-    slug: 'joined-room'
+    slug: 'joined-room',
+    status: 'active'
   },
   {
     id: 'created-room',
     title: '내가 만든 투표방',
-    slug: 'created-room'
+    slug: 'created-room',
+    status: 'active'
+  },
+  {
+    id: 'completed-room',
+    title: '완료된 투표 카드',
+    slug: 'completed-room',
+    status: 'result_published'
   }
 ] as RallyRoom[];
 
@@ -23,7 +31,7 @@ const profile: ProfileReadModel = {
   todayVotes: 8,
   followedCategoryIds: ['cat-stage'],
   earnedRewards: ['Spotlight Crew', 'Mission Starter'],
-  joinedRoomIds: ['joined-room'],
+  joinedRoomIds: ['joined-room', 'completed-room'],
   createdRoomIds: ['created-room'],
   rewardHistory: [
     {
@@ -60,11 +68,11 @@ describe('buildProfileRewardHistory', () => {
       voteTickets: 3,
       streakDays: 5,
       todayVotes: 8,
-      joinedRoomCount: 1,
+      joinedRoomCount: 2,
       createdRoomCount: 1,
       earnedRewardCount: 2
     });
-    expect(viewModel?.joinedRooms.map((room) => room.title)).toEqual(['참여한 투표방']);
+    expect(viewModel?.joinedRooms.map((room) => room.title)).toEqual(['참여한 투표방', '완료된 투표 카드']);
     expect(viewModel?.createdRooms.map((room) => room.title)).toEqual(['내가 만든 투표방']);
   });
 
@@ -78,6 +86,13 @@ describe('buildProfileRewardHistory', () => {
       rpDelta: 120,
       voteTicketDelta: 1
     });
+  });
+
+  it('splits ongoing joined votes from completed result cards', () => {
+    const viewModel = buildProfileRewardHistory(profile, rooms);
+
+    expect(viewModel?.ongoingJoinedRooms.map((room) => room.title)).toEqual(['참여한 투표방']);
+    expect(viewModel?.completedVoteRooms.map((room) => room.title)).toEqual(['완료된 투표 카드']);
   });
 
   it('returns null when profile data is not available', () => {
