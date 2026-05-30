@@ -32,7 +32,13 @@ export function RoomCard({ room, category, compact = false }: RoomCardProps) {
       data-category={category?.colorToken ?? 'primary'}
       data-tone={room.thumbnail.tone}
     >
-      <RoomThumbnail room={room} categoryName={category?.name} href={`/rooms/${room.id}`} className="room-card__visual" />
+      <RoomThumbnail
+        room={room}
+        categoryName={category?.name}
+        href={`/rooms/${room.id}`}
+        className="room-card__visual"
+        decorativeLink
+      />
 
       <div className="room-card__body">
         <div className="room-card__meta">

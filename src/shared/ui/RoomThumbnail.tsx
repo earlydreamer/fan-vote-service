@@ -13,9 +13,10 @@ interface RoomThumbnailProps {
   categoryName?: string;
   href?: string;
   className?: string;
+  decorativeLink?: boolean;
 }
 
-export function RoomThumbnail({ room, categoryName = '투표방', href, className }: RoomThumbnailProps) {
+export function RoomThumbnail({ room, categoryName = '투표방', href, className, decorativeLink = false }: RoomThumbnailProps) {
   const thumbnailStyle = {
     '--thumb-accent': room.thumbnail.accent
   } as CSSProperties;
@@ -32,7 +33,14 @@ export function RoomThumbnail({ room, categoryName = '투표방', href, classNam
 
   if (href) {
     return (
-      <a className={classNames} href={href} style={thumbnailStyle} aria-label={`${room.title} 썸네일`}>
+      <a
+        className={classNames}
+        href={href}
+        style={thumbnailStyle}
+        aria-hidden={decorativeLink}
+        aria-label={decorativeLink ? undefined : `${room.title} 썸네일`}
+        tabIndex={decorativeLink ? -1 : undefined}
+      >
         {content}
       </a>
     );

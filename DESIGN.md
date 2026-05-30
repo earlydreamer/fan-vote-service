@@ -61,6 +61,13 @@ radii:
 
 RallyRoom is a temporary name. The interface must be designed around the product behavior: fans create and browse popularity polls, vote on candidates, follow ranking changes, collect lightweight rewards, and share result cards.
 
+The core hierarchy is:
+
+- a room is a persistent fan-created space
+- the current vote is the active poll session inside that room
+- completed votes become room history and result-card material
+- the MVP shows one active vote per room, but copy and data shaping should leave room for repeat votes and presets
+
 The home experience is a **content discovery surface**, not a dashboard. Each vote room should feel like browsable content:
 
 - it has a visual identity or thumbnail
@@ -313,10 +320,14 @@ Fans should feel that rewards are useful inside the service, not just decorative
 
 MVP behavior:
 
-- each vote room exposes a cost for adding a new vote option
-- adding an option consumes a vote ticket first when available
-- if no ticket is available, the fallback cost can be RP
-- newly added options enter a pending or review state before becoming trusted candidates
+- initial candidates added while creating a room are free
+- voting consumes vote tickets
+- consumed vote tickets increase both the selected candidate count and Vote Energy
+- Vote Energy reaching the goal closes the current vote
+- adding an option during an already active vote consumes vote tickets
+- an option added mid-vote receives the spent tickets as its initial votes
+- if no ticket is available, a later paid/RP fallback can be explored, but it should not be the primary MVP copy
+- newly added options can enter a pending or review state before becoming trusted candidates if moderation is needed
 - candidate counts should vary so option addition feels meaningful on some rooms and unnecessary on others
 
 This loop supports future monetization because vote tickets, RP, badges, result-card themes, and priority review can become subscription or paid-pack benefits without implying official artist or agency delivery.
@@ -367,6 +378,8 @@ The MVP may use:
 - category-based visual patterns
 - candidate avatar placeholders
 - graphic ranking previews
+
+Thumbnail overlays should show semantic badges such as category, live/result status, D-day, or candidate count. Do not expose internal shorthand labels such as `CAST`, `OPENING`, `MEME CUP`, or other unexplained fixture labels.
 
 The MVP must not use:
 
@@ -442,9 +455,11 @@ Detail should feel like opening a content item.
 Useful ingredients:
 
 - visual header or thumbnail
-- vote/ranking section
-- candidate cards
-- fan-wall/messages
+- room title as the persistent space name
+- current vote title as the active poll title
+- vote/ranking section rendered as a vertical candidate list
+- inline option-add entry at the bottom of the candidate list
+- tabs for current vote, fan-wall/messages, missions, and result/history
 - related vote rooms
 - result-card route if published
 
@@ -555,8 +570,9 @@ Treat it as an ingredient-based design brief, not a fixed layout spec.
 Create a Fan Vote Discovery experience inspired by Korean content platforms: strong Featured treatment, category browsing, visual vote cards, compact user state, and enough mock content to feel alive.
 You may freely choose the composition: editorial stage, shelves, grid, asymmetric layout, compact top strip, profile popover, category tabs, or another structure that better expresses discovery.
 Do not hard-code a two-column dashboard, permanent right summary rail, text-only hero, or exact CHZZK/SOOP clone.
-Increase mock content volume: 12+ vote rooms, 6+ categories, several poll formats, ending-soon items, and result-card items.
-Vote cards need thumbnails or visual identities, category tags, status badges, ranking/vote metadata, and one clear action.
+Increase mock content volume: 24+ vote rooms, 10+ categories, several poll formats, ending-soon items, and result-card items.
+Vote cards need thumbnails or visual identities, category tags, status badges, ranking/vote metadata, and one clear action. Do not show unexplained raw thumbnail labels.
+Treat each room as a persistent space with one current vote session in the MVP.
 Do not use real celebrities, streamers, IP images, official partnership language, or hard dashboard panels.
 ```
 
@@ -569,3 +585,4 @@ Do not use real celebrities, streamers, IP images, official partnership language
 | 2026-05-30 | Replace dashboard-first design with discovery-first direction | The dashboard framing made the product feel like an admin tool and failed to create a content browsing impression. |
 | 2026-05-30 | Use CHZZK/SOOP as structural references only | Korean content platforms show useful patterns for Featured, category browsing, and card density, but their brands and real content must not be copied. |
 | 2026-05-30 | Remove fixed layout prescriptions | The design system should define ingredients and quality bars, so implementers can create more expressive layouts. |
+| 2026-05-30 | Define room as persistent space and vote as current session | This resolves room/vote hierarchy ambiguity while preserving a simple MVP with one active vote per room. |
