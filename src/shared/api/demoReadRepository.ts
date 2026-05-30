@@ -102,7 +102,7 @@ export const demoReadRepository = {
 
   castVoteDemo(
     roomId: string,
-    candidateIds: string[],
+    candidateIds: readonly string[],
     voteTicketCount: number
   ): { candidateVotes: { candidateId: string; voteCount: number }[]; currentGoalValue: number; participantCount: number } | undefined {
     const room = rooms.find((r) => r.id === roomId || r.slug === roomId);
