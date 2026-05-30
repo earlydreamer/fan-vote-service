@@ -5,6 +5,7 @@ import { getVoteTitle } from '../../shared/domain/roomDisplay';
 import type { DiscoverySort, RallyRoom } from '../../shared/types/rallyroom';
 import { ProgressMeter } from '../../shared/ui/ProgressMeter';
 import { RoomCard } from '../../shared/ui/RoomCard';
+import { RoomThumbnail } from '../../shared/ui/RoomThumbnail';
 
 const sortOptions: Array<{ id: DiscoverySort; label: string }> = [
   { id: 'popular', label: '인기순' },
@@ -208,10 +209,12 @@ function FeaturedVote({ room }: { room: RallyRoom }) {
 
   return (
     <article className="featured-vote-card" aria-label={`${voteTitle} Featured 카드`}>
-      <div className="featured-vote-card__media">
-        <span>{room.featuredLabel ?? 'Featured'}</span>
-        <strong>{room.thumbnail.label}</strong>
-      </div>
+      <RoomThumbnail
+        room={room}
+        categoryName={category?.name}
+        href={`/rooms/${room.id}`}
+        className="featured-vote-card__media"
+      />
       <div className="featured-vote-card__body">
         <div className="room-card__meta">
           <span className="chip">{category?.name ?? '투표방'}</span>

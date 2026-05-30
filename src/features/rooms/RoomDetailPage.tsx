@@ -1,8 +1,9 @@
 import { type FormEvent, useState } from 'react';
 import { PlusCircle, Ticket } from 'lucide-react';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
-import { getVoteTitle } from '../../shared/domain/roomDisplay';
+import { createRoomSessionViewModel } from '../../shared/domain/roomSessionViewModel';
 import type { RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
+import { RoomThumbnail } from '../../shared/ui/RoomThumbnail';
 import { RoomMessagePanel } from '../messages/RoomMessagePanel';
 import type { PostRoomMessageCommand } from '../messages/usePostRoomMessage';
 import { MissionList } from '../missions/MissionList';
@@ -29,7 +30,7 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   if (!room) return <NotFoundPage />;
 
   const category = demoReadRepository.getCategory(room.categoryId);
-  const voteTitle = getVoteTitle(room);
+  const session = createRoomSessionViewModel(room, profile);
   const castVoteCommand = createDemoCastVoteCommand(room);
   const completeMissionCommand = createDemoCompleteMissionCommand(room);
   const postRoomMessageCommand = createDemoPostRoomMessageCommand(room);
@@ -53,17 +54,15 @@ export function RoomDetailPage({ roomId }: RoomDetailPageProps) {
   return (
     <div className="room-detail-page">
       <section className="detail-stage" aria-labelledby="room-title">
-        <div className="detail-stage__visual" aria-hidden="true">
-          <span>{room.thumbnail.label}</span>
-        </div>
+        <RoomThumbnail room={room} categoryName={category?.name} className="detail-stage__visual" />
         <div className="detail-stage__copy">
           <p className="eyebrow">Vote detail</p>
-          <h1 id="room-title">{room.title}</h1>
+          <h1 id="room-title">{session.room.title}</h1>
           <div className="detail-vote-title">
             <span>투표 제목</span>
-            <strong>{voteTitle}</strong>
+            <strong>{session.currentVote.title}</strong>
           </div>
-          <p>{room.topic}</p>
+          <p>{session.room.topic}</p>
           <div className="room-card__meta">
             <span className="chip">{category?.name ?? '투표방'}</span>
             {room.tags.slice(0, 4).map((tag) => (

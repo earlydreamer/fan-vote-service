@@ -801,7 +801,13 @@ select:focus-visible {
     repeating-linear-gradient(45deg, rgb(255 255 255 / 14%) 0 1px, transparent 1px 16px);
 }
 
-.room-card__visual img {
+.room-thumbnail {
+  position: relative;
+  overflow: hidden;
+  color: #fff;
+}
+
+.room-thumbnail img {
   position: absolute;
   inset: 0;
   inline-size: 100%;
@@ -810,11 +816,11 @@ select:focus-visible {
   transition: transform 500ms ease;
 }
 
-.room-card:hover .room-card__visual img {
+.room-card:hover .room-thumbnail img {
   transform: scale(1.035);
 }
 
-.room-card__visual::after {
+.room-thumbnail::after {
   content: "";
   position: absolute;
   inset: auto 0 0 0;
@@ -823,13 +829,13 @@ select:focus-visible {
   background: linear-gradient(180deg, transparent 0%, rgb(16 19 24 / 36%) 100%);
 }
 
-.room-card__status,
-.room-card__thumbnail-label {
+.room-thumbnail__status,
+.room-thumbnail__category {
   position: relative;
   z-index: 1;
 }
 
-.room-card__status {
+.room-thumbnail__status {
   align-self: flex-start;
   padding: 5px 8px;
   border-radius: 999px;
@@ -839,9 +845,13 @@ select:focus-visible {
   font-weight: 950;
 }
 
-.room-card__thumbnail-label {
-  font-size: 28px;
-  font-weight: 950;
+.room-thumbnail__category {
+  align-self: flex-start;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: rgb(16 19 24 / 42%);
+  font-size: 13px;
+  font-weight: 900;
   letter-spacing: 0;
   text-shadow: 0 2px 14px rgb(16 19 24 / 26%);
 }
@@ -1346,8 +1356,8 @@ select:focus-visible {
     repeating-linear-gradient(45deg, rgb(255 255 255 / 14%) 0 1px, transparent 1px 18px);
 }
 
-.detail-stage__visual span {
-  font-size: 34px;
+.detail-stage__visual .room-thumbnail__category {
+  font-size: 16px;
   font-weight: 950;
 }
 
