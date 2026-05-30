@@ -155,6 +155,9 @@ function renderRoute(route: AppRoute, options: RouteRenderOptions) {
     case 'profile':
       return <ProfilePage profile={profile} />;
     case 'profileEdit':
+      if (!profile) {
+        return <AuthPage onLogin={options.onLogin} />;
+      }
       return <ProfileEditPage />;
     case 'auth':
       return <AuthPage onLogin={options.onLogin} />;
