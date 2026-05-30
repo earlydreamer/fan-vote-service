@@ -201,24 +201,34 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
 
 function createDemoCastVoteCommand(room: RallyRoom): CastVoteCommand {
   return async ({ roomId, candidateIds, voteTicketCount }) => {
-    const selectedCandidateIds = new Set(candidateIds);
-
     const currentProfile = demoReadRepository.getProfile();
     demoReadRepository.updateProfile({
       voteTickets: Math.max(currentProfile.voteTickets - voteTicketCount, 0),
       todayVotes: currentProfile.todayVotes + voteTicketCount
     });
 
+    const result = demoReadRepository.castVoteDemo(roomId, candidateIds, voteTicketCount);
+    if (!result) {
+      const selectedCandidateIds = new Set(candidateIds);
+      return {
+        ok: true,
+        data: {
+          roomId,
+          candidateVotes: room.candidates.map((candidate) => ({
+            candidateId: candidate.id,
+            voteCount: candidate.voteCount + (selectedCandidateIds.has(candidate.id) ? voteTicketCount : 0)
+          })),
+          currentGoalValue: Math.min(room.currentGoalValue + voteTicketCount, room.goalValue),
+          participantCount: room.participantCount + 1
+        }
+      };
+    }
+
     return {
       ok: true,
       data: {
         roomId,
-        candidateVotes: room.candidates.map((candidate) => ({
-          candidateId: candidate.id,
-          voteCount: candidate.voteCount + (selectedCandidateIds.has(candidate.id) ? voteTicketCount : 0)
-        })),
-        currentGoalValue: Math.min(room.currentGoalValue + voteTicketCount, room.goalValue),
-        participantCount: room.participantCount + 1
+        ...result
       }
     };
   };
