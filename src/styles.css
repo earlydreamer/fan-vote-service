@@ -1223,6 +1223,28 @@ select:focus-visible {
   font: 13px/1.55 "IBM Plex Mono", "JetBrains Mono", ui-monospace, monospace;
 }
 
+.create-receipt {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+}
+
+.receipt-status-row,
+.receipt-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.create-receipt p:not(.eyebrow) {
+  color: var(--ink-muted);
+  line-height: 1.65;
+}
+
+.create-receipt strong {
+  color: var(--ink);
+}
+
 .live-preview {
   overflow: hidden;
   border: 1px solid var(--line-soft);

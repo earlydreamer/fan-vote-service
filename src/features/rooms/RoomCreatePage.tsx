@@ -7,6 +7,7 @@ import {
   type CreateRoomCommandPayload,
   type CreateRoomFormInput
 } from './createRoomCommand';
+import { buildCreateRoomReceipt, type CreateRoomReceiptViewModel } from './createRoomReceipt';
 
 const pollFormatOptions: Array<{ value: PollFormat; label: string }> = [
   { value: 'single', label: '단일 선택' },
@@ -39,6 +40,7 @@ export function RoomCreatePage() {
   const [newCandidateTitle, setNewCandidateTitle] = useState('');
   const [errors, setErrors] = useState<string[]>([]);
   const [payload, setPayload] = useState<CreateRoomCommandPayload | null>(null);
+  const [receipt, setReceipt] = useState<CreateRoomReceiptViewModel | null>(null);
 
   const updateField = <Key extends keyof CreateRoomFormInput>(key: Key, value: CreateRoomFormInput[Key]) => {
     setFormInput((currentInput) => ({
@@ -46,6 +48,7 @@ export function RoomCreatePage() {
       [key]: value
     }));
     setPayload(null);
+    setReceipt(null);
   };
 
   const handleAddCandidate = () => {
@@ -71,11 +74,13 @@ export function RoomCreatePage() {
     if (!result.ok) {
       setErrors(result.errors);
       setPayload(null);
+      setReceipt(null);
       return;
     }
 
     setErrors([]);
     setPayload(result.payload);
+    setReceipt(buildCreateRoomReceipt(result.payload));
   };
 
   return (
@@ -251,6 +256,29 @@ export function RoomCreatePage() {
             <p className="eyebrow">Command payload</p>
             <h2>create-room</h2>
             <pre>{JSON.stringify(payload, null, 2)}</pre>
+          </section>
+        )}
+
+        {receipt && (
+          <section className="content-panel create-receipt" aria-label="생성 요청 receipt">
+            <p className="eyebrow">Mock command response</p>
+            <h2>생성 요청 접수</h2>
+            <div className="receipt-status-row">
+              <span className="chip chip-format">{receipt.command}</span>
+              <span className="chip chip-mission">{receipt.reviewStatus}</span>
+              <span className="chip chip-muted">{receipt.requestId}</span>
+            </div>
+            <p>
+              <strong>{receipt.roomTitle}</strong> · {receipt.voteTitle}
+            </p>
+            <p className="guard-copy">{receipt.note}</p>
+            <div className="receipt-action-row">
+              {receipt.nextActions.map((action) => (
+                <a key={action.href} className="button button-secondary" href={action.href}>
+                  {action.label}
+                </a>
+              ))}
+            </div>
           </section>
         )}
       </div>

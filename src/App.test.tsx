@@ -119,6 +119,7 @@ describe('RallyRoom app shell', () => {
     await user.click(screen.getByRole('button', { name: '생성 intent 만들기' }));
 
     const preview = screen.getByRole('region', { name: '생성 command preview' });
+    const receipt = screen.getByRole('region', { name: '생성 요청 receipt' });
 
     expect(within(preview).getByText('create-room')).toBeInTheDocument();
     expect(within(preview).getByText(/팬이 고르는 오프닝 명장면/)).toBeInTheDocument();
@@ -127,6 +128,17 @@ describe('RallyRoom app shell', () => {
     expect(within(preview).queryByText(/current_goal_value/)).not.toBeInTheDocument();
     expect(within(preview).queryByText(/reward_rp/)).not.toBeInTheDocument();
     expect(within(preview).queryByText(/total_rp/)).not.toBeInTheDocument();
+    expect(within(receipt).getByText('생성 요청 접수')).toBeInTheDocument();
+    expect(within(receipt).getByText('pending_review')).toBeInTheDocument();
+    expect(within(receipt).getByText(/실제 DB 생성 없이 서버 응답 예시만 보여줘요/)).toBeInTheDocument();
+    expect(within(receipt).getByRole('link', { name: '홈 피드로 돌아가기' })).toHaveAttribute('href', '/');
+    expect(within(receipt).getByRole('link', { name: '내 활동에서 만든 방 확인' })).toHaveAttribute('href', '/profile');
+    expect(within(receipt).getByRole('link', { name: '데모 방 상세 보기' })).toHaveAttribute(
+      'href',
+      '/rooms/room-stage-opening'
+    );
+    expect(JSON.stringify(receipt.textContent)).not.toContain('voteCount');
+    expect(JSON.stringify(receipt.textContent)).not.toContain('totalRp');
   });
 
   it('shows creation validation errors for officiality phrases and too few candidates', async () => {
@@ -145,6 +157,7 @@ describe('RallyRoom app shell', () => {
     expect(screen.getByRole('alert')).toHaveTextContent('공식');
     expect(screen.getByRole('alert')).toHaveTextContent('전달 보장');
     expect(screen.getByRole('alert')).toHaveTextContent('투표 항목은 최소 2개 이상 필요해요.');
+    expect(screen.queryByRole('region', { name: '생성 요청 receipt' })).not.toBeInTheDocument();
   });
 
   it('opens a room detail page and gates an unpublished result card route', async () => {
