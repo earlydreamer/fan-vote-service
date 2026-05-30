@@ -1530,18 +1530,27 @@ select:focus-visible {
 
 .inline-option-form {
   display: grid;
-  grid-template-columns: minmax(180px, 1fr) 140px auto;
+  grid-template-columns: minmax(260px, 1fr) minmax(126px, 0.28fr) auto;
   align-items: end;
-  gap: 10px;
+  gap: 12px;
+  inline-size: 100%;
 }
 
-.inline-option-form label,
+.inline-option-form__field,
 .ticket-select {
   display: grid;
   gap: 6px;
   color: var(--ink-muted);
   font-size: 12px;
   font-weight: 900;
+}
+
+.inline-option-form__field {
+  min-inline-size: 0;
+}
+
+.inline-option-form__field--ticket {
+  min-inline-size: 126px;
 }
 
 .inline-option-form input,
@@ -2692,6 +2701,27 @@ select:focus-visible {
   .detail-stage > .button,
   .option-form button,
   .vote-action-row button {
+    inline-size: 100%;
+    white-space: normal;
+  }
+
+  .candidate-row__label {
+    grid-template-columns: auto 34px minmax(0, 1fr);
+  }
+
+  .candidate-row__metrics {
+    grid-column: 3;
+    grid-template-columns: auto auto;
+    justify-content: start;
+    justify-items: start;
+    gap: 8px;
+  }
+
+  .inline-option-form {
+    grid-template-columns: 1fr;
+  }
+
+  .inline-option-form__submit {
     inline-size: 100%;
     white-space: normal;
   }

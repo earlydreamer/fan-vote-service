@@ -110,7 +110,13 @@ export function VotePanel({
                 <span className="candidate-row__rank">{index + 1}</span>
                 <span className="candidate-row__main">
                   <strong>{candidate.title}</strong>
-                  <em>{voteState.selectedCandidateId === candidate.id ? '선택한 후보' : '서버 read model 기준 집계'}</em>
+                  <em>
+                    {voteState.selectedCandidateId === candidate.id
+                      ? '선택한 후보'
+                      : candidate.status === 'pending'
+                        ? '새로 추가한 후보'
+                        : '실시간 집계'}
+                  </em>
                 </span>
                 <span className="candidate-row__metrics">
                   <span className="candidate-row__votes">{candidate.voteCount.toLocaleString()}표</span>
@@ -132,29 +138,34 @@ export function VotePanel({
               </button>
             ) : (
               <div className="inline-option-form">
-                <label htmlFor={`${roomId}-new-option-title`}>새 투표 항목</label>
-                <input
-                  id={`${roomId}-new-option-title`}
-                  value={newOptionTitle}
-                  disabled={voteState.isSubmitting}
-                  onChange={(event) => setNewOptionTitle(event.target.value)}
-                  placeholder="예: 커튼콜 마지막 장면"
-                />
-                <label htmlFor={`${roomId}-option-ticket-count`}>자동 투표권</label>
-                <select
-                  id={`${roomId}-option-ticket-count`}
-                  value={optionVoteTicketCount}
-                  disabled={voteState.isSubmitting}
-                  onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
-                >
-                  {optionTicketOptions.map((ticketCount) => (
-                    <option key={ticketCount} value={ticketCount}>
-                      {ticketCount}장
-                    </option>
-                  ))}
-                </select>
+                <div className="inline-option-form__field inline-option-form__field--title">
+                  <label htmlFor={`${roomId}-new-option-title`}>새 투표 항목</label>
+                  <input
+                    id={`${roomId}-new-option-title`}
+                    value={newOptionTitle}
+                    disabled={voteState.isSubmitting}
+                    onChange={(event) => setNewOptionTitle(event.target.value)}
+                    placeholder="예: 커튼콜 마지막 장면"
+                  />
+                </div>
+                <div className="inline-option-form__field inline-option-form__field--ticket">
+                  <label htmlFor={`${roomId}-option-ticket-count`}>자동 투표권</label>
+                  <select
+                    id={`${roomId}-option-ticket-count`}
+                    value={optionVoteTicketCount}
+                    disabled={voteState.isSubmitting}
+                    onChange={(event) => setOptionVoteTicketCount(Number(event.target.value))}
+                  >
+                    {optionTicketOptions.map((ticketCount) => (
+                      <option key={ticketCount} value={ticketCount}>
+                        {ticketCount}장
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <button
                   type="button"
+                  className="inline-option-form__submit"
                   disabled={!newOptionTitle.trim() || voteState.isSubmitting || voteState.maxSpendableTickets < 1}
                   onClick={handleAddOption}
                 >
