@@ -175,11 +175,19 @@ D:\Projects\vibex
 │  │  │  ├─ profile.json
 │  │  │  ├─ rooms.json
 │  │  │  └─ targets.json
+│  │  ├─ domain/
+│  │  │  ├─ roomDisplay.test.ts
+│  │  │  ├─ roomDisplay.ts
+│  │  │  ├─ roomSessionViewModel.test.ts
+│  │  │  └─ roomSessionViewModel.ts
 │  │  ├─ types/
 │  │  │  └─ rallyroom.ts
 │  │  └─ ui/
 │  │     ├─ ProgressMeter.tsx
-│  │     └─ RoomCard.tsx
+│  │     ├─ RoomCard.test.tsx
+│  │     ├─ RoomCard.tsx
+│  │     ├─ RoomThumbnail.test.tsx
+│  │     └─ RoomThumbnail.tsx
 │  ├─ test/
 │  │  └─ setup.ts
 │  ├─ App.test.tsx
