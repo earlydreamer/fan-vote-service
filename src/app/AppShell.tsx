@@ -1,5 +1,6 @@
 import { type MouseEvent, useEffect, useState } from 'react';
 import { Home, PlusCircle, Ticket, UserRound } from 'lucide-react';
+import { Button } from '../shared/ui/Button';
 import { AuthPage } from '../features/auth/AuthPage';
 import { CrewDashboardPage } from '../features/crew/CrewDashboardPage';
 import { HomePage } from '../features/home/HomePage';
@@ -96,9 +97,9 @@ export function AppShell() {
                   나
                 </span>
               </a>
-              <button className="auth-button" type="button" onClick={() => setIsAuthenticated(false)}>
+              <Button variant="unstyled" className="auth-button" onClick={() => setIsAuthenticated(false)}>
                 로그아웃
-              </button>
+              </Button>
             </>
           ) : (
             <a className="auth-button auth-button--primary" href="/login">

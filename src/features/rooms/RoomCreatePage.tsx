@@ -1,5 +1,6 @@
 import { type FormEvent, useState } from 'react';
 import { CheckCircle2, ImagePlus, PlusCircle, Ticket, X } from 'lucide-react';
+import { Button } from '../../shared/ui/Button';
 import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import type { PollFormat } from '../../shared/types/rallyroom';
 import {
@@ -196,14 +197,14 @@ export function RoomCreatePage() {
                       <span className="candidate-setup-item-num">{index + 1}</span>
                       <span className="candidate-setup-item-name">{candidate}</span>
                     </div>
-                    <button
-                      type="button"
+                    <Button
+                      variant="unstyled"
                       className="candidate-setup-item-delete"
                       aria-label={`후보 ${index + 1} 삭제`}
                       onClick={() => handleRemoveCandidate(index)}
                     >
                       <X size={14} aria-hidden="true" />
-                    </button>
+                    </Button>
                   </div>
                 ))}
               </div>
@@ -217,10 +218,10 @@ export function RoomCreatePage() {
                     onChange={(event) => setNewCandidateTitle(event.target.value)}
                     placeholder="예: 암전 후 첫 조명"
                   />
-                  <button type="button" className="button button-secondary" onClick={handleAddCandidate}>
+                  <Button variant="secondary" onClick={handleAddCandidate}>
                     <PlusCircle size={17} aria-hidden="true" />
                     초기 후보 항목 추가
-                  </button>
+                  </Button>
                 </div>
               </div>
 
@@ -237,9 +238,9 @@ export function RoomCreatePage() {
               )}
             </div>
 
-            <button type="submit" className="button button-primary submit-intent-btn">
+            <Button type="submit" variant="primary" className="submit-intent-btn">
               생성 intent 만들기
-            </button>
+            </Button>
           </form>
         </section>
 

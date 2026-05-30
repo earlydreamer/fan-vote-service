@@ -3,6 +3,7 @@ import { demoReadRepository } from '../../shared/api/demoReadRepository';
 import { createRoomSessionViewModel } from '../../shared/domain/roomSessionViewModel';
 import type { ProfileReadModel, RallyRoom, RoomStatus } from '../../shared/types/rallyroom';
 import { RoomThumbnail } from '../../shared/ui/RoomThumbnail';
+import { Button } from '../../shared/ui/Button';
 import { RoomMessagePanel } from '../messages/RoomMessagePanel';
 import type { PostRoomMessageCommand } from '../messages/usePostRoomMessage';
 import { MissionList } from '../missions/MissionList';
@@ -67,9 +68,9 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
         </div>
         <div className="detail-stage__actions">
           {isOwner && (
-            <button className="button button-secondary" type="button">
+            <Button variant="secondary">
               방 관리
-            </button>
+            </Button>
           )}
           <a className="button button-secondary" href={`/rooms/${room.id}/result`}>
             결과 카드 보기
@@ -80,17 +81,17 @@ export function RoomDetailPage({ roomId, viewerProfile = demoReadRepository.getP
       <section className="detail-tab-shell" aria-label="투표방 상세 콘텐츠">
         <div className="detail-tab-list" role="tablist" aria-label="투표방 상세 탭">
           {roomDetailTabs.map((tab) => (
-            <button
+            <Button
               key={tab.id}
               id={`${tab.id}-tab`}
-              type="button"
+              variant="unstyled"
               role="tab"
               aria-selected={activeTab === tab.id}
               aria-controls={`${tab.id}-panel`}
               onClick={() => setActiveTab(tab.id)}
             >
               {tab.label}
-            </button>
+            </Button>
           ))}
         </div>
 

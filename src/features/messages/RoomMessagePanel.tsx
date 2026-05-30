@@ -1,5 +1,6 @@
 import { type FormEvent } from 'react';
 import { MessageSquareText, SendHorizontal } from 'lucide-react';
+import { Button } from '../../shared/ui/Button';
 import type { MessageType, RoomMessage } from '../../shared/types/rallyroom';
 import {
   MAX_MESSAGE_BODY_LENGTH,
@@ -86,10 +87,10 @@ export function RoomMessagePanel({
             <span id={`${roomId}-message-count`} className={remainingCharacters < 0 ? 'over-limit' : undefined}>
               {messageState.body.trim().length}/{MAX_MESSAGE_BODY_LENGTH}
             </span>
-            <button type="submit" disabled={messageState.isSubmitting}>
+            <Button type="submit" variant="primary" disabled={messageState.isSubmitting}>
               <SendHorizontal size={16} aria-hidden="true" />
               {messageState.isSubmitting ? '등록 중' : '메시지 남기기'}
-            </button>
+            </Button>
           </div>
 
           {messageState.error && (

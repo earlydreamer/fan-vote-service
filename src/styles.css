@@ -2644,14 +2644,14 @@ select:focus-visible {
 .plan-card__current {
   align-self: end;
   margin-block-start: auto;
-  min-block-size: 44px;
-}
-
-.plan-card__current {
+  min-block-size: 42px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 14px;
+}
+
+.plan-card__current {
+  padding: 10px 16px;
   border: 1px solid transparent;
   border-radius: 14px;
   background: var(--surface-raised);
